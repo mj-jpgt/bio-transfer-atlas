@@ -72,8 +72,7 @@ Primary `fine_mapped` requires `fallback_mode == signed_ld` from `plink2 --r-unp
 (PLINK2 a.7 writes `.unphased.vcor1`). PSD ridge; `estimate_residual_variance=FALSE`.
 Unsigned \|r\| / identity / \|z\| / legacy `real_ld` → `pipeline_fallback`, non-primary.
 Meta: `data/labels/susie/susie_primary_meta.json`. CAD EUR/AFR currently majority
-`signed_ld`; BMI/LDL/T2D farm continues with the vcor1 path fix
-(`scripts/lambda_m5_susie_signed_ld.sh`).
+`signed_ld`; BMI/LDL/T2D continue on the signed-LD / vcor1 path.
 
 ---
 
@@ -113,16 +112,9 @@ GAT AUROC ≈ 0.619 vs XGBoost ≈ 0.623. Trees primary. Attention = **descripti
 
 ---
 
-## Claim checklist
+## Interpretation notes
 
-1. LD-block AF_LD_SEL ≈0.629 primary; not variant holdout.  
-2. No AF/LD vs Popcorn \(r_g\) peer contest; no `RG_REAL` in feature JSON peers.  
-3. Soften vs POP_DISTANCE unless paired ΔAUROC CI excludes 0.  
-4. Interventions = mean separation; matched MC empirical \(p\) + LOSO present.  
-5. SuSiE primary = signed LD only (metadata: `ld_type`, `plink_flag`, ridge).  
-6. Duffy homozygous 2-vs-&lt;2 + ACKR1 fraction; allele audit + CIs.  
-7. PAGE external only if `n_variants≥500` + `qc_counts`; else internal_only framing.  
-8. Grouped permutation present for attribution one-liner.  
-9. Sign-discordance endpoint + power sensitivity tables present.
-
-Gate: `python scripts/gate_literature_roadmap.py`
+Primary mechanism claim is LD-block AF+LD+SEL (~0.629 AUROC), not variant-holdout.
+Interventions report ancestry mean separation (MAD), not phenotype accuracy.
+SuSiE primary uses signed LD only; Duffy uses homozygous 2-vs-&lt;2 plus ACKR1 fraction;
+PAGE external requires allele QC counts with adequate variant overlap.

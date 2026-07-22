@@ -113,5 +113,4 @@ MHC-heavy scores.
 ## Software
 
 Python 3 (pandas, scikit-learn, xgboost, torch, torch_geometric), PLINK2, R/`susieR`,
-optional Popcorn/PolyFun clones under `tools/`. Reproducible Lambda launchers live in
-`scripts/lambda_*.sh`.
+and optional Popcorn/PolyFun tooling. Analysis entrypoints live under `scripts/`.

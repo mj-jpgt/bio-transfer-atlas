@@ -80,10 +80,11 @@ bio-transfer-atlas/scripts/upload_*
 bio-transfer-atlas/scripts/gate_*
 bio-transfer-atlas/tests/gate_*
 bio-transfer-atlas/tests/run_all_gates.py
-bio-transfer-atlas/results/tables/
+bio-transfer-atlas/results/tables/**
+!bio-transfer-atlas/results/tables/.gitkeep
 bio-transfer-atlas/results/logs/
 bio-transfer-atlas/results/exports/
-bio-transfer-atlas/results/BTA_M1_M3_RESULTS_REPORT.md
+bio-transfer-atlas/results/*.md
 bio-transfer-atlas/results/LAMBDA_*.md
 bio-transfer-atlas/data/raw/
 bio-transfer-atlas/data/interim/
