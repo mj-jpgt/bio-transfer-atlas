@@ -1,22 +1,38 @@
 # Biological Transferability Atlas
 
-Predict **cross-ancestry polygenic score / GWAS portability failure** from open allele-frequency and LD features, then test **score-edit interventions** on 1000 Genomes (GRCh38).
+Polygenic scores (PGS) and GWAS effects often **stop working** when applied outside the ancestries they were trained on. That failure is one of the central equity and translation problems in human genetics: risk tools built mostly in European cohorts can systematically mis-rank people with African, East Asian, South Asian, or admixed ancestry.
 
-Labels come from multi-ancestry summary-statistic concordance (high \(I^2\), sign discordance)—no individual phenotypes required for the primary analyses.
+This project asks a sharper question than “does accuracy drop?”:
+
+> **Can we predict—*without phenotypes*—which variants and scores are likely to fail across ancestries, what population-genetic mechanism drives that failure, and which score edits actually shrink ancestry gaps?**
+
+The **Biological Transferability Atlas (BTA)** is an open-data answer: a genome-wide map of portability risk built from 1000 Genomes genotypes, PGS Catalog weights, and multi-ancestry summary statistics (Pan-UK Biobank, with PAGE as an external check).
+
+## Why this matters
+
+**For the field.** Much of the literature documents that PGS transfer poorly, or treats ancestry distance as a single dial. Recent work argues that **allele-frequency (AF) and linkage-disequilibrium (LD) structure**—not mysterious effect-size chaos everywhere—drive a large share of the problem. BTA turns that idea into an operational, genome-wide testbed: variant-level failure labels from cross-ancestry GWAS discordance, predictors from AF/LD/selection features, and ablations under **LD-block** cross-validation so claims are not inflated by leakage.
+
+**For translational / clinical genomics.** Before a score is used for screening, triage, or risk communication in a new population, teams need to know (1) which loci are structurally fragile, (2) whether a proposed “fix” merely compresses score distributions or actually targets biology, and (3) when fancy tools (fine-mapping, graph nets) are descriptive lenses rather than cures. BTA stress-tests **score edits** on open genotypes and scores them as ancestry **mean separation**—honest about what we can measure without biobank phenotypes, and useful as a pre-deployment triage layer.
+
+**What we are *not* claiming.** We do not claim improved clinical accuracy, calibrated absolute risk, or that editing a Catalog PGS replaces multi-ancestry discovery. Interventions here reduce score gaps across ancestries; phenotype association remains future work.
 
 ## Abstract
 
-Cross-ancestry polygenic scores often lose accuracy outside European discovery cohorts. We build an open-data **Biological Transferability Atlas**: variant-level models that predict GWAS/PRS portability failure from allele-frequency (AF), LD, and selection features, then test score-edit interventions on 1000 Genomes GRCh38 genotypes. Under LD-block cross-validation, AF+LD features achieve AUROC ≈ **0.627**, exceeding coarse \(F_{ST}\); population-distance features are competitive (~0.617) and should not be dismissed as uniformly weak. Frequency-aware interventions (\(F_{ST}\)/MAF filters) reduce mean absolute EUR–non-EUR score gaps on average, whereas pruning top predicted-risk variants often worsens gaps. Positive controls (Duffy/WBC; autoimmune MHC stress-tests) and open external sumstat concordance with bootstrap CIs anchor claim discipline. Fine-mapping tiers and an LD-graph GAT provide descriptive attention weights without claiming that SuSiE or graph nets “solve” allele-frequency bias.
+Cross-ancestry polygenic scores often lose accuracy outside European discovery cohorts. We build an open-data **Biological Transferability Atlas**: genome-wide models that predict GWAS/PRS portability failure from allele-frequency, LD, and selection features, then test score-edit interventions on 1000 Genomes GRCh38 genotypes. Under LD-block cross-validation (~109k test variants), AF+LD features achieve AUROC ≈ **0.627** for high-\(I^2\) failure—better than coarse \(F_{ST}\), with population-distance features competitive rather than irrelevant. Frequency-aware edits (\(F_{ST}\)/MAF filters) shrink mean EUR–non-EUR score gaps on average, while pruning the highest predicted-risk variants often **widens** them. A Duffy/WBC positive control and MHC-heavy autoimmune scores anchor biology; external PAGE concordance stays near zero after allele QC. Fine-mapping (signed-LD SuSiE) and an LD-graph GAT clarify *where* risk concentrates without claiming to solve AF bias.
 
-## Contributions
+## What we built (contributions)
 
-1. **Variant-level portability-risk models** under LD-block cross-validation, using AF, LD, and selection features to predict high-\(I^2\) GWAS discordance (and related endpoints such as sign discordance).
-2. **Honest peer comparisons**: AF/LD vs coarse \(F_{ST}\) and population-distance encodings at the variant scale; trait-level Z-score concordance kept as a trait-scale analysis, not an AF/LD peer contest.
-3. **Score-edit intervention bake-off** on Catalog PGS applied to 1000 Genomes GRCh38, scored as ancestry **mean separation** (MAD)—not phenotype accuracy—with matched-mass Monte Carlo and leave-one-score-out controls.
-4. **Biological anchors**: Duffy/WBC positive control (allele-audited) and MHC-heavy autoimmune stress-tests; internal Pan-UKB concordance sensitivity vs external PAGE after GRCh38 liftover.
-5. **Claim discipline**: SuSiE primary = signed LD only; GAT attention is descriptive graph weighting, not mechanism evidence.
+1. **A phenotype-free, genome-wide portability atlas.** End-to-end pipeline on 1000 Genomes GRCh38 + open sumstats: score-shift maps across ancestries, multi-ancestry concordance labels, AF/LD/selection features, and pathway-level risk aggregation—so others can study transfer failure without private biobank access.
 
-## Results
+2. **Predictive models of *where* transfer fails.** Variant-level models that forecast high cross-ancestry GWAS discordance (and sign discordance) from population-genetic features under rigorous LD-block CV—moving from documenting decay to **locating** fragile loci.
+
+3. **Mechanism-facing evidence, not a single-number ancestry dial.** Nested ablations and grouped permutation show **AF**, then **LD**, carry most of the signal; coarse \(F_{ST}\) underperforms; trait-level Z-score concordance is kept at the **trait scale** (not falsely pitted as a variant-level peer of AF/LD).
+
+4. **Intervention triage that can say “no.”** A bake-off of Catalog PGS edits on real genotypes: which filters reduce ancestry mean separation (MAD), which backfire, with matched-mass Monte Carlo and leave-one-score-out controls—so “drop the risky SNPs” is tested, not assumed.
+
+5. **Biological and external stress tests.** Allele-audited Duffy/WBC positive control (ACKR1), MHC-heavy autoimmune scores, internal Pan-UKB sensitivity checks, and external PAGE after GRCh38 liftover—plus honest limits on SuSiE/GAT as descriptive tools rather than portability cures.
+
+## Headline results
 
 Under **LD-block** cross-validation (~109k test variants):
 
@@ -27,7 +43,7 @@ Under **LD-block** cross-validation (~109k test variants):
 | vs coarse \(F_{ST}\) | Higher (paired ΔAUROC CI excludes 0) |
 | Feature family permutation | Largest AUROC drop from **AF**, then **LD** |
 | Sign-discordance endpoint | AUROC **0.77** |
-| Score edits (Catalog PGS) | Frequency-aware filters (\(F_{ST}\)/MAF) reduce ancestry mean score separation (MAD); matched-mass Monte Carlo supports several modes |
+| Score edits (Catalog PGS) | Frequency-aware filters (\(F_{ST}\)/MAF) reduce ancestry mean score separation; matched-mass Monte Carlo supports several modes |
 | Duffy / WBC positive control | AFR null-homozygous vs dose&lt;2: Δmean PGS **0.119** [0.024, 0.206] |
 | PAGE LDL (external) | **4,384** variants after allele QC; β correlation ≈ **0.01** |
 
