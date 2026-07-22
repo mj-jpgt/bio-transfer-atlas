@@ -18,7 +18,6 @@ dependencies:
   - seaborn
   - jupyterlab
   - ipykernel
-  - snakemake-minimal
   - bcftools
   - htslib
   - plink2

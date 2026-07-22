@@ -103,8 +103,9 @@ bio-transfer-atlas/data/modeling/*
 !bio-transfer-atlas/data/**/MANIFEST.tsv
 !bio-transfer-atlas/data/registry.yaml
 
-# Manuscript drafts stay private
+# Manuscript drafts / unused Snakemake scaffold stay private
 bio-transfer-atlas/paper/
+bio-transfer-atlas/workflow/
 
 # Freeze pack: keep tables/figures/reports; ignore nested paper duplicate if re-added
 bio-transfer-atlas/BTA_robustness_freeze_results_20260720/paper/

@@ -72,12 +72,6 @@ python scripts/run_duffy_positive_control.py
 python scripts/run_external_page_grch38.py --from-joined data/raw/external_sumstats/page_panukbb_joined_grch38.parquet
 ```
 
-Optional chr22 smoke pipeline:
-
-```bash
-make smoke
-```
-
 ## Repository layout
 
 ```
@@ -85,7 +79,6 @@ bio-transfer-atlas/
 ├── configs/          # experiment YAML
 ├── scripts/          # analysis entrypoints
 ├── src/bta/          # library code
-├── workflow/         # Snakemake rules
 ├── BTA_robustness_freeze_results_20260720/  # result tables + figures
 ├── tests/
 └── environment.yml
