@@ -4,6 +4,18 @@ Predict **cross-ancestry polygenic score / GWAS portability failure** from open 
 
 Labels come from multi-ancestry summary-statistic concordance (high \(I^2\), sign discordance)—no individual phenotypes required for the primary analyses.
 
+## Abstract
+
+Cross-ancestry polygenic scores often lose accuracy outside European discovery cohorts. We build an open-data **Biological Transferability Atlas**: variant-level models that predict GWAS/PRS portability failure from allele-frequency (AF), LD, and selection features, then test score-edit interventions on 1000 Genomes GRCh38 genotypes. Under LD-block cross-validation, AF+LD features achieve AUROC ≈ **0.627**, exceeding coarse \(F_{ST}\); population-distance features are competitive (~0.617) and should not be dismissed as uniformly weak. Frequency-aware interventions (\(F_{ST}\)/MAF filters) reduce mean absolute EUR–non-EUR score gaps on average, whereas pruning top predicted-risk variants often worsens gaps. Positive controls (Duffy/WBC; autoimmune MHC stress-tests) and open external sumstat concordance with bootstrap CIs anchor claim discipline. Fine-mapping tiers and an LD-graph GAT provide descriptive attention weights without claiming that SuSiE or graph nets “solve” allele-frequency bias.
+
+## Contributions
+
+1. **Variant-level portability-risk models** under LD-block cross-validation, using AF, LD, and selection features to predict high-\(I^2\) GWAS discordance (and related endpoints such as sign discordance).
+2. **Honest peer comparisons**: AF/LD vs coarse \(F_{ST}\) and population-distance encodings at the variant scale; trait-level Z-score concordance kept as a trait-scale analysis, not an AF/LD peer contest.
+3. **Score-edit intervention bake-off** on Catalog PGS applied to 1000 Genomes GRCh38, scored as ancestry **mean separation** (MAD)—not phenotype accuracy—with matched-mass Monte Carlo and leave-one-score-out controls.
+4. **Biological anchors**: Duffy/WBC positive control (allele-audited) and MHC-heavy autoimmune stress-tests; internal Pan-UKB concordance sensitivity vs external PAGE after GRCh38 liftover.
+5. **Claim discipline**: SuSiE primary = signed LD only; GAT attention is descriptive graph weighting, not mechanism evidence.
+
 ## Results
 
 Under **LD-block** cross-validation (~109k test variants):
@@ -20,7 +32,7 @@ Under **LD-block** cross-validation (~109k test variants):
 | PAGE LDL (external) | **4,384** variants after allele QC; β correlation ≈ **0.01** |
 
 Full CSV tables and figures: [`bio-transfer-atlas/BTA_robustness_freeze_results_20260720/`](bio-transfer-atlas/BTA_robustness_freeze_results_20260720/)  
-Write-up: [`bio-transfer-atlas/paper/`](bio-transfer-atlas/paper/) · [`bio-transfer-atlas/BTA_robustness_freeze_results_20260720/reports/BTA_M4_M6_RESULTS_REPORT.md`](bio-transfer-atlas/BTA_robustness_freeze_results_20260720/reports/BTA_M4_M6_RESULTS_REPORT.md)
+Narrative report: [`bio-transfer-atlas/BTA_robustness_freeze_results_20260720/reports/BTA_M4_M6_RESULTS_REPORT.md`](bio-transfer-atlas/BTA_robustness_freeze_results_20260720/reports/BTA_M4_M6_RESULTS_REPORT.md)
 
 ## Setup
 
@@ -74,7 +86,6 @@ bio-transfer-atlas/
 ├── scripts/          # analysis entrypoints
 ├── src/bta/          # library code
 ├── workflow/         # Snakemake rules
-├── paper/            # manuscript
 ├── BTA_robustness_freeze_results_20260720/  # result tables + figures
 ├── tests/
 └── environment.yml

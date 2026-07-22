@@ -1,10 +1,8 @@
 # Paper freeze write-up — robustness fixes (M4–M6 revised)
 
-**Biological Transferability Atlas · robustness pass before freeze (July 2026)**  
-Compute: Lambda A100 · project root `/lambda/nfs/geeg/fairness`
+**Biological Transferability Atlas · robustness pass before freeze (July 2026)**
 
-Manuscript: [`../paper/`](../paper/)  
-Earlier ledger: [`BTA_M1_M3_RESULTS_REPORT.md`](BTA_M1_M3_RESULTS_REPORT.md)
+See the repository root [README](../../../README.md) for abstract and contributions.
 
 ---
 
