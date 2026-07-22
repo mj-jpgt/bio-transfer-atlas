@@ -1,0 +1,17 @@
+target,split,subset,feature_group,n_feats,model,n_train,n_test,pos_rate_test,AUROC,AUPRC,F1,balACC,ECE
+y_high_I2,split_variant,associated,FST,1,logreg,50432,11160,0.4087,0.5804,0.4631,0.4223,0.5374,0.0913
+y_high_I2,split_variant,associated,FST,1,hgb,50432,11160,0.4087,0.5957,0.4961,0.1840,0.5259,0.0043
+y_high_I2,split_variant,associated,AF,19,logreg,50432,11160,0.4087,0.6501,0.5366,0.5948,0.6161,0.0912
+y_high_I2,split_variant,associated,AF,19,hgb,50432,11160,0.4087,0.8095,0.7761,0.6582,0.7264,0.0617
+y_high_I2,split_variant,associated,LD,9,logreg,50432,11160,0.4087,0.6629,0.5588,0.5721,0.6154,0.0877
+y_high_I2,split_variant,associated,LD,9,hgb,50432,11160,0.4087,0.7990,0.7660,0.6294,0.7118,0.0562
+y_high_I2,split_variant,associated,SEL,22,logreg,50432,11160,0.4087,0.6503,0.5348,0.5730,0.6217,0.0875
+y_high_I2,split_variant,associated,SEL,22,hgb,50432,11160,0.4087,0.8191,0.7841,0.6703,0.7359,0.0672
+y_high_I2,split_variant,associated,AF_LD,28,logreg,50432,11160,0.4087,0.6718,0.5864,0.5901,0.6281,0.0896
+y_high_I2,split_variant,associated,AF_LD,28,hgb,50432,11160,0.4087,0.8312,0.8019,0.6745,0.7397,0.0593
+y_high_I2,split_variant,associated,AF_SEL,41,logreg,50432,11160,0.4087,0.6648,0.5558,0.5964,0.6311,0.0865
+y_high_I2,split_variant,associated,AF_SEL,41,hgb,50432,11160,0.4087,0.8306,0.7984,0.6886,0.7474,0.0646
+y_high_I2,split_variant,associated,LD_SEL,31,logreg,50432,11160,0.4087,0.6770,0.5913,0.5811,0.6252,0.0876
+y_high_I2,split_variant,associated,LD_SEL,31,hgb,50432,11160,0.4087,0.8382,0.8088,0.6857,0.7474,0.0670
+y_high_I2,split_variant,associated,AF_LD_SEL,50,logreg,50432,11160,0.4087,0.6842,0.6074,0.5951,0.6367,0.0877
+y_high_I2,split_variant,associated,AF_LD_SEL,50,hgb,50432,11160,0.4087,0.8424,0.8123,0.6914,0.7514,0.0636

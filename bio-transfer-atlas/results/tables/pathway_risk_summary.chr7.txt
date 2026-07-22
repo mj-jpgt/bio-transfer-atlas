@@ -1,0 +1,43 @@
+======================================================================
+TOP CROSS-ANCESTRY-UNSTABLE PATHWAYS per trait (chr7)
+======================================================================
+
+[CAD]
+  I2=0.658  n_assoc= 36  PBS=0.129  Mechanical load activates signaling by PIEZO1 and integrins 
+  I2=0.512  n_assoc=  3  PBS=0.112  Acyl chain remodelling of PC
+  I2=0.512  n_assoc=  3  PBS=0.112  Acyl chain remodelling of PE
+  I2=0.507  n_assoc= 17  PBS=0.123  Cellular response to mitochondrial stress
+  I2=0.491  n_assoc= 35  PBS=0.131  Formation of TC-NER Pre-Incision Complex
+  I2=0.480  n_assoc= 33  PBS=0.104  Unwinding of DNA
+  I2=0.477  n_assoc= 17  PBS=0.141  Signal regulatory protein family interactions
+  I2=0.467  n_assoc= 26  PBS=0.122  RNA Polymerase II Transcription Initiation
+
+[T2D]
+  I2=0.655  n_assoc=130  PBS=0.128  Elevation of cytosolic Ca2+ levels
+  I2=0.655  n_assoc=130  PBS=0.128  Antigen activates B Cell Receptor (BCR) leading to generatio
+  I2=0.653  n_assoc= 87  PBS=0.148  MicroRNA (miRNA) biogenesis
+  I2=0.653  n_assoc= 87  PBS=0.148  Formation of the Early Elongation Complex
+  I2=0.653  n_assoc= 87  PBS=0.148  FGFR2 alternative splicing
+  I2=0.653  n_assoc= 87  PBS=0.148  RNA Polymerase II Transcription Elongation
+  I2=0.653  n_assoc= 87  PBS=0.148  RNA Pol II CTD phosphorylation and interaction with CE
+  I2=0.653  n_assoc= 87  PBS=0.148  FGFR2 mutant receptor activation
+
+[BMI]
+  I2=0.773  n_assoc= 71  PBS=0.125  Mitochondrial calcium ion transport
+  I2=0.773  n_assoc= 71  PBS=0.125  Processing of SMDT1
+  I2=0.754  n_assoc=106  PBS=0.129  Biosynthesis of A2E, implicated in retinal degradation
+  I2=0.748  n_assoc=107  PBS=0.139  Diseases associated with visual transduction
+  I2=0.748  n_assoc=107  PBS=0.139  Retinoid cycle disease events
+  I2=0.748  n_assoc=107  PBS=0.139  Diseases of the neuronal system
+  I2=0.604  n_assoc=124  PBS=0.186  Killing mechanisms
+  I2=0.604  n_assoc=124  PBS=0.186  DAP12 signaling
+
+[LDL]
+  I2=0.670  n_assoc= 60  PBS=0.163  FLT3 Signaling
+  I2=0.670  n_assoc= 60  PBS=0.163  Signal attenuation
+  I2=0.670  n_assoc= 60  PBS=0.163  RET signaling
+  I2=0.670  n_assoc= 60  PBS=0.163  Insulin receptor signalling cascade
+  I2=0.670  n_assoc= 60  PBS=0.163  IRS activation
+  I2=0.647  n_assoc= 30  PBS=0.378  Aspirin ADME
+  I2=0.647  n_assoc= 30  PBS=0.378  Biosynthesis of specialized proresolving mediators (SPMs)
+  I2=0.647  n_assoc= 30  PBS=0.378  Biosynthesis of DHA-derived SPMs

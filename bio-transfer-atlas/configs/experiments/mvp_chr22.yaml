@@ -1,0 +1,36 @@
+experiment_name: mvp_cad_t2d_bmi_chr22
+
+genotype:
+  panel: 1000g_phase3
+  chromosomes: [22]
+  build: GRCh37
+
+traits:
+  - coronary_artery_disease
+  - type_2_diabetes
+  - body_mass_index
+
+score_selection:
+  min_variant_match_rate: 0.70
+  include_development_ancestry:
+    - European
+    - Multi-ancestry
+    - East Asian
+
+pathway_mapping:
+  primary: reactome_positional_10kb
+  sensitivity:
+    - reactome_nearest_gene
+    - reactome_vep_consequence
+    - go_positional_10kb
+
+metrics:
+  - standardized_population_shift
+  - rank_instability
+  - genetic_distance_sensitivity
+  - pathway_instability
+  - inclusion_priority
+
+bootstrap:
+  n_boot: 1000
+  seed: 719

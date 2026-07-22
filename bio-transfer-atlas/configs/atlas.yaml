@@ -1,0 +1,38 @@
+project:
+  name: bio-transfer-atlas
+  seed: 719
+  build_target: GRCh38
+
+traits:
+  - T2D
+  - CAD
+  - BMI
+  - LDL
+
+labels:
+  heterogeneity_i2_threshold: 0.25
+  risk_class_medium:
+    i2_gt: 0.25
+    sign_concordance_lt: 0.80
+  risk_class_high:
+    i2_gt: 0.50
+    sign_concordance_lt: 0.60
+  associated_zmeta_abs_threshold: 3.0
+
+splits:
+  split_trait:
+    train: [CAD, T2D]
+    val: [BMI]
+    test: [LDL]
+  split_variant:
+    train_frac: 0.70
+    val_frac: 0.15
+    test_frac: 0.15
+
+sources:
+  panukbb:
+    manifest: https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/phenotype_manifest.tsv.bgz
+  bbj:
+    downloads: https://pheweb.jp/downloads
+  finngen:
+    manifest_r12: https://storage.googleapis.com/finngen-public-data-r12/summary_stats/finngen_R12_manifest.tsv

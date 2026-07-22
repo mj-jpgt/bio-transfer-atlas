@@ -1,0 +1,3 @@
+model,split,AUROC,AUPRC,device,n_graphs_train,n_graphs_test,n_feats
+gat,split_ld_block,0.6194,0.4295,cuda,313,85,50
+xgboost_hist,split_ld_block,0.6231,0.4645,cuda,313,85,50

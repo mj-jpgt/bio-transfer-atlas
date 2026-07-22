@@ -1,0 +1,38 @@
+name: bta
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - numpy
+  - pandas
+  - polars
+  - pyarrow
+  - scipy
+  - scikit-learn
+  - statsmodels
+  - matplotlib
+  - plotly
+  - seaborn
+  - jupyterlab
+  - ipykernel
+  - snakemake-minimal
+  - bcftools
+  - htslib
+  - plink2
+  - tabix
+  - awscli
+  - pytest
+  - pip:
+      - pandera
+      - pydantic
+      - typer
+      - rich
+      - loguru
+      - requests
+      - tqdm
+      - huggingface_hub
+      - datasets
+      - gseapy

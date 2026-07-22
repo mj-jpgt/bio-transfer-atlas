@@ -1,0 +1,43 @@
+======================================================================
+TOP CROSS-ANCESTRY-UNSTABLE PATHWAYS per trait (chr6)
+======================================================================
+
+[CAD]
+  I2=0.608  n_assoc=128  PBS=0.088  Activation and oligomerization of BAK protein
+  I2=0.608  n_assoc=128  PBS=0.088  Release of apoptotic factors from the mitochondria
+  I2=0.608  n_assoc=128  PBS=0.088  Apoptotic factor-mediated response
+  I2=0.608  n_assoc=128  PBS=0.088  Intrinsic Pathway for Apoptosis
+  I2=0.608  n_assoc=128  PBS=0.088  Pyroptosis
+  I2=0.517  n_assoc=173  PBS=0.123  Platelet calcium homeostasis
+  I2=0.517  n_assoc=173  PBS=0.123  Elevation of cytosolic Ca2+ levels
+  I2=0.517  n_assoc=173  PBS=0.123  DAG and IP3 signaling
+
+[T2D]
+  I2=0.592  n_assoc=145  PBS=0.111  Gap-filling DNA repair synthesis and ligation in TC-NER
+  I2=0.592  n_assoc=145  PBS=0.111  Transcription-Coupled Nucleotide Excision Repair (TC-NER)
+  I2=0.592  n_assoc=145  PBS=0.111  Formation of TC-NER Pre-Incision Complex
+  I2=0.592  n_assoc=145  PBS=0.111  Dual Incision in GG-NER
+  I2=0.592  n_assoc=145  PBS=0.111  Dual incision in TC-NER
+  I2=0.570  n_assoc=3383  PBS=0.083  Translocation of ZAP-70 to Immunological synapse
+  I2=0.570  n_assoc=3383  PBS=0.083  Phosphorylation of CD3 and TCR zeta chains
+  I2=0.570  n_assoc=3383  PBS=0.083  Generation of second messenger molecules
+
+[BMI]
+  I2=0.686  n_assoc=253  PBS=0.108  G alpha (z) signalling events
+  I2=0.648  n_assoc=668  PBS=0.099  tRNA modification in the nucleus and cytosol
+  I2=0.602  n_assoc=156  PBS=0.122  Transport of RCbl within the body
+  I2=0.602  n_assoc=156  PBS=0.122  Uptake of dietary cobalamins into enterocytes
+  I2=0.602  n_assoc=156  PBS=0.122  Defective ABCD4 causes MAHCJ
+  I2=0.571  n_assoc=182  PBS=0.103  APOBEC3G mediated resistance to HIV-1 infection
+  I2=0.571  n_assoc=182  PBS=0.103  Integration of provirus
+  I2=0.571  n_assoc=182  PBS=0.103  Integration of viral DNA into host genomic DNA
+
+[LDL]
+  I2=0.677  n_assoc=1155  PBS=0.086  Butyrophilin (BTN) family interactions
+  I2=0.668  n_assoc=5666  PBS=0.083  Generation of second messenger molecules
+  I2=0.668  n_assoc=5666  PBS=0.083  Phosphorylation of CD3 and TCR zeta chains
+  I2=0.668  n_assoc=5666  PBS=0.083  Translocation of ZAP-70 to Immunological synapse
+  I2=0.659  n_assoc=317  PBS=0.055  TNF receptor superfamily (TNFSF) members mediating non-canon
+  I2=0.659  n_assoc=298  PBS=0.054  TNFs bind their physiological receptors
+  I2=0.657  n_assoc=284  PBS=0.057  Interleukin-10 signaling
+  I2=0.657  n_assoc=284  PBS=0.057  Differentiation of naive CD4+ T cells to T helper 1 cells (T

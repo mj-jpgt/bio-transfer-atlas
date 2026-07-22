@@ -1,0 +1,43 @@
+======================================================================
+TOP CROSS-ANCESTRY-UNSTABLE PATHWAYS per trait (chr22)
+======================================================================
+
+[CAD]
+  I2=0.546  n_assoc=127  PBS=0.213  tRNA modification in the mitochondrion
+  I2=0.523  n_assoc=120  PBS=0.215  The role of GTSE1 in G2/M progression after G2 checkpoint
+  I2=0.455  n_assoc= 62  PBS=0.241  BMAL1:CLOCK,NPAS2 activates circadian expression
+  I2=0.455  n_assoc= 62  PBS=0.241  Transcriptional activation of mitochondrial biogenesis
+  I2=0.455  n_assoc= 62  PBS=0.241  Nuclear Receptor transcription pathway
+  I2=0.455  n_assoc= 62  PBS=0.241  Transcriptional regulation of brown and beige adipocyte diff
+  I2=0.455  n_assoc= 62  PBS=0.241  Transcriptional regulation of brown and beige adipocyte diff
+  I2=0.455  n_assoc= 62  PBS=0.241  SUMOylation of intracellular receptors
+
+[T2D]
+  I2=0.574  n_assoc= 89  PBS=0.151  EPHB-mediated forward signaling
+  I2=0.529  n_assoc= 84  PBS=0.130  ER Quality Control Compartment (ERQC)
+  I2=0.529  n_assoc= 84  PBS=0.130  Calnexin/calreticulin cycle
+  I2=0.529  n_assoc= 84  PBS=0.130  N-glycan trimming in the ER and Calnexin/Calreticulin cycle
+  I2=0.506  n_assoc=102  PBS=0.161  RHO GTPases Activate ROCKs
+  I2=0.506  n_assoc=102  PBS=0.161  Sema4D in semaphorin signaling
+  I2=0.506  n_assoc=102  PBS=0.161  Sema4D induced cell migration and growth-cone collapse
+  I2=0.506  n_assoc=102  PBS=0.161  Semaphorin interactions
+
+[BMI]
+  I2=0.599  n_assoc=289  PBS=0.211  Ca2+ pathway
+  I2=0.599  n_assoc=289  PBS=0.211  Post-transcriptional silencing by small RNAs
+  I2=0.599  n_assoc=289  PBS=0.211  Regulation of PD-L1(CD274) translation
+  I2=0.599  n_assoc=289  PBS=0.211  Regulation of MITF-M-dependent genes involved in apoptosis
+  I2=0.599  n_assoc=289  PBS=0.211  Regulation of RUNX1 Expression and Activity
+  I2=0.599  n_assoc=289  PBS=0.211  Transcriptional Regulation by VENTX
+  I2=0.599  n_assoc=289  PBS=0.211  MAPK6/MAPK4 signaling
+  I2=0.599  n_assoc=289  PBS=0.211  Regulation of CDH11 mRNA translation by microRNAs
+
+[LDL]
+  I2=0.623  n_assoc= 91  PBS=0.145  Protein ubiquitination
+  I2=0.623  n_assoc= 91  PBS=0.145  E3 ubiquitin ligases ubiquitinate target proteins
+  I2=0.623  n_assoc= 91  PBS=0.145  Synthesis of active ubiquitin: roles of E1 and E2 enzymes
+  I2=0.623  n_assoc= 91  PBS=0.145  RIPK1-mediated regulated necrosis
+  I2=0.623  n_assoc= 91  PBS=0.145  Regulated Necrosis
+  I2=0.623  n_assoc= 91  PBS=0.145  Regulation of necroptotic cell death
+  I2=0.623  n_assoc= 91  PBS=0.145  Regulation of TNFR1 signaling
+  I2=0.550  n_assoc=106  PBS=0.091  Mitophagy

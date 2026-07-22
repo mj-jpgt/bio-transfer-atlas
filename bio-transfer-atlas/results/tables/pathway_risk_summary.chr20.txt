@@ -1,0 +1,43 @@
+======================================================================
+TOP CROSS-ANCESTRY-UNSTABLE PATHWAYS per trait (chr20)
+======================================================================
+
+[CAD]
+  I2=0.546  n_assoc=156  PBS=0.108  Defective GSS causes GSS deficiency
+  I2=0.545  n_assoc=158  PBS=0.049  Regulation of necroptotic cell death
+  I2=0.545  n_assoc=158  PBS=0.049  RIPK1-mediated regulated necrosis
+  I2=0.536  n_assoc=164  PBS=0.080  DDX58/IFIH1-mediated induction of interferon-alpha/beta
+  I2=0.536  n_assoc=164  PBS=0.080  Negative regulators of DDX58/IFIH1 signaling
+  I2=0.534  n_assoc= 55  PBS=0.112  Lipid particle organization
+  I2=0.525  n_assoc=170  PBS=0.102  SARS-CoV-1 activates/modulates innate immune responses
+  I2=0.519  n_assoc=129  PBS=0.101  Aflatoxin activation and detoxification
+
+[T2D]
+  I2=0.454  n_assoc=193  PBS=0.112  Lipid particle organization
+  I2=0.438  n_assoc= 18  PBS=0.105  Serine metabolism
+  I2=0.417  n_assoc= 49  PBS=0.116  Diseases of nucleotide metabolism
+  I2=0.417  n_assoc= 49  PBS=0.116  Defective ADA disrupts (deoxy)adenosine deamination
+  I2=0.417  n_assoc= 49  PBS=0.116  Nucleotide salvage defects
+  I2=0.417  n_assoc= 49  PBS=0.116  Purine salvage
+  I2=0.411  n_assoc= 36  PBS=0.103  Signaling by Hippo
+  I2=0.406  n_assoc=203  PBS=0.128  Nuclear Receptor transcription pathway
+
+[BMI]
+  I2=0.708  n_assoc= 99  PBS=0.112  Lipid particle organization
+  I2=0.683  n_assoc=155  PBS=0.196  TNFs bind their physiological receptors
+  I2=0.667  n_assoc=173  PBS=0.187  Telomere Extension By Telomerase
+  I2=0.667  n_assoc=173  PBS=0.187  Resolution of D-Loop Structures
+  I2=0.667  n_assoc=173  PBS=0.187  Cytosolic iron-sulfur cluster assembly
+  I2=0.667  n_assoc=173  PBS=0.187  Resolution of D-loop Structures through Synthesis-Dependent 
+  I2=0.655  n_assoc= 99  PBS=0.139  TGFBR1 LBD Mutants in Cancer
+  I2=0.655  n_assoc= 99  PBS=0.139  Signaling by TGF-beta Receptor Complex in Cancer
+
+[LDL]
+  I2=0.621  n_assoc= 18  PBS=0.099  Paracetamol ADME
+  I2=0.621  n_assoc= 18  PBS=0.099  Aflatoxin activation and detoxification
+  I2=0.617  n_assoc=391  PBS=0.094  Complex III assembly
+  I2=0.606  n_assoc=318  PBS=0.064  Regulation of TP53 Degradation
+  I2=0.606  n_assoc=318  PBS=0.064  Regulation of TP53 Activity through Association with Co-fact
+  I2=0.606  n_assoc=318  PBS=0.064  Regulation of TP53 Expression and Degradation
+  I2=0.568  n_assoc=215  PBS=0.062  Maturation of TCA enzymes and regulation of TCA cycle
+  I2=0.568  n_assoc=215  PBS=0.062  Mitochondrial iron-sulfur cluster biogenesis

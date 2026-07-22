@@ -1,0 +1,43 @@
+======================================================================
+TOP CROSS-ANCESTRY-UNSTABLE PATHWAYS per trait (chr21)
+======================================================================
+
+[CAD]
+  I2=0.454  n_assoc=  4  PBS=0.119  Proteasome assembly
+  I2=0.347  n_assoc= 56  PBS=0.138  Induction of Cell-Cell Fusion
+  I2=0.347  n_assoc= 56  PBS=0.138  Attachment and Entry
+  I2=0.347  n_assoc= 56  PBS=0.138  Early SARS-CoV-2 Infection Events
+  I2=0.347  n_assoc= 56  PBS=0.138  Late SARS-CoV-2 Infection Events
+  I2=0.347  n_assoc= 56  PBS=0.138  Attachment and Entry
+  I2=0.327  n_assoc= 58  PBS=0.149  Antimicrobial mechanism of IFN-stimulated genes
+  I2=0.327  n_assoc= 58  PBS=0.149  ISG15 antiviral mechanism
+
+[T2D]
+  I2=0.561  n_assoc=  4  PBS=0.111  Methylation
+  I2=0.561  n_assoc=  4  PBS=0.111  Phase II - Conjugation of compounds
+  I2=0.561  n_assoc=  4  PBS=0.111  Eukaryotic Translation Termination
+  I2=0.486  n_assoc= 46  PBS=0.094  Vitamin B6 activation to pyridoxal phosphate
+  I2=0.453  n_assoc= 22  PBS=0.063  CHD6, CHD7, CHD8, CHD9 subfamily
+  I2=0.453  n_assoc= 22  PBS=0.063  Recognition and association of DNA glycosylase with site con
+  I2=0.453  n_assoc= 22  PBS=0.063  Reproduction
+  I2=0.453  n_assoc= 22  PBS=0.063  CHD1 and CHD2 subfamily
+
+[BMI]
+  I2=0.572  n_assoc= 41  PBS=0.078  Cooperation of PDCL (PhLP1) and TRiC/CCT in G-protein beta f
+  I2=0.572  n_assoc= 41  PBS=0.078  Cargo trafficking to the periciliary membrane
+  I2=0.572  n_assoc= 41  PBS=0.078  BBSome-mediated cargo-targeting to cilium
+  I2=0.572  n_assoc= 41  PBS=0.078  Cooperation of Prefoldin and TriC/CCT  in actin and tubulin 
+  I2=0.572  n_assoc= 41  PBS=0.078  Formation of tubulin folding intermediates by CCT/TriC
+  I2=0.572  n_assoc= 41  PBS=0.078  Folding of actin by CCT/TriC
+  I2=0.572  n_assoc= 41  PBS=0.078  Prefoldin mediated transfer of substrate  to CCT/TriC
+  I2=0.572  n_assoc= 41  PBS=0.078  Protein folding
+
+[LDL]
+  I2=0.598  n_assoc=171  PBS=0.101  Nuclear signaling by ERBB4
+  I2=0.598  n_assoc=171  PBS=0.101  Signaling by ERBB4
+  I2=0.540  n_assoc= 67  PBS=0.090  Interleukin-12 signaling
+  I2=0.540  n_assoc= 67  PBS=0.090  Detoxification of Reactive Oxygen Species
+  I2=0.540  n_assoc= 67  PBS=0.090  Interleukin-12 family signaling
+  I2=0.540  n_assoc= 67  PBS=0.090  Gene and protein expression by JAK-STAT signaling after Inte
+  I2=0.474  n_assoc=226  PBS=0.095  DDX58/IFIH1-mediated induction of interferon-alpha/beta
+  I2=0.474  n_assoc=226  PBS=0.095  MyD88:MAL(TIRAP) cascade initiated on plasma membrane

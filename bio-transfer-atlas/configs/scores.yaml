@@ -1,0 +1,23 @@
+# Score selection config for bio-transfer-atlas
+# Populated after running scripts/select_scores.py against PGS Catalog API.
+# See data/raw/pgs_catalog/metadata/api/ for raw JSON search results.
+
+# Score selection criteria:
+#   - Must have harmonized scoring file available (GRCh37)
+#   - Variant match rate >= 0.70 against 1000G Phase 3
+#   - At least one EUR-developed score per trait
+#   - Include multi-ancestry or non-EUR if available
+#   - Prefer scores with clear development_ancestry metadata
+
+# Format per entry:
+#   pgs_id: PGS000XXX
+#   trait: <trait key from traits.yaml>
+#   development_ancestry: EUR | EAS | AFR | SAS | AMR | Multi
+#   n_variants: <original variant count>
+#   genome_build: GRCh37 | GRCh38
+#   reason_selected: <free text>
+
+# This file is updated by scripts/select_scores.py
+# Do not edit manually after that script has run.
+
+selected_scores: []  # populated after score selection phase

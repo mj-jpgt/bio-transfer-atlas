@@ -1,0 +1,33 @@
+trait,rid,pathway,n_variants,n_assoc,mean_I2,mean_I2_assoc,sign_discord_frac,high_risk_frac,mean_PBS,mean_FST
+CAD,R-HSA-5619056,Defective HK1 causes hexokinase deficiency (HK deficiency),1070.0000,41.0000,0.1003,0.5608,0.9140,0.8458,0.1051,0.0467
+CAD,R-HSA-446205,Synthesis of GDP-mannose,1070.0000,41.0000,0.1003,0.5608,0.9140,0.8458,0.1051,0.0467
+CAD,R-HSA-983170,"Antigen Presentation: Folding, assembly and peptide loading of class I MHC",196.0000,19.0000,0.2083,0.5220,0.8571,0.7857,0.1143,0.0437
+CAD,R-HSA-5694530,Cargo concentration in the ER,196.0000,19.0000,0.2083,0.5220,0.8571,0.7857,0.1143,0.0437
+CAD,R-HSA-5620922,BBSome-mediated cargo-targeting to cilium,317.0000,26.0000,0.1722,0.4666,0.9495,0.8233,0.0893,0.0377
+CAD,R-HSA-5419276,Mitochondrial translation termination,794.0000,17.0000,0.1205,0.4582,0.8665,0.7607,0.1052,0.0450
+CAD,R-HSA-5389840,Mitochondrial translation elongation,794.0000,17.0000,0.1205,0.4582,0.8665,0.7607,0.1052,0.0450
+CAD,R-HSA-5368287,Mitochondrial translation,794.0000,17.0000,0.1205,0.4582,0.8665,0.7607,0.1052,0.0450
+T2D,R-HSA-9937080,Developmental Lineage of Multipotent Pancreatic Progenitor Cells,358.0000,168.0000,0.3018,0.5467,0.7989,0.6872,0.1430,0.0605
+T2D,R-HSA-452723,Transcriptional regulation of pluripotent stem cells,685.0000,173.0000,0.2004,0.5309,0.8511,0.7051,0.1422,0.0589
+T2D,R-HSA-2892245,"POU5F1 (OCT4), SOX2, NANOG repress genes related to differentiation",685.0000,173.0000,0.2004,0.5309,0.8511,0.7051,0.1422,0.0589
+T2D,R-HSA-9768919,NPAS4 regulates expression of target genes,618.0000,56.0000,0.1638,0.5298,0.8916,0.7832,0.1015,0.0428
+T2D,R-HSA-9634815,Transcriptional Regulation by NPAS4,618.0000,56.0000,0.1638,0.5298,0.8916,0.7832,0.1015,0.0428
+T2D,R-HSA-9836573,Mitochondrial RNA degradation,485.0000,101.0000,0.2950,0.5020,0.8948,0.7897,0.1194,0.0458
+T2D,R-HSA-937039,IRAK1 recruits IKK complex,371.0000,57.0000,0.1521,0.4895,0.9218,0.8302,0.1343,0.0577
+T2D,R-HSA-5603027,IKBKG deficiency causes anhidrotic ectodermal dysplasia with immunodeficiency (EDA-ID) (via TLR),371.0000,57.0000,0.1521,0.4895,0.9218,0.8302,0.1343,0.0577
+BMI,R-HSA-2393930,Phosphate bond hydrolysis by NUDT proteins,479.0000,59.0000,0.2666,0.6859,0.8998,0.7557,0.0666,0.0345
+BMI,R-HSA-8951430,RUNX3 regulates WNT signaling,934.0000,271.0000,0.4715,0.6710,0.9111,0.8426,0.1451,0.0523
+BMI,R-HSA-8878159,Transcriptional regulation by RUNX3,934.0000,271.0000,0.4715,0.6710,0.9111,0.8426,0.1451,0.0523
+BMI,R-HSA-201722,Formation of the beta-catenin:TCF transactivating complex,934.0000,271.0000,0.4715,0.6710,0.9111,0.8426,0.1451,0.0523
+BMI,R-HSA-9823730,Formation of definitive endoderm,934.0000,271.0000,0.4715,0.6710,0.9111,0.8426,0.1451,0.0523
+BMI,R-HSA-9825892,Regulation of MITF-M-dependent genes involved in cell cycle and proliferation,934.0000,271.0000,0.4715,0.6710,0.9111,0.8426,0.1451,0.0523
+BMI,R-HSA-4411364,Binding of TCF/LEF:CTNNB1 to target gene promoters,934.0000,271.0000,0.4715,0.6710,0.9111,0.8426,0.1451,0.0523
+BMI,R-HSA-381771,"Synthesis, secretion, and inactivation of Glucagon-like Peptide-1 (GLP-1)",1536.0000,277.0000,0.3385,0.6575,0.9271,0.8372,0.1286,0.0503
+LDL,R-HSA-8878159,Transcriptional regulation by RUNX3,934.0000,357.0000,0.4589,0.6716,0.9251,0.8437,0.1451,0.0523
+LDL,R-HSA-4411364,Binding of TCF/LEF:CTNNB1 to target gene promoters,934.0000,357.0000,0.4589,0.6716,0.9251,0.8437,0.1451,0.0523
+LDL,R-HSA-9825892,Regulation of MITF-M-dependent genes involved in cell cycle and proliferation,934.0000,357.0000,0.4589,0.6716,0.9251,0.8437,0.1451,0.0523
+LDL,R-HSA-9823730,Formation of definitive endoderm,934.0000,357.0000,0.4589,0.6716,0.9251,0.8437,0.1451,0.0523
+LDL,R-HSA-201722,Formation of the beta-catenin:TCF transactivating complex,934.0000,357.0000,0.4589,0.6716,0.9251,0.8437,0.1451,0.0523
+LDL,R-HSA-8951430,RUNX3 regulates WNT signaling,934.0000,357.0000,0.4589,0.6716,0.9251,0.8437,0.1451,0.0523
+LDL,R-HSA-9909649,Regulation of PD-L1(CD274) transcription,1156.0000,376.0000,0.4078,0.6575,0.9187,0.8227,0.1281,0.0477
+LDL,R-HSA-75109,Triglyceride biosynthesis,512.0000,211.0000,0.3565,0.6374,0.9453,0.8242,0.1030,0.0427

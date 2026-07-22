@@ -1,0 +1,2 @@
+torch_ok cuda=True geometric=True
+HGB+SHAP is primary attribution; GAT optional follow-on.

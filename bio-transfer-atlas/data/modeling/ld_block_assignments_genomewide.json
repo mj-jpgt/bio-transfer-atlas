@@ -1,0 +1,8 @@
+{
+  "method": "mb_bin_1.0",
+  "n_variants": 2394596,
+  "n_blocks": 2709,
+  "n_train_blocks": 2168,
+  "n_test_blocks": 541,
+  "test_frac_variants": 0.19314072185871856
+}

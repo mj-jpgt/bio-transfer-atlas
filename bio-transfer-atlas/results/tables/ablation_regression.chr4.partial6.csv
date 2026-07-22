@@ -1,0 +1,17 @@
+target,split,subset,feature_group,n_feats,model,pearson_r,spearman_rho,RMSE,MAE
+I2,split_variant,associated,FST,1,ridge,0.0885,0.1476,0.2428,0.2093
+I2,split_variant,associated,FST,1,hgb,0.1634,0.1677,0.2404,0.2055
+I2,split_variant,associated,AF,19,ridge,0.2275,0.2287,0.2373,0.2019
+I2,split_variant,associated,AF,19,hgb,0.5035,0.4476,0.2128,0.1779
+I2,split_variant,associated,LD,9,ridge,0.2130,0.2313,0.2381,0.2028
+I2,split_variant,associated,LD,9,hgb,0.4787,0.4245,0.2157,0.1803
+I2,split_variant,associated,SEL,22,ridge,0.2386,0.2338,0.2367,0.2015
+I2,split_variant,associated,SEL,22,hgb,0.5135,0.4571,0.2119,0.1772
+I2,split_variant,associated,AF_LD,28,ridge,0.2472,0.2446,0.2361,0.2005
+I2,split_variant,associated,AF_LD,28,hgb,0.5460,0.4840,0.2066,0.1708
+I2,split_variant,associated,AF_SEL,41,ridge,0.2507,0.2470,0.2359,0.2003
+I2,split_variant,associated,AF_SEL,41,hgb,0.5437,0.4799,0.2073,0.1728
+I2,split_variant,associated,LD_SEL,31,ridge,0.2586,0.2529,0.2354,0.1997
+I2,split_variant,associated,LD_SEL,31,hgb,0.5535,0.4929,0.2057,0.1701
+I2,split_variant,associated,AF_LD_SEL,50,ridge,0.2654,0.2579,0.2350,0.1991
+I2,split_variant,associated,AF_LD_SEL,50,hgb,0.5696,0.5071,0.2031,0.1676

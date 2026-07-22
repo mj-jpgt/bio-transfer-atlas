@@ -1,0 +1,4 @@
+split,feature_group,AUROC,n_feats,n_train,n_test,device
+split_ld_block,AF_LD_SEL,0.6266,50,391274,108726,cuda
+split_ld_block,RG_REAL,0.5662,2,391274,108726,cuda
+split_ld_block,AF_LD_SEL+VEP_AF,0.6266,50,391274,108726,cuda

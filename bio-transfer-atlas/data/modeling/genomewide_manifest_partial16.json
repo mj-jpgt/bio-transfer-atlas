@@ -1,0 +1,26 @@
+{
+  "chromosomes": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12",
+    "13",
+    "14",
+    "15",
+    "22"
+  ],
+  "n_master_rows": 32116582,
+  "n_unique_variants": 8060705,
+  "n_label_rows": 32116582,
+  "master_path": "data\\modeling\\master_variant_table_genomewide_partial16.parquet",
+  "labels_path": "data\\labels\\gwas_concordance_labels_multisource_genomewide_partial16.parquet",
+  "feature_groups_path": "data\\modeling\\feature_groups_genomewide_partial16.json"
+}

@@ -1,0 +1,2 @@
+split,feature_group,AUROC,AUPRC,n_train,n_test,device,model
+split_ld_block,AF_LD_SEL,0.6004,0.4739,391274,108726,cuda,xgb_hist_depth12_1500

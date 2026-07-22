@@ -1,0 +1,43 @@
+======================================================================
+TOP CROSS-ANCESTRY-UNSTABLE PATHWAYS per trait (chr14)
+======================================================================
+
+[CAD]
+  I2=0.544  n_assoc=105  PBS=0.067  TFAP2 (AP-2) family regulates transcription of growth factor
+  I2=0.544  n_assoc=105  PBS=0.067  Transcriptional regulation by the AP-2 (TFAP2) family of tra
+  I2=0.535  n_assoc=107  PBS=0.088  DNA Damage Recognition in GG-NER
+  I2=0.503  n_assoc= 31  PBS=0.084  SMAD2/SMAD3:SMAD4 heterotrimer regulates transcription
+  I2=0.486  n_assoc=120  PBS=0.094  Global Genome Nucleotide Excision Repair (GG-NER)
+  I2=0.486  n_assoc=120  PBS=0.094  Nucleotide Excision Repair
+  I2=0.477  n_assoc= 35  PBS=0.109  Transcriptional activity of SMAD2/SMAD3:SMAD4 heterotrimer
+  I2=0.470  n_assoc=125  PBS=0.106  Estrogen-dependent gene expression
+
+[T2D]
+  I2=0.551  n_assoc=131  PBS=0.161  Nonhomologous End-Joining (NHEJ)
+  I2=0.529  n_assoc= 95  PBS=0.151  Interaction between L1 and Ankyrins
+  I2=0.397  n_assoc= 26  PBS=0.126  CHD chromatin remodelers
+  I2=0.387  n_assoc=220  PBS=0.084  Transcriptional and post-translational regulation of MITF-M 
+  I2=0.387  n_assoc=220  PBS=0.084  Signaling by high-kinase activity BRAF mutants
+  I2=0.387  n_assoc=220  PBS=0.084  MAP2K and MAPK activation
+  I2=0.387  n_assoc= 24  PBS=0.090  CHD6, CHD7, CHD8, CHD9 subfamily
+  I2=0.375  n_assoc=  9  PBS=0.108  RHOB GTPase cycle
+
+[BMI]
+  I2=0.564  n_assoc=118  PBS=0.178  Advanced glycosylation endproduct receptor signaling
+  I2=0.564  n_assoc=118  PBS=0.178  RUNX2 regulates genes involved in differentiation of myeloid
+  I2=0.564  n_assoc=118  PBS=0.178  RUNX1 regulates transcription of genes involved in different
+  I2=0.561  n_assoc=134  PBS=0.080  Creatine metabolism
+  I2=0.560  n_assoc=329  PBS=0.068  RND3 GTPase cycle
+  I2=0.559  n_assoc=195  PBS=0.065  RND2 GTPase cycle
+  I2=0.557  n_assoc= 91  PBS=0.104  RUNX1 regulates transcription of genes involved in different
+  I2=0.552  n_assoc=249  PBS=0.084  MAP2K and MAPK activation
+
+[LDL]
+  I2=0.578  n_assoc=300  PBS=0.090  Complex IV assembly
+  I2=0.540  n_assoc=265  PBS=0.072  Activation of PUMA and translocation to mitochondria
+  I2=0.540  n_assoc=265  PBS=0.072  TP53 Regulates Transcription of Death Receptors and Ligands
+  I2=0.540  n_assoc=265  PBS=0.072  TP53 Regulates Transcription of Genes Involved in Cytochrome
+  I2=0.529  n_assoc=272  PBS=0.103  Activation of BH3-only proteins
+  I2=0.529  n_assoc=272  PBS=0.103  Regulation of TP53 Activity through Association with Co-fact
+  I2=0.514  n_assoc= 94  PBS=0.146  Nuclear Pore Complex (NPC) Disassembly
+  I2=0.514  n_assoc= 94  PBS=0.146  Activation of NIMA Kinases NEK9, NEK6, NEK7

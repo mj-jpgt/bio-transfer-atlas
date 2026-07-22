@@ -1,0 +1,91 @@
+datasets:
+  panukbb_manifest:
+    url: https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_release/phenotype_manifest.tsv.bgz
+    build: GRCh37
+    license: public
+    local: data/raw/panukbb/phenotype_manifest.tsv.bgz
+    md5: null
+
+  panukbb_t2d:
+    url: https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_flat_files/phecode-250.2-both_sexes.tsv.bgz
+    build: GRCh37
+    license: public
+    local: data/raw/panukbb/chr22/T2D.chr22.parquet
+    md5: null
+
+  panukbb_cad:
+    url: https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_flat_files/phecode-411.4-both_sexes.tsv.bgz
+    build: GRCh37
+    license: public
+    local: data/raw/panukbb/chr22/CAD.chr22.parquet
+    md5: null
+
+  panukbb_bmi:
+    url: https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_flat_files/continuous-21001-both_sexes-irnt.tsv.bgz
+    build: GRCh37
+    license: public
+    local: data/raw/panukbb/chr22/BMI.chr22.parquet
+    md5: null
+
+  panukbb_ldl:
+    url: https://pan-ukb-us-east-1.s3.amazonaws.com/sumstats_flat_files/continuous-LDLC-both_sexes-medadj_irnt.tsv.bgz
+    build: GRCh37
+    license: public
+    local: data/raw/panukbb/chr22/LDL.chr22.parquet
+    md5: null
+
+  bbj_t2d:
+    url: https://humandbs.dbcls.jp/files/hum0197/hum0197.v3.BBJ.T2D.v1.zip
+    build: GRCh37
+    license: BBJ public summary statistics
+    local: data/raw/bbj/chr22/T2D.chr22.parquet
+    md5: null
+
+  bbj_cad:
+    url: https://humandbs.dbcls.jp/files/hum0197/hum0197.v5.gwas.CAD.v1.txt.gz
+    build: GRCh37
+    license: BBJ public summary statistics
+    local: data/raw/bbj/chr22/CAD.chr22.parquet
+    md5: null
+
+  bbj_bmi:
+    url: https://humandbs.dbcls.jp/files/hum0197/hum0197.v3.BBJ.BMI.v1.zip
+    build: GRCh37
+    license: BBJ public summary statistics
+    local: data/raw/bbj/chr22/BMI.chr22.parquet
+    md5: null
+
+  bbj_ldl:
+    url: https://humandbs.dbcls.jp/files/hum0197/hum0197.v3.BBJ.LDLC.v1.zip
+    build: GRCh37
+    license: BBJ public summary statistics
+    local: data/raw/bbj/chr22/LDL.chr22.parquet
+    md5: null
+
+  finngen_manifest_r12:
+    url: https://storage.googleapis.com/finngen-public-data-r12/summary_stats/finngen_R12_manifest.tsv
+    build: GRCh38
+    license: FinnGen public summary statistics
+    local: data/raw/finngen/manifest/finngen_R12_manifest.tsv
+    md5: null
+
+  finngen_t2d:
+    url: https://storage.googleapis.com/finngen-public-data-r12/summary_stats/release/finngen_R12_T2D.gz
+    build: GRCh38
+    license: FinnGen public summary statistics
+    local: data/raw/finngen/chr22/T2D.chr22.parquet
+    md5: null
+
+  finngen_cad:
+    url: https://storage.googleapis.com/finngen-public-data-r12/summary_stats/release/finngen_R12_I9_CHD.gz
+    build: GRCh38
+    license: FinnGen public summary statistics
+    local: data/raw/finngen/chr22/CAD.chr22.parquet
+    md5: null
+
+  gnomad_constraint_v41:
+    url: https://storage.googleapis.com/gcp-public-data--gnomad/release/4.1/constraint/gnomad.v4.1.constraint_metrics.tsv
+    build: GRCh38
+    license: gnomAD data terms
+    local: data/raw/reference/gnomad.v4.1.constraint_metrics.tsv
+    md5: null

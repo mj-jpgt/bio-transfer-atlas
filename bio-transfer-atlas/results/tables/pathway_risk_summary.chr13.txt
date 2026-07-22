@@ -1,0 +1,43 @@
+======================================================================
+TOP CROSS-ANCESTRY-UNSTABLE PATHWAYS per trait (chr13)
+======================================================================
+
+[CAD]
+  I2=0.551  n_assoc=  3  PBS=0.134  MITF-M-dependent gene expression
+  I2=0.551  n_assoc=  3  PBS=0.134  Regulation of MITF-M-dependent genes involved in pigmentatio
+  I2=0.551  n_assoc=  3  PBS=0.134  Melanin biosynthesis
+  I2=0.450  n_assoc=  4  PBS=0.080  RNA Polymerase I Transcription Termination
+  I2=0.450  n_assoc=  4  PBS=0.080  RNA Polymerase I Transcription Initiation
+  I2=0.450  n_assoc=  4  PBS=0.080  B-WICH complex positively regulates rRNA expression
+  I2=0.450  n_assoc=  4  PBS=0.080  Cytosolic sensors of pathogen-associated DNA 
+  I2=0.450  n_assoc=  4  PBS=0.080  Positive epigenetic regulation of rRNA expression
+
+[T2D]
+  I2=0.554  n_assoc= 23  PBS=0.092  PKR-mediated signaling
+  I2=0.554  n_assoc= 23  PBS=0.105  Kinesins
+  I2=0.554  n_assoc= 23  PBS=0.105  The role of GTSE1 in G2/M progression after G2 checkpoint
+  I2=0.554  n_assoc= 23  PBS=0.105  Sealing of the nuclear envelope (NE) by ESCRT-III
+  I2=0.554  n_assoc= 23  PBS=0.105  Golgi-to-ER retrograde transport
+  I2=0.554  n_assoc= 23  PBS=0.105  Activation of AMPK downstream of NMDARs
+  I2=0.554  n_assoc= 23  PBS=0.105  EML4 and NUDC in mitotic spindle formation
+  I2=0.554  n_assoc= 23  PBS=0.105  Carboxyterminal post-translational modifications of tubulin
+
+[BMI]
+  I2=0.604  n_assoc=220  PBS=0.130  FLT3 mutants bind TKIs
+  I2=0.604  n_assoc=220  PBS=0.130  STAT5 activation downstream of FLT3 ITD mutants
+  I2=0.604  n_assoc=220  PBS=0.130  KW2449-resistant FLT3 mutants
+  I2=0.604  n_assoc=220  PBS=0.130  semaxanib-resistant FLT3 mutants
+  I2=0.604  n_assoc=220  PBS=0.130  crenolanib-resistant FLT3 mutants
+  I2=0.604  n_assoc=220  PBS=0.130  FLT3 Signaling
+  I2=0.604  n_assoc=220  PBS=0.130  STAT5 Activation
+  I2=0.604  n_assoc=220  PBS=0.130  tamatinib-resistant FLT3 mutants
+
+[LDL]
+  I2=0.535  n_assoc=166  PBS=0.121  DNA Damage Recognition in GG-NER
+  I2=0.535  n_assoc=166  PBS=0.121  Formation of TC-NER Pre-Incision Complex
+  I2=0.513  n_assoc=255  PBS=0.070  Defective homologous recombination repair (HRR) due to PALB2
+  I2=0.513  n_assoc=255  PBS=0.070  Defective HDR through Homologous Recombination Repair (HRR) 
+  I2=0.513  n_assoc=255  PBS=0.070  Defective HDR through Homologous Recombination Repair (HRR) 
+  I2=0.513  n_assoc=255  PBS=0.070  Defective homologous recombination repair (HRR) due to BRCA1
+  I2=0.513  n_assoc=255  PBS=0.070  Impaired BRCA2 translocation to the nucleus
+  I2=0.513  n_assoc=255  PBS=0.070  Reproduction

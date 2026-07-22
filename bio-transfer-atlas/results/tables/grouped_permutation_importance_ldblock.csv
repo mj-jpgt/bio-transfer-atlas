@@ -1,0 +1,6 @@
+feature_family,n_features,baseline_auroc,mean_auroc_drop,std_auroc_drop,n_repeats,attribution,note
+AF,18,0.627058,0.0840523,0.00162712,50,grouped_permutation,descriptive_attention_weights are not primary attribution
+LD,9,0.627058,0.0253104,0.000991495,50,grouped_permutation,descriptive_attention_weights are not primary attribution
+SEL,12,0.627058,0.00531023,0.000512774,50,grouped_permutation,descriptive_attention_weights are not primary attribution
+distance,7,0.627058,0.00359997,0.000315104,50,grouped_permutation,descriptive_attention_weights are not primary attribution
+FST,11,0.627058,-0.000521533,0.000391193,50,grouped_permutation,descriptive_attention_weights are not primary attribution

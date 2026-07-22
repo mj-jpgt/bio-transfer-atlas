@@ -1,0 +1,7 @@
+target,split,subset,feature_group,n_feats,model,n_train,n_test,pos_rate_test,AUROC,AUPRC,F1,balACC,ECE,chrom
+y_high_I2,split_variant,associated,AF_LD_SEL,50,hgb,168656,36493,0.3732,0.7843,0.7253,0.5661,0.6848,0.0615,1
+y_high_I2,split_variant,associated,AF_LD_SEL,50,hgb,187533,40402,0.3853,0.7850,0.7301,0.5625,0.6812,0.0622,2
+y_high_I2,split_variant,associated,AF_LD_SEL,50,hgb,158204,33914,0.3826,0.7926,0.7408,0.5861,0.6928,0.0620,3
+y_high_I2,split_variant,associated,AF_LD_SEL,50,hgb,138195,29198,0.3572,0.7990,0.7302,0.5539,0.6831,0.0620,4
+y_high_I2,split_variant,associated,AF_LD_SEL,50,hgb,133251,28789,0.3610,0.8079,0.7470,0.5802,0.6959,0.0650,5
+y_high_I2,split_variant,associated,AF_LD_SEL,50,hgb,29805,6340,0.2968,0.8470,0.7445,0.5789,0.7030,0.0466,22

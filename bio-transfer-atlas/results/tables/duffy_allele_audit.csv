@@ -1,0 +1,2 @@
+rsid,chrom,pos_grch38,ref,alt,plink_column,plink_counted_allele,duffy_null_allele_target,dosage_flipped_to_null,interpretation
+rs2814778,1,159204893,T,C,1:159204893:T:C_T,T,C,True,"duffy_null_dose = copies of Duffy-null allele (C); expect high in AFR, low in EUR"

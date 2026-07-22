@@ -1,0 +1,48 @@
+experiment_name: full_autosomes_all_traits
+
+genotype:
+  panel: 1000g_phase3
+  chromosomes: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22]
+  build: GRCh37
+
+traits:
+  - coronary_artery_disease
+  - type_2_diabetes
+  - body_mass_index
+  - ldl_cholesterol
+  - hypertension
+  - alzheimers_disease
+  - rheumatoid_arthritis
+  - inflammatory_bowel_disease
+  - asthma
+  - breast_cancer
+  - prostate_cancer
+
+score_selection:
+  min_variant_match_rate: 0.70
+  include_development_ancestry:
+    - European
+    - Multi-ancestry
+    - East Asian
+    - African
+    - South Asian
+
+pathway_mapping:
+  primary: reactome_positional_10kb
+  sensitivity:
+    - reactome_nearest_gene
+    - reactome_vep_consequence
+    - go_positional_10kb
+    - reactome_positional_50kb
+
+metrics:
+  - standardized_population_shift
+  - rank_instability
+  - genetic_distance_sensitivity
+  - pathway_instability
+  - inclusion_priority
+  - effect_source_instability
+
+bootstrap:
+  n_boot: 1000
+  seed: 719

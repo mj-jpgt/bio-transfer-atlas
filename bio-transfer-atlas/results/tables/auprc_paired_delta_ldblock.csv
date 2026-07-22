@@ -1,0 +1,6 @@
+metric,model_a,model_b,delta,delta_lo,delta_hi,p_gt_0,n_boot,ci_excludes_zero,verdict,status
+AUPRC,AF_LD_SEL,POP_DISTANCE,0.0124,-0.0009,0.0279,0.9500,200,False,no_clear_difference,ldblock_bootstrap
+AUPRC,AF_LD_SEL,FST,0.0225,0.0029,0.0421,0.9950,200,True,higher,ldblock_bootstrap
+AUPRC,AF_LD_SEL,AF,0.0133,0.0001,0.0257,0.9750,200,True,higher,ldblock_bootstrap
+AUPRC,AF_LD,AF,0.0101,-0.0058,0.0246,0.9200,200,False,no_clear_difference,ldblock_bootstrap
+AUPRC,AF_LD_SEL,AF_LD,0.0032,-0.0060,0.0115,0.7500,200,False,no_clear_difference,ldblock_bootstrap

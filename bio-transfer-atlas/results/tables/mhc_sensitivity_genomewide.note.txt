@@ -1,0 +1,1 @@
+Sampled non-MHC associated rows (max=450000) + all MHC; train capped at 250000. Not full 3M-row fit.

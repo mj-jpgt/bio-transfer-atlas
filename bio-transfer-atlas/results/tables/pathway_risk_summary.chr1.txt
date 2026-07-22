@@ -1,0 +1,43 @@
+======================================================================
+TOP CROSS-ANCESTRY-UNSTABLE PATHWAYS per trait (chr1)
+======================================================================
+
+[CAD]
+  I2=0.472  n_assoc=113  PBS=0.079  Sema4D in semaphorin signaling
+  I2=0.472  n_assoc=113  PBS=0.079  Sema4D induced cell migration and growth-cone collapse
+  I2=0.469  n_assoc= 13  PBS=0.123  Regulation of TP53 Activity through Methylation
+  I2=0.436  n_assoc= 90  PBS=0.090  PI5P, PP2A and IER3 Regulate PI3K/AKT Signaling
+  I2=0.432  n_assoc=157  PBS=0.166  Loss-of-function mutations in DBT cause MSUD2
+  I2=0.432  n_assoc=157  PBS=0.166  Maple Syrup Urine Disease
+  I2=0.432  n_assoc=157  PBS=0.166  Diseases of branched-chain amino acid catabolism
+  I2=0.432  n_assoc=157  PBS=0.166  H139Hfs13* PPM1K causes a mild variant of  MSUD
+
+[T2D]
+  I2=0.560  n_assoc=  3  PBS=0.154  Synthesis of wybutosine at G37 of tRNA(Phe)
+  I2=0.471  n_assoc= 54  PBS=0.182  Regulation of pyruvate metabolism
+  I2=0.452  n_assoc=125  PBS=0.096  RHOBTB GTPase Cycle
+  I2=0.452  n_assoc=125  PBS=0.096  RHOBTB1 GTPase cycle
+  I2=0.432  n_assoc= 10  PBS=0.149  Regulation of MITF-M-dependent genes involved in lysosome bi
+  I2=0.430  n_assoc=  8  PBS=0.083  Norepinephrine Neurotransmitter Release Cycle
+  I2=0.430  n_assoc=  8  PBS=0.083  Dopamine Neurotransmitter Release Cycle
+  I2=0.430  n_assoc=  8  PBS=0.083  Serotonin Neurotransmitter Release Cycle
+
+[BMI]
+  I2=0.724  n_assoc= 69  PBS=0.220  Metabolism of vitamin K
+  I2=0.717  n_assoc=173  PBS=0.173  Dengue virus modulates apoptosis
+  I2=0.672  n_assoc=114  PBS=0.161  Nuclear RNA decay
+  I2=0.644  n_assoc=223  PBS=0.153  Activation of the phototransduction cascade
+  I2=0.644  n_assoc=223  PBS=0.153  Incretin synthesis, secretion, and inactivation
+  I2=0.644  n_assoc=223  PBS=0.153  The phototransduction cascade
+  I2=0.644  n_assoc=223  PBS=0.153  Inactivation, recovery and regulation of the phototransducti
+  I2=0.644  n_assoc=223  PBS=0.153  Synthesis, secretion, and inactivation of Glucagon-like Pept
+
+[LDL]
+  I2=0.662  n_assoc=149  PBS=0.181  Regulation of pyruvate metabolism
+  I2=0.645  n_assoc=169  PBS=0.180  Rhesus blood group biosynthesis
+  I2=0.620  n_assoc=141  PBS=0.114  Assembly of active LPL and LIPC lipase complexes
+  I2=0.620  n_assoc=141  PBS=0.114  NR1H2 & NR1H3 regulate gene expression linked to lipogenesis
+  I2=0.596  n_assoc= 13  PBS=0.186  Regulation of FOXO transcriptional activity by acetylation
+  I2=0.587  n_assoc= 18  PBS=0.232  Defective LFNG causes SCDO3
+  I2=0.587  n_assoc= 18  PBS=0.232  Pre-NOTCH Processing in the Endoplasmic Reticulum
+  I2=0.582  n_assoc=361  PBS=0.119  VLDLR internalisation and degradation

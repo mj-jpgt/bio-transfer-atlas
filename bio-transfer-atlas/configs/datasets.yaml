@@ -1,0 +1,82 @@
+# -------------------------------------------------------
+# Data registry — all raw data sources for bio-transfer-atlas
+# Never hardcode paths in code; reference keys from this file.
+# -------------------------------------------------------
+
+# 1000 Genomes Phase 3 (GRCh37)
+1000g_phase3_metadata:
+  source: IGSR
+  build: GRCh37
+  url: "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/integrated_call_samples_v3.20130502.ALL.panel"
+  local: "data/raw/1000g/metadata/integrated_call_samples_v3.20130502.ALL.panel"
+  open_access: true
+  checksum: null
+
+1000g_phase3_chr22_vcf:
+  source: IGSR
+  build: GRCh37
+  url: "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz"
+  local: "data/raw/1000g/vcf/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz"
+  open_access: true
+  checksum: null
+
+1000g_phase3_chr22_tbi:
+  source: IGSR
+  build: GRCh37
+  url: "https://ftp.1000genomes.ebi.ac.uk/vol1/ftp/release/20130502/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz.tbi"
+  local: "data/raw/1000g/vcf/ALL.chr22.phase3_shapeit2_mvncall_integrated_v5b.20130502.genotypes.vcf.gz.tbi"
+  open_access: true
+  checksum: null
+
+# PGS Catalog
+pgs_catalog_metadata_bulk:
+  source: PGS Catalog
+  url: "ftp://ftp.ebi.ac.uk/pub/databases/spot/pgs/metadata/"
+  local: "data/raw/pgs_catalog/metadata/"
+  open_access: true
+
+pgs_catalog_api_base:
+  source: PGS Catalog
+  url: "https://www.pgscatalog.org/rest/"
+  local: "data/raw/pgs_catalog/metadata/api/"
+  open_access: true
+
+# Pan-UKBB (public AWS S3, no account required)
+panukbb_s3:
+  source: Pan-UK Biobank
+  url: "s3://pan-ukb-us-east-1/"
+  local: "data/raw/panukbb/"
+  open_access: true
+  notes: "Use --no-sign-request. Download manifest first."
+
+# BioBank Japan PheWeb
+bbj_wget_list:
+  source: BioBank Japan PheWeb
+  url: "https://pheweb.jp/static/txt/sakaue-kanai-2021-bbj.wget.txt"
+  local: "data/raw/bbj/bbj_wget_commands.txt"
+  open_access: true
+
+# Reactome
+reactome_ncbi2reactome:
+  source: Reactome
+  url: "https://reactome.org/download/current/NCBI2Reactome.txt"
+  local: "data/raw/reactome/NCBI2Reactome.txt"
+  open_access: true
+
+reactome_ensembl2reactome:
+  source: Reactome
+  url: "https://reactome.org/download/current/Ensembl2Reactome.txt"
+  local: "data/raw/reactome/Ensembl2Reactome.txt"
+  open_access: true
+
+reactome_ensembl2reactome_all:
+  source: Reactome
+  url: "https://reactome.org/download/current/Ensembl2Reactome_All_Levels.txt"
+  local: "data/raw/reactome/Ensembl2Reactome_All_Levels.txt"
+  open_access: true
+
+reactome_uniprot2reactome:
+  source: Reactome
+  url: "https://reactome.org/download/current/UniProt2Reactome.txt"
+  local: "data/raw/reactome/UniProt2Reactome.txt"
+  open_access: true

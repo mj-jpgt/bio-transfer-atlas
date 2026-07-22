@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "bta"
+version = "0.1.0"
+description = "Biological Transferability Atlas of Polygenic Scores Across Global Populations"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy",
+    "pandas",
+    "polars",
+    "pyarrow",
+    "scipy",
+    "scikit-learn",
+    "statsmodels",
+    "matplotlib",
+    "plotly",
+    "seaborn",
+    "requests",
+    "tqdm",
+    "loguru",
+    "rich",
+    "typer",
+    "pydantic",
+    "pandera",
+    "gseapy",
+    "huggingface_hub",
+    "datasets",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-cov", "black", "ruff", "mypy"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

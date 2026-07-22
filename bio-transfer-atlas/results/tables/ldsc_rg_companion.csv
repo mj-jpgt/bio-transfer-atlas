@@ -1,0 +1,9 @@
+trait,anc1,anc2,rg,se,n,method
+T2D,EUR,AFR,0.0380119,0.00212142,222204,panukbb_z_correlation_popcorn_failed
+T2D,EUR,EAS,0.0321653,0.00272983,134196,panukbb_z_correlation_popcorn_failed
+CAD,EUR,AFR,0.012208,0.00212146,222196,panukbb_z_correlation_popcorn_failed
+CAD,EUR,EAS,0.0221366,0.00272963,134215,panukbb_z_correlation_popcorn_failed
+BMI,EUR,AFR,0.000874112,0.00212142,222204,panukbb_z_correlation_popcorn_failed
+BMI,EUR,EAS,0.0781222,0.00272963,134215,panukbb_z_correlation_popcorn_failed
+LDL,EUR,AFR,0.00196714,0.00212146,222196,panukbb_z_correlation_popcorn_failed
+LDL,EUR,EAS,0.0773253,0.00272975,134204,panukbb_z_correlation_popcorn_failed

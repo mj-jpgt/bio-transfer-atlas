@@ -1,0 +1,9 @@
+trait,anc1,anc2,rg,se,n,method
+T2D,EUR,AFR,0.0102856,0.000244287,16757164,popcorn_autosome_zcorr
+T2D,EUR,EAS,0.00329926,0.000319595,9790416,popcorn_autosome_zcorr
+CAD,EUR,AFR,0.00419454,0.000244204,16768461,popcorn_autosome_zcorr
+CAD,EUR,EAS,0.00868505,0.000319465,9798385,popcorn_autosome_zcorr
+BMI,EUR,AFR,0.0285891,0.000244204,16768547,popcorn_autosome_zcorr
+BMI,EUR,EAS,0.0427546,0.000319458,9798797,popcorn_autosome_zcorr
+LDL,EUR,AFR,0.0239559,0.000244205,16768318,popcorn_autosome_zcorr
+LDL,EUR,EAS,0.0309233,0.000319535,9794099,popcorn_autosome_zcorr

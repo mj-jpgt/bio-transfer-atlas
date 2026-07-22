@@ -1,0 +1,10 @@
+{
+  "chroms": [
+    "1",
+    "22"
+  ],
+  "method": "panukbb_z_concordance_chr1,22",
+  "scope": "available_chroms",
+  "estimand": "cross_ancestry_z_score_concordance",
+  "note": "Pearson Z-score concordance; not Popcorn genetic-effect rg"
+}

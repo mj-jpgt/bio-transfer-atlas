@@ -1,0 +1,43 @@
+======================================================================
+TOP CROSS-ANCESTRY-UNSTABLE PATHWAYS per trait (chr12)
+======================================================================
+
+[CAD]
+  I2=0.515  n_assoc=158  PBS=0.100  Striated Muscle Contraction
+  I2=0.483  n_assoc= 55  PBS=0.065  MET activates RAP1 and RAC1
+  I2=0.482  n_assoc= 23  PBS=0.122  Interleukin-23 signaling
+  I2=0.472  n_assoc= 82  PBS=0.113  Interleukin-12 family signaling
+  I2=0.469  n_assoc= 59  PBS=0.111  Gene and protein expression by JAK-STAT signaling after Inte
+  I2=0.469  n_assoc= 59  PBS=0.111  Interleukin-12 signaling
+  I2=0.444  n_assoc=202  PBS=0.141  OAS antiviral response
+  I2=0.442  n_assoc= 63  PBS=0.115  TP53 regulates transcription of additional cell cycle genes 
+
+[T2D]
+  I2=0.575  n_assoc=185  PBS=0.141  OAS antiviral response
+  I2=0.556  n_assoc= 21  PBS=0.154  p75NTR negatively regulates cell cycle via SC1
+  I2=0.545  n_assoc=202  PBS=0.159  Interferon gamma signaling
+  I2=0.526  n_assoc=209  PBS=0.158  Interferon alpha/beta signaling
+  I2=0.520  n_assoc=255  PBS=0.087  Regulation of gene expression in beta cells
+  I2=0.520  n_assoc=255  PBS=0.087  Regulation of beta-cell development
+  I2=0.444  n_assoc=  3  PBS=0.134  CD22 mediated BCR regulation
+  I2=0.444  n_assoc=  3  PBS=0.134  Interleukin receptor SHC signaling
+
+[BMI]
+  I2=0.718  n_assoc=245  PBS=0.130  Signaling by LTK in cancer
+  I2=0.634  n_assoc=167  PBS=0.100  IL-6-type cytokine receptor ligand interactions
+  I2=0.629  n_assoc= 55  PBS=0.118  TFAP2A acts as a transcriptional repressor during retinoic a
+  I2=0.623  n_assoc=299  PBS=0.116  RHO GTPases activate IQGAPs
+  I2=0.623  n_assoc=112  PBS=0.110  Formation of the canonical BAF (cBAF) complex
+  I2=0.616  n_assoc=104  PBS=0.141  SARS-CoV-2 modulates autophagy
+  I2=0.612  n_assoc=619  PBS=0.102  Amplification  of signal from unattached  kinetochores via a
+  I2=0.612  n_assoc=619  PBS=0.102  Amplification of signal from the kinetochores
+
+[LDL]
+  I2=0.685  n_assoc=166  PBS=0.225  Serotonin clearance from the synaptic cleft
+  I2=0.685  n_assoc=166  PBS=0.225  Neurotransmitter clearance
+  I2=0.685  n_assoc=166  PBS=0.225  Metabolism of serotonin
+  I2=0.685  n_assoc=166  PBS=0.225  Ethanol oxidation
+  I2=0.624  n_assoc=271  PBS=0.168  MAPK6/MAPK4 signaling
+  I2=0.614  n_assoc=173  PBS=0.135  Defective SLC11A2 causes hypochromic microcytic anemia, with
+  I2=0.603  n_assoc= 90  PBS=0.115  Metabolism of cofactors
+  I2=0.603  n_assoc= 90  PBS=0.115  Ubiquinol biosynthesis

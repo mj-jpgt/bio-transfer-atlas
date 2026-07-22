@@ -1,0 +1,3 @@
+super_pop,status,contrast,n_hom2,n_lt2,delta_total,delta_total_lo,delta_total_hi,delta_window,delta_window_lo,delta_window_hi,delta_snp,delta_snp_lo,delta_snp_hi,delta_window_rest,delta_outside,delta_outside_lo,delta_outside_hi,ackr1_fraction,ackr1_fraction_lo,ackr1_fraction_hi,n_snp_weights,n_window_weights,n_outside_weights
+AFR,ok,hom2_minus_lt2,617,44,0.11919,0.0238236,0.205566,0.568182,0.386364,0.705114,,,,,-0.448992,-0.604533,-0.272776,4.76703,2.63428,16.6898,0,3,513
+EUR,underpowered_contrast,,0,503,,,,,,,,,,,,,,,,,,,

@@ -1,0 +1,35 @@
+Phase 18 genomewide intervention summary
+========================================
+
+reweight_linear:
+  PGS000018: MAD=0.6373 (baseline 0.7190, reduction 0.0817)
+  PGS004696: MAD=2.5036 (baseline 2.5994, reduction 0.0959)
+  PGS004698: MAD=2.2582 (baseline 2.2879, reduction 0.0297)
+  PGS003897: MAD=0.3282 (baseline 0.3761, reduction 0.0479)
+  PGS002853: MAD=0.4292 (baseline 0.4512, reduction 0.0220)
+  PGS002858: MAD=0.4494 (baseline 0.4850, reduction 0.0356)
+  PGS003092: MAD=0.4885 (baseline 0.3704, reduction -0.1181)
+  PGS000014: MAD=2.0748 (baseline 2.5558, reduction 0.4810)
+  PGS004840: MAD=1.2897 (baseline 1.2108, reduction -0.0789)
+
+filter_10:
+  PGS000018: MAD=0.8101 (baseline 0.7190, reduction -0.0911)
+  PGS004696: MAD=2.4909 (baseline 2.5994, reduction 0.1086)
+  PGS004698: MAD=2.5008 (baseline 2.2879, reduction -0.2130)
+  PGS003897: MAD=0.2706 (baseline 0.3761, reduction 0.1055)
+  PGS002853: MAD=0.5331 (baseline 0.4512, reduction -0.0819)
+  PGS002858: MAD=0.4746 (baseline 0.4850, reduction 0.0103)
+  PGS003092: MAD=0.4363 (baseline 0.3704, reduction -0.0658)
+  PGS000014: MAD=2.2445 (baseline 2.5558, reduction 0.3113)
+  PGS004840: MAD=1.4040 (baseline 1.2108, reduction -0.1933)
+
+random:
+  PGS000018: MAD=0.7509 (baseline 0.7190, reduction -0.0318)
+  PGS004696: MAD=2.5538 (baseline 2.5994, reduction 0.0457)
+  PGS004698: MAD=2.2767 (baseline 2.2879, reduction 0.0112)
+  PGS003897: MAD=0.3750 (baseline 0.3761, reduction 0.0011)
+  PGS002853: MAD=0.5373 (baseline 0.4512, reduction -0.0862)
+  PGS002858: MAD=0.5235 (baseline 0.4850, reduction -0.0386)
+  PGS003092: MAD=0.4169 (baseline 0.3704, reduction -0.0464)
+  PGS000014: MAD=2.1658 (baseline 2.5558, reduction 0.3900)
+  PGS004840: MAD=1.1697 (baseline 1.2108, reduction 0.0410)

@@ -1,0 +1,43 @@
+======================================================================
+TOP CROSS-ANCESTRY-UNSTABLE PATHWAYS per trait (chr5)
+======================================================================
+
+[CAD]
+  I2=0.545  n_assoc=  4  PBS=0.066  Complex IV assembly
+  I2=0.448  n_assoc= 27  PBS=0.079  HCN channels
+  I2=0.426  n_assoc= 28  PBS=0.108  Scavenging by Class A Receptors
+  I2=0.412  n_assoc= 16  PBS=0.072  SLC-mediated transport of organic anions
+  I2=0.412  n_assoc= 16  PBS=0.067  Organic anion transport by SLCO transporters
+  I2=0.411  n_assoc= 31  PBS=0.082  NGF-stimulated transcription
+  I2=0.409  n_assoc=  8  PBS=0.095  Nephron development
+  I2=0.387  n_assoc= 35  PBS=0.063  RAB GEFs exchange GTP for GDP on RABs
+
+[T2D]
+  I2=0.700  n_assoc= 34  PBS=0.129  TP53 Regulates Transcription of Cell Death Genes
+  I2=0.700  n_assoc= 34  PBS=0.129  TP53 Regulates Transcription of Genes Involved in Cytochrome
+  I2=0.653  n_assoc=121  PBS=0.121  PKMTs methylate histone lysines
+  I2=0.571  n_assoc= 46  PBS=0.166  FGFR4 mutant receptor activation
+  I2=0.571  n_assoc= 46  PBS=0.166  betaKlotho-mediated ligand binding
+  I2=0.525  n_assoc= 50  PBS=0.112  Signaling by FGFR4 in disease
+  I2=0.487  n_assoc=112  PBS=0.135  Formation of the cornified envelope
+  I2=0.487  n_assoc=112  PBS=0.135  Keratinization
+
+[BMI]
+  I2=0.755  n_assoc=204  PBS=0.095  Translesion synthesis by Y family DNA polymerases bypasses l
+  I2=0.755  n_assoc=204  PBS=0.095  Termination of translesion DNA synthesis
+  I2=0.755  n_assoc=204  PBS=0.095  Translesion synthesis by POLK
+  I2=0.755  n_assoc=204  PBS=0.095  Gap-filling DNA repair synthesis and ligation in GG-NER
+  I2=0.742  n_assoc=208  PBS=0.093  Dual Incision in GG-NER
+  I2=0.726  n_assoc=215  PBS=0.089  DNA Damage Bypass
+  I2=0.726  n_assoc=277  PBS=0.068  Sphingolipid de novo biosynthesis
+  I2=0.648  n_assoc=263  PBS=0.115  HDR through Homologous Recombination (HRR)
+
+[LDL]
+  I2=0.746  n_assoc=472  PBS=0.068  Sphingolipid de novo biosynthesis
+  I2=0.736  n_assoc=313  PBS=0.095  Gap-filling DNA repair synthesis and ligation in GG-NER
+  I2=0.736  n_assoc=313  PBS=0.095  Termination of translesion DNA synthesis
+  I2=0.736  n_assoc=313  PBS=0.095  Translesion synthesis by POLK
+  I2=0.736  n_assoc=313  PBS=0.095  Translesion synthesis by Y family DNA polymerases bypasses l
+  I2=0.736  n_assoc=313  PBS=0.093  Dual Incision in GG-NER
+  I2=0.695  n_assoc=333  PBS=0.089  DNA Damage Bypass
+  I2=0.679  n_assoc=346  PBS=0.077  Global Genome Nucleotide Excision Repair (GG-NER)

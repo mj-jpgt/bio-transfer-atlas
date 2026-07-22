@@ -1,0 +1,43 @@
+======================================================================
+TOP CROSS-ANCESTRY-UNSTABLE PATHWAYS per trait (chr8)
+======================================================================
+
+[CAD]
+  I2=0.424  n_assoc= 23  PBS=0.147  Incretin synthesis, secretion, and inactivation
+  I2=0.424  n_assoc= 23  PBS=0.147  Synthesis, secretion, and inactivation of Glucose-dependent 
+  I2=0.424  n_assoc= 23  PBS=0.147  Formation of lateral plate mesoderm
+  I2=0.424  n_assoc= 23  PBS=0.147  Physiological factors
+  I2=0.424  n_assoc= 23  PBS=0.147  Developmental Lineage of Pancreatic Acinar Cells
+  I2=0.424  n_assoc= 23  PBS=0.147  YAP1- and WWTR1 (TAZ)-stimulated gene expression
+  I2=0.411  n_assoc=  5  PBS=0.064  Transcription of E2F targets under negative control by p107 
+  I2=0.411  n_assoc=  5  PBS=0.064  G1/S-Specific Transcription
+
+[T2D]
+  I2=0.520  n_assoc=275  PBS=0.157  Synthesis of PIPs at the late endosome membrane
+  I2=0.510  n_assoc=282  PBS=0.151  Inositol phosphate metabolism
+  I2=0.510  n_assoc=282  PBS=0.151  Synthesis of IP2, IP, and Ins in the cytosol
+  I2=0.508  n_assoc= 87  PBS=0.103  Paracetamol ADME
+  I2=0.508  n_assoc= 87  PBS=0.103  Acetylation
+  I2=0.508  n_assoc= 87  PBS=0.103  Drug ADME
+  I2=0.500  n_assoc=278  PBS=0.154  Synthesis of PIPs at the plasma membrane
+  I2=0.483  n_assoc=298  PBS=0.140  PI Metabolism
+
+[BMI]
+  I2=0.644  n_assoc=158  PBS=0.132  Signaling by BRAF and RAF1 fusions
+  I2=0.644  n_assoc=158  PBS=0.132  Oncogenic MAPK signaling
+  I2=0.640  n_assoc=159  PBS=0.115  FGFR2 alternative splicing
+  I2=0.521  n_assoc= 57  PBS=0.085  Translocation of SLC2A4 (GLUT4) to the plasma membrane
+  I2=0.521  n_assoc= 57  PBS=0.085  Chk1/Chk2(Cds1) mediated inactivation of Cyclin B:Cdk1 compl
+  I2=0.521  n_assoc= 57  PBS=0.085  SARS-CoV-2 targets host intracellular signalling and regulat
+  I2=0.521  n_assoc= 57  PBS=0.085  SARS-CoV-1 targets host intracellular signalling and regulat
+  I2=0.521  n_assoc= 57  PBS=0.085  Rap1 signalling
+
+[LDL]
+  I2=0.694  n_assoc=212  PBS=0.135  Caspase-mediated cleavage of cytoskeletal proteins
+  I2=0.694  n_assoc=212  PBS=0.135  Type I hemidesmosome assembly
+  I2=0.677  n_assoc=200  PBS=0.082  Ephrin signaling
+  I2=0.632  n_assoc=164  PBS=0.132  Maturation of nucleoprotein
+  I2=0.632  n_assoc=164  PBS=0.132  Maturation of nucleoprotein
+  I2=0.603  n_assoc=173  PBS=0.108  Nicotinate metabolism
+  I2=0.598  n_assoc=206  PBS=0.080  TNFR1-mediated ceramide production
+  I2=0.595  n_assoc=224  PBS=0.168  Regulation of RUNX2 expression and activity

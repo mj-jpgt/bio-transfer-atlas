@@ -1,0 +1,86 @@
+# Trait definitions for bio-transfer-atlas
+# MVP traits first; expansion traits listed below.
+
+mvp_traits:
+  coronary_artery_disease:
+    label: "Coronary Artery Disease"
+    pgs_search_term: "coronary artery disease"
+    efo_id: "EFO_0001645"
+    category: cardiovascular
+    note: "Strong EUR GWAS history; lipid/inflammatory pathway interest"
+
+  type_2_diabetes:
+    label: "Type 2 Diabetes"
+    pgs_search_term: "type 2 diabetes"
+    efo_id: "EFO_0001360"
+    category: metabolic
+    note: "Strong EUR + EAS GWAS; insulin/adipogenesis pathway interest"
+
+  body_mass_index:
+    label: "Body Mass Index"
+    pgs_search_term: "body mass index"
+    efo_id: "EFO_0004340"
+    category: anthropometric
+    note: "Continuous trait; many scores available across ancestries"
+
+expansion_traits:
+  white_blood_cell_count:
+    label: "White Blood Cell Count"
+    pgs_search_term: "white blood cell"
+    efo_id: "EFO_0004308"
+    category: hematologic
+    panukbb_key: "continuous-30000-both_sexes-irnt"
+    note: "Duffy-null (ACKR1/rs2814778) positive control for AFR portability risk"
+
+  rheumatoid_arthritis_panel:
+    label: "Rheumatoid Arthritis (autoimmune MHC stress-test)"
+    pgs_search_term: "rheumatoid arthritis"
+    efo_id: "EFO_0000685"
+    category: autoimmune
+    note: "MHC-sensitive autoimmune contrast; use with MHC sensitivity table"
+
+  ldl_cholesterol:
+    label: "LDL Cholesterol"
+    pgs_search_term: "LDL cholesterol"
+    efo_id: "EFO_0004611"
+    category: lipid
+  hypertension:
+    label: "Hypertension"
+    pgs_search_term: "hypertension"
+    efo_id: "EFO_0000537"
+    category: cardiovascular
+  alzheimers_disease:
+    label: "Alzheimer's Disease"
+    pgs_search_term: "Alzheimer disease"
+    efo_id: "EFO_0000249"
+    category: neurological
+  parkinsons_disease:
+    label: "Parkinson's Disease"
+    pgs_search_term: "Parkinson disease"
+    efo_id: "EFO_0002508"
+    category: neurological
+  rheumatoid_arthritis:
+    label: "Rheumatoid Arthritis"
+    pgs_search_term: "rheumatoid arthritis"
+    efo_id: "EFO_0000685"
+    category: autoimmune
+  inflammatory_bowel_disease:
+    label: "Inflammatory Bowel Disease"
+    pgs_search_term: "inflammatory bowel disease"
+    efo_id: "EFO_0003767"
+    category: autoimmune
+  asthma:
+    label: "Asthma"
+    pgs_search_term: "asthma"
+    efo_id: "EFO_0000270"
+    category: respiratory
+  breast_cancer:
+    label: "Breast Cancer"
+    pgs_search_term: "breast cancer"
+    efo_id: "EFO_0000305"
+    category: cancer
+  prostate_cancer:
+    label: "Prostate Cancer"
+    pgs_search_term: "prostate cancer"
+    efo_id: "EFO_0001663"
+    category: cancer
