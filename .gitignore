@@ -104,3 +104,7 @@ bio-transfer-atlas/data/modeling/*
 
 # Freeze pack: keep tables/figures/reports; ignore nested paper duplicate if re-added
 bio-transfer-atlas/BTA_robustness_freeze_results_20260720/paper/
+
+# stray root results artifact
+/results
+results
