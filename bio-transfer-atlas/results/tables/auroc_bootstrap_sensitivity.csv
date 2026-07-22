@@ -1,6 +1,0 @@
-split,feature_group,AUROC,AUPRC,n_feats,n_train,n_test,pos_rate_test,AUROC_lo,AUROC_hi,method,label
-split_ld_block,AF_LD_SEL,0.6272,0.4700,50,250000,108726,0.3797,0.6072,0.6472,approx_from_point,y_high_I2_default
-split_ld_block,FST,0.5795,0.4260,1,250000,108726,0.3797,0.5595,0.5995,approx_from_point,y_high_I2_default
-split_ld_block,POP_DISTANCE,0.6174,0.4546,7,250000,108726,0.3797,0.5974,0.6374,approx_from_point,y_high_I2_default
-split_ld_block,RG_PROXY,0.6184,0.4631,9,250000,108726,0.3797,0.5984,0.6384,approx_from_point,y_high_I2_default
-split_ld_block,RG_REAL,0.5662,0.4182,2,250000,108726,0.3797,0.5462,0.5862,approx_from_point,y_high_I2_default

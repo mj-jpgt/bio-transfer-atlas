@@ -1,9 +1,0 @@
-trait,anc1,anc2,rg,se,n,method,z_concordance,estimand
-T2D,EUR,AFR,0.0183829,0.000810687,1521577,"panukbb_z_concordance_chr1,22",0.0183829,cross_ancestry_z_score_concordance
-T2D,EUR,EAS,0.0185928,0.00105912,891479,"panukbb_z_concordance_chr1,22",0.0185928,cross_ancestry_z_score_concordance
-CAD,EUR,AFR,0.012208,0.00212146,222196,"panukbb_z_concordance_chr1,22",0.012208,cross_ancestry_z_score_concordance
-CAD,EUR,EAS,0.0221366,0.00272963,134215,"panukbb_z_concordance_chr1,22",0.0221366,cross_ancestry_z_score_concordance
-BMI,EUR,AFR,0.000874112,0.00212142,222204,"panukbb_z_concordance_chr1,22",0.000874112,cross_ancestry_z_score_concordance
-BMI,EUR,EAS,0.0781222,0.00272963,134215,"panukbb_z_concordance_chr1,22",0.0781222,cross_ancestry_z_score_concordance
-LDL,EUR,AFR,0.00196714,0.00212146,222196,"panukbb_z_concordance_chr1,22",0.00196714,cross_ancestry_z_score_concordance
-LDL,EUR,EAS,0.0773253,0.00272975,134204,"panukbb_z_concordance_chr1,22",0.0773253,cross_ancestry_z_score_concordance

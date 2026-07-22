@@ -1,4 +1,0 @@
-tier,feature_group,AUROC,AUPRC,n_train,n_test,pos_rate_test
-fine_mapped,AF_LD_SEL,0.7960,0.9991,1290,251,0.9960
-tag_only,AF_LD_SEL,0.7327,0.6566,250000,74310,0.3778
-all,AF_LD_SEL,0.7298,0.6556,250000,74561,0.3799

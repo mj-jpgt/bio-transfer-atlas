@@ -1,2 +1,0 @@
-locus,trait,metric,window_bp_used,n_duffy,duffy_mean,duffy_mean_i2,outside_mean_i2,n_null_windows,null_mean,null_sd,z_vs_null,frac_null_below_duffy,passes_positive_control,source_file
-ACKR1_Duffy_null_rs2814778,WBC,mean_|beta_AFR-beta_EUR|,99941,1800,0.227703,0.477693,0.446835,1,0.20844,0,0.092417,1,True,WBC.chr1_159000000_159400000.parquet

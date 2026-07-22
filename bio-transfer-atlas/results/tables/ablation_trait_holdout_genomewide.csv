@@ -1,9 +1,0 @@
-experiment,held_out_trait,feature_group,permuted,AUROC,AUROC_lo,AUROC_hi,AUPRC,n_train,n_test,pos_rate_test
-leave_one_trait_out,CAD,AF_LD_SEL,False,0.5696,0.5681,0.5713,0.3469,2630510,397364,0.2915
-leave_one_trait_out,CAD,PERMUTED,True,0.5055,0.5040,0.5073,0.2925,2630510,397364,0.2915
-leave_one_trait_out,T2D,AF_LD_SEL,False,0.5608,0.5594,0.5620,0.3442,2457448,570426,0.2927
-leave_one_trait_out,T2D,PERMUTED,True,0.5086,0.5070,0.5098,0.2981,2457448,570426,0.2927
-leave_one_trait_out,BMI,AF_LD_SEL,False,0.6747,0.6740,0.6755,0.5979,1834203,1193671,0.4449
-leave_one_trait_out,BMI,PERMUTED,True,0.5075,0.5066,0.5083,0.4607,1834203,1193671,0.4449
-leave_one_trait_out,LDL,AF_LD_SEL,False,0.6599,0.6588,0.6612,0.5402,2161461,866413,0.3872
-leave_one_trait_out,LDL,PERMUTED,True,0.5201,0.5192,0.5211,0.4068,2161461,866413,0.3872

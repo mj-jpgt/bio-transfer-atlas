@@ -1,5 +1,0 @@
-setting,feature_group,AUROC,AUPRC,n_train,n_test,pos_rate_test,n_mhc_test
-full_pooled,AF_LD_SEL,0.7345,0.6825,250000,76009,0.4099,8900
-mhc_excluded,AF_LD_SEL,0.7195,0.6385,250000,67109,0.3776,0
-mhc_only,AF_LD_SEL,0.8505,0.9122,40621,8900,0.6533,8900
-full_plus_is_mhc,AF_LD_SEL+is_mhc,0.7355,0.6834,250000,76009,0.4099,8900

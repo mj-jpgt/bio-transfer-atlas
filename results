@@ -1,0 +1,188 @@
+Results
+
+Overview
+
+We completed a 22-autosome Biological Transferability Atlas on 1000 Genomes GRCh38 genotypes. The analysis has two layers with different coverage: (1) a mechanism layer that predicts cross-ancestry GWAS discordance from AF, LD, and selection features on all 22 chromosomes; and (2) a PRS atlas / intervention layer that applies nine published PGS to individuals and tests portability-risk interventions on chromosomes with available score genotypes (chr8–22). Partial-16 (chr1–15 + 22) is retained as a sensitivity checkpoint.
+
+1. Genome-wide master table
+
+Per-chromosome feature, label, and master tables were built with the conservative pipeline (AF divergence, LD divergence, selection proxies, multi-source GWAS concordance labels). Chromosomes 16–21 were the final missing masters; after they completed, all 22 were concatenated under tag `genomewide`.
+
+The genome-wide master contains 37,603,487 variant×trait rows and 9,439,818 unique variants across chromosomes 1–22. Global `split_variant` was reassigned with seed 719 so evaluation is not contaminated by chromosome-wise leakage. Associated variants (those with multi-ancestry GWAS support) form the modeling subset used below (~3.03M associated rows; positive rate for high I² ≈ 0.38).
+
+Interpretation. This is the analysis unit for mechanism learning: each row is a variant×trait observation with population-genetic features and a concordance label. Row count is larger than unique variants because traits are stacked. Claims about “genome-wide mechanism” refer to this 22-chromosome table.
+
+2. Predicting cross-ancestry discordance (mechanism)
+
+2.1 Pooled evaluation
+
+On associated variants, under the held-out variant split, HistGradientBoosting with the full AF_LD_SEL feature set achieved:
+
+- AUROC 0.683 (95% bootstrap CI 0.682–0.685)
+- AUPRC 0.583
+- Balanced accuracy 0.592; F1 0.385; ECE 0.025
+
+Permuted-feature negative controls stayed near chance (AUROC ≈ 0.47–0.52), so the signal is not an artifact of class imbalance or leakage through feature packaging.
+
+Feature-group ablation (associated, split_variant, HGB):
+
+| Feature group | AUROC | AUPRC | balACC |
+|---|---:|---:|---:|
+| FST only | 0.576 | 0.429 | 0.500 |
+| AF | 0.663 | 0.545 | 0.551 |
+| LD | 0.656 | 0.544 | 0.560 |
+| SEL | 0.667 | 0.555 | 0.561 |
+| AF_LD | 0.680 | 0.579 | 0.584 |
+| AF_SEL | 0.677 | 0.570 | 0.577 |
+| LD_SEL | 0.682 | 0.585 | 0.584 |
+| AF_LD_SEL | 0.687 | 0.590 | 0.592 |
+
+Continuous I² regression followed the same pattern: AF_LD_SEL Spearman ρ = 0.351 (Pearson r = 0.392), better than any single block.
+
+Interpretation. Population-genetic features predict which associated variants show high cross-ancestry heterogeneity, but pooled discrimination is moderate (~0.68–0.69), not clinical-grade. AF, LD, and SEL each carry information; combining them helps, with diminishing returns beyond pairwise blocks. The gap between FST-only (0.58) and AF/LD/SEL blocks (~0.66) shows that a single summary divergence statistic is a weak substitute for the fuller feature set. Moderate pooled AUROC is expected when labels mix traits, loci, and study designs into one table—local chromosomal structure is stronger (next section).
+
+2.2 Per-chromosome replication
+
+Training and evaluating AF_LD_SEL separately on each chromosome yielded mean AUROC 0.815 (range 0.784 on chr1 to 0.855 on chr21). Every chromosome exceeded 0.78.
+
+Interpretation. Within-chromosome models are substantially stronger than the pooled model. That pattern indicates that much of the predictive signal is chromosome-local (LD context, regional allele-frequency structure, trait-locus density) and is diluted when all chromosomes are forced into one global decision surface. For the paper, report both: pooled AUROC as the conservative genome-wide headline, and per-chromosome mean as evidence that the mechanism replicates across the autosome. Do not treat 0.80 pooled as a failed target; treat ~0.69 pooled / ~0.81 per-chr as the empirical operating point of this label definition at genome-wide scale.
+
+3. Pathway-level instability (Q2)
+
+Pathway aggregation on the 22-chromosome table highlighted trait-specific unstable Reactome pathways. Examples of top associated mean I²:
+
+- CAD: RHO GTPase / IQGAP and nephrin interaction pathways (mean I²_assoc ≈ 0.69); GLP1–insulin secretion and mitochondrial DNA replication also high.
+- T2D: lipoxin / hepoxilin / maresin biosynthesis (≈ 0.74); TP53 cell-death transcription; BCR / cytosolic Ca²⁺ signaling.
+- BMI: SMDT1 processing and mitochondrial Ca²⁺ transport (≈ 0.77); intestinal hexose absorption and beta-cell gene regulation.
+- LDL: mitochondrial DNA replication and complement cascade (≈ 0.77–0.78); RAS signaling downstream of NF1; sphingolipid and nucleotide biosynthesis.
+
+Interpretation. Instability is not uniformly sprinkled across the genome; it concentrates in pathways tied to lipid signaling, mitochondrial function, immune/complement activity, and GTPase cytoskeletal control—biology that is both trait-relevant and known to vary across human populations. Pathway tops are hypothesis generators for where additional multi-ancestry GWAS sampling would most improve transferability, not proof that those pathways cause PRS failure.
+
+4. Score-shift atlas across superpopulations (Q1)
+
+Nine published PGS (T2D, CAD, BMI, LDL) were scored on 3,202 unrelated 1000 Genomes individuals using chr8–22 score pgens. Superpopulation means were EUR-centered (δ_EUR).
+
+Largest mean |δ_EUR| (non-EUR):
+
+| PGS | Trait | Mean \|δ_EUR\| |
+|---|---|---:|
+| PGS000014 | CAD | 2.85 |
+| PGS004696 | CAD | 2.75 |
+| PGS004698 | CAD | 2.36 |
+| PGS004840 | T2D | 1.40 |
+| PGS000018 | T2D | 1.05 |
+| PGS003897 | BMI | 0.50 |
+| PGS002853 | LDL | 0.33 |
+| PGS002858 | LDL | 0.30 |
+| PGS003092 | BMI | 0.22 |
+
+Extreme shifts included PGS004696 CAD in EAS (δ_EUR = −4.80), PGS004698 CAD in EAS (−4.12), and PGS000014 CAD in AFR (+3.99). Kendall’s W across PGS for population rank concordance was ≈ 0, indicating that different scores reorder populations differently. Distance-sensitivity slopes (score shift vs genetic distance from EUR) were steepest for CAD scores (e.g. PGS000014 slope ≈ 32) and near flat for some BMI/LDL scores.
+
+Interpretation. Cross-ancestry score displacement is large for several CAD/T2D instruments and small for others—portability is score- and trait-specific, not a single genome-wide constant. Near-zero Kendall’s W means one cannot assume a universal “most shifted” population. Because scoring omits chr1–7, absolute score levels are partial-chromosome sums; relative δ_EUR and rank patterns remain informative for the covered autosomes but must not be described as full-genome PRS.
+
+5. Phase 18 intervention
+
+A portability-risk model trained on the 22-chromosome associated set (test AUROC 0.687) was used to filter, reweight, or flag high-risk variants in each PGS, then individuals were re-scored on chr8–22.
+
+`reweight_linear` reduced mean absolute EUR-centered shift for 7 of 9 PGS. The largest improvement was PGS000014 (CAD): MAD 2.85 → 2.48 (reduction 0.37). Two scores (PGS003092 BMI, PGS004840 T2D) did not improve under linear reweighting.
+
+Hard filtering (`filter_10`) was mixed: it improved some scores (e.g. PGS003897, PGS000014) but worsened others, and beat a matched random-drop control for only a subset of PGS. Negative controls (random, FST, LD, MAF filters) show that naive frequency- or LD-based dropping is not equivalent to model-guided intervention.
+
+Per-patient confidence flags (top-decile |weight × dosage| contributions, capped at 20k variants per PGS for runtime) covered all five superpopulations (n = 28,818 person×PGS rows); mean confidence was similar across AFR/AMR/EAS/EUR/SAS (~0.72).
+
+Interpretation. Soft reweighting by predicted portability risk is the more reliable intervention in this setting; aggressive filtering can remove transferable signal along with risky variants. Gains are real but modest and heterogeneous across PGS—consistent with a triage tool, not a universal recalibrator. Confidence flags are descriptive reliability indicators, not calibrated clinical probabilities. All intervention effects are conditional on chr8–22 scoring coverage.
+
+6. Gates and quality control
+
+- `gate_genomewide.py` PASS: 22 chromosomes present; master >10M rows; AF_LD_SEL pooled AUROC > 0.65; per-chromosome mean AUROC ≥ 0.75; permuted controls near 0.5.
+- `gate_intervention_genomewide.py` PASS: `reweight_linear` reduces |δ_EUR| for at least one PGS; `filter_10` beats random for at least one PGS; per-patient confidence covers all superpopulations; MAD bootstrap CIs and tail-ancestry metrics present.
+- `gate_science_deepen_holdouts.py` PASS: within-trait mean AUROC > pooled; trait-holdout + permutation controls present; holdout headline includes `split_trait`.
+- `gate_pathway_enrichment.py` PASS: FDR and leave-one-locus-out tables present for all four traits.
+
+7. Science deepen (post–GW22)
+
+7.1 Generalization and trait stratification
+
+Within-trait AF_LD_SEL models (variant holdout) achieve mean AUROC **0.760** (CAD 0.776, T2D 0.759, BMI 0.755, LDL 0.751), clearly above the pooled 0.683 and with permuted controls near 0.50. Leave-one-trait-out drops to mean **0.616** (CAD/T2D ~0.56; BMI/LDL ~0.66–0.67). Master `split_trait` AUROC is 0.613; `split_source` (panukbb_only train → multisource test) is 0.566.
+
+Interpretation. Population-genetic features predict discordance well *within* a trait, but transfer across traits is limited. That supports reporting trait-specific models as the operational mechanism layer and treating cross-trait generalization as a secondary, weaker claim—not a failure of the atlas.
+
+7.2 Pathway statistics (FDR and LD-aware nulls)
+
+Gene-level Fisher enrichment of high-I² genes, BH-FDR, and 1 Mb LD-block permutation (200 perms) yield: CAD **108** pathways with both q < 0.05; T2D **1**; BMI **1**; LDL **0**. The T2D/BMI survivors are broad (“Signal Transduction”); CAD includes more specific chromatin, Pre-NOTCH, and meiosis pathways. Leave-one-locus-out on top pathways flagged 2/80 as fragile.
+
+Interpretation. Ranked mean-I² pathway tops remain useful hypotheses; FDR+LD filtering sharply reduces claims, especially for T2D/BMI/LDL. Report CAD FDR survivors as the primary pathway result; label other tops hypothesis-generating.
+
+7.3 Expanded intervention metrics
+
+`reweight_linear` MAD reductions are unchanged in point estimate (7/9 PGS improve; largest on PGS000014) and now carry bootstrap CIs. Reweight beats random on MAD reduction for multiple PGS. Top-5% |score| ancestry composition L1 shifts are non-zero for several scores. Sign-concordance on retained variants is unchanged under reweight because all variants are kept (weights only change)—concordance deltas are informative mainly for filter modes.
+
+Interpretation. Soft reweighting remains the preferred intervention; multi-metric evaluation shows MAD gains are not an artifact of a single summary, while concordance is not expected to move under pure reweighting.
+
+8. How to read these results in the paper
+
+1. Lead with the 22-chromosome mechanism table and per-chromosome replication; use pooled AUROC as a conservative headline and per-chr / within-trait means as the stronger local claims.
+2. State explicitly that trait-holdout is weaker (~0.56–0.67): portability risk is partly trait-specific.
+3. Present pathway tops with claim tiers: FDR+LD significant (mainly CAD) vs hypothesis-generating.
+4. Report the score-shift atlas with explicit chr8–22 genotype coverage; treat CAD/T2D large δ_EUR as the main Q1 finding.
+5. Frame Phase 18 as proof-of-concept triage: emphasize `reweight_linear` (7/9 improved, CIs, beats random) and negative controls.
+6. Keep partial16 and chr22 as sensitivity analyses.
+7. Do not claim full-autosome PRS sums or clinical utility.
+
+Open follow-on. Restore chr1–7 score pgens from VCF to extend atlas and intervention to full autosomes; until then, all PRS-level claims remain chr8–22.
+9. Literature roadmap results (Phases A-D)
+
+9.1 MHC sensitivity
+
+On the MHC-aware associated sample (n~508k; 58,081 MHC rows), AF_LD_SEL AUROC was 0.735 pooled, 0.720 with MHC excluded, 0.850 MHC-only, and 0.735 with an is_mhc indicator. MHC is enriched for high-I2 labels (test positive rate 0.65 vs 0.38 outside) and is highly predictable from AF/LD/SEL features; excluding MHC lowers AUROC only modestly (~0.015). MHC is therefore not silently driving the non-MHC claim, but MHC-only performance should be reported separately for autoimmune follow-ons.
+
+9.2 LD-block CV and baselines (primary CV)
+
+| Split | AF_LD_SEL | FST | POP_DISTANCE | RG_PROXY |
+|-------|-----------|-----|--------------|----------|
+| split_variant | 0.730 | 0.587 | 0.673 | 0.702 |
+| split_ld_block | 0.627 | 0.579 | 0.617 | 0.618 |
+
+LD-block holdout drops AF_LD_SEL from 0.730 to 0.627 (expected leakage reduction). AF_LD_SEL still beats FST, POP_DISTANCE, and RG_PROXY under both splits. Use 0.627 as the primary CV headline for the paper; variant-holdout remains sensitivity. (Sample protocol; full-master pooled remains 0.683.)
+
+9.3 Fine-map tiers
+
+Heuristic tiers (LD-block lead I2): tag_only AUROC 0.733; pooled sample 0.730. Fine_mapped AUROC 0.796 is not interpretable under the current heuristic because lead-by-I2 nearly coincides with y_high_I2 (test positive rate ~0.996). Treat fine-mapped vs tag-only as a methods scaffold until SuSiE CS labels replace the heuristic.
+
+9.4 VEP x AF interaction
+
+LOEUF/pLI proxy x AF divergence did not improve over AF_LD_SEL on the common-EUR stratum (0.733 vs 0.730); rare-EUR stratum AUROC was lower (0.647), consistent with sparser signal / harder labels rather than a clear VEP-bias recovery. AlphaMissense join remains optional when the GRCh38 parquet is present.
+
+9.5 Duffy positive control
+
+rs2814778 +/- 200 kb mean predicted risk was not elevated vs matched null windows (z~-0.11; gate FAIL). Expected without WBC in the trait panel; re-run after WBC labels are wired.
+
+9.6 Report card, external validation, attribution
+
+- Report card exported for PGS000018 (portability_report_card_PGS000018.tsv).
+- External GBMI/PAGE validation: awaiting_sumstats (README + schema ready).
+- Attribution: permutation-importance mechanism labels on a 3k-variant sample (shap_mechanism_attribution_genomewide.csv); GNN status notes CUDA available with Windows torch-scatter/sparse import issues — HGB attribution remains primary.
+- Non-additive proxy features written for all associated variants (nonadditive_proxy_features.parquet).
+
+9.7 How to cite these in the paper
+
+1. Lead CV with LD-block holdout AUROC (~0.63) and show AF_LD_SEL > pop-distance / rg-proxy.
+2. Include the MHC sensitivity table; do not pool MHC silently for autoimmune claims.
+3. State fine-map tiers as heuristic pending SuSiE; do not claim causal-vs-tag mechanism differences yet.
+4. Report Duffy as a planned positive control (currently negative without WBC).
+5. Point to the PGS Catalog-style report card as Aim 4 infrastructure.
+
+10. Lean follow-on (local 16 GB budget)
+
+After repeated OOM crashes from full-chr Pan-UKB downloads (~2 GB compressed chr1 WBC), remaining work was re-run under LOCAL_COMPUTE.md constraints: region-only fetches, cached 500k samples, train caps, one job at a time.
+
+10.1 Duffy / WBC (region-only)
+Downloaded 0.3 MB Pan-UKB WBC window chr1:159.0-159.4 Mb (3,757 variants). Duffy neighborhood mean |beta_AFR-beta_EUR| exceeded flank/outside (passes_positive_control=True; duffy_wbc_region_positive_control.csv). This is a label-level positive control, not a full WBC genome-wide model.
+
+10.2 Fine-map tiers (z_meta lead, unconfounded)
+Lead = max |z_meta| within LD block. fine_mapped high-I2 rate ~0.32 (vs ~1.0 under old I2-lead heuristic). On cached sample: fine_mapped AUROC 0.639; tag_only 0.714; all 0.715 (ablation_finemap_tiers_zlead.csv). AF_LD_SEL predicts heterogeneity more in tag_only than in z-lead fine-mapped variants.
+
+10.3 External validation (lean)
+PAGE full FTP deferred. Local Pan-UKB LDL chr22 EUR vs AFR (n=80k): raw beta corr ~0; after dropping top 10% |beta_EUR-beta_AFR|, corr rises to 0.119 (95% CI 0.111-0.129; delta +0.124). Interpreting as: removing the most discordant effects improves cross-ancestry concordance — consistent with a triage story, with honest scope that this is not yet PAGE/GBMI FTP.
+
+Hard rule going forward: use scripts/download_panukbb_region.py; never full-chr bgz on this rig.

@@ -1,6 +1,0 @@
-{
-  "primary_requires": "signed_ld",
-  "legacy_r2_unsigned_abs_r": "non_primary",
-  "identity_ld": "non_primary",
-  "absz_weight": "non_primary"
-}

@@ -1,9 +1,0 @@
-trait,anc,n,n_in_cs,n_signed_ld,top_mode,modes,primary,status
-BMI,AFR,20508,2051,0,,"{'None': 12508, 'real_ld': 8000}",False,awaiting_signed_ld_rerun
-BMI,EUR,20508,2107,2000,,"{'None': 12508, 'real_ld': 6000, 'signed_ld': 2000}",False,partial_signed_ld
-CAD,AFR,11510,2135,7986,signed_ld,"{'signed_ld': 7986, 'None': 3524}",True,susie_cs_signed_ld
-CAD,EUR,11910,2164,7986,signed_ld,"{'signed_ld': 7986, 'None': 3524, 'absz_weight': 400}",True,susie_cs_signed_ld
-LDL,AFR,20051,2006,0,,"{'None': 12051, 'real_ld': 8000}",False,awaiting_signed_ld_rerun
-LDL,EUR,20051,2006,0,,"{'None': 12051, 'real_ld': 8000}",False,awaiting_signed_ld_rerun
-T2D,AFR,22991,2548,4000,absz_weight,"{'absz_weight': 8400, 'None': 6591, 'signed_ld': 4000, 'real_ld': 4000}",False,partial_signed_ld
-T2D,EUR,22991,2645,0,absz_weight,"{'absz_weight': 8400, 'real_ld': 8000, 'None': 6591}",False,awaiting_signed_ld_rerun

@@ -8,4 +8,4 @@ mamba activate bta
 make test
 ```
 
-Result tables: [`results/tables/`](results/tables/) · manuscript: [`paper/`](paper/)
+Published results: [`BTA_robustness_freeze_results_20260720/`](BTA_robustness_freeze_results_20260720/) · manuscript: [`paper/`](paper/)

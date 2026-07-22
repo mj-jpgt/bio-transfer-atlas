@@ -1,7 +1,6 @@
-# Biological Transferability Atlas (FAIRGEN-Open / BTA)
-# Ignore bulky genomics artifacts; keep code, configs, paper, and small result tables.
+# Public repo: code + paper + freeze results only
 
-# --- Secrets / env ---
+# Secrets
 .env
 .env.*
 !.env.example
@@ -10,7 +9,7 @@
 credentials*
 *token*
 
-# --- Python ---
+# Python / tooling
 __pycache__/
 *.py[cod]
 *$py.class
@@ -24,14 +23,16 @@ venv/
 .mypy_cache/
 .ruff_cache/
 .ipynb_checkpoints/
-
-# --- Snakemake / workflow caches ---
 .snakemake/
 .cache/
 **/hf_staging*/
 **/huggingface/
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
 
-# --- Genotypes & huge binary formats ---
+# Genotypes / large binaries
 *.vcf
 *.vcf.gz
 *.tbi
@@ -43,13 +44,7 @@ venv/
 *.bim
 *.fam
 *.bgen
-*.bgi
 *.sscore
-*.geno
-*.dose
-*.nosex
-
-# --- Large tabular / array dumps ---
 *.parquet
 *.feather
 *.h5
@@ -61,17 +56,35 @@ venv/
 *.ckpt
 *.joblib
 *.pkl
-*.pickle
-*.zst
-*.xz
-*.bz2
-# Keep small text results; ignore huge archives
 *.zip
 *.tar
 *.tar.gz
-*.7z
 
-# --- Project data lakes (regenerate / download) ---
+# Private / ops (never publish)
+agents/
+scripts/
+checklist
+current
+methods
+/results/
+bio-transfer-atlas/LOCAL_COMPUTE.md
+bio-transfer-atlas/ROADMAP_TO_COMPLETION.md
+bio-transfer-atlas/logs/
+bio-transfer-atlas/backup/
+bio-transfer-atlas/hf_dataset/
+bio-transfer-atlas/tools/
+bio-transfer-atlas/scripts/lambda_*
+bio-transfer-atlas/scripts/_*
+bio-transfer-atlas/scripts/cleanup_*
+bio-transfer-atlas/scripts/upload_*
+bio-transfer-atlas/scripts/gate_*
+bio-transfer-atlas/tests/gate_*
+bio-transfer-atlas/tests/run_all_gates.py
+bio-transfer-atlas/results/tables/
+bio-transfer-atlas/results/logs/
+bio-transfer-atlas/results/exports/
+bio-transfer-atlas/results/BTA_M1_M3_RESULTS_REPORT.md
+bio-transfer-atlas/results/LAMBDA_*.md
 bio-transfer-atlas/data/raw/
 bio-transfer-atlas/data/interim/
 bio-transfer-atlas/data/processed/
@@ -80,51 +93,14 @@ bio-transfer-atlas/data/features/
 bio-transfer-atlas/data/labels/
 bio-transfer-atlas/data/targets/
 bio-transfer-atlas/data/annotations/
-# Keep small configs under modeling/; ignore large sample parquets via global *.parquet
 bio-transfer-atlas/data/modeling/*
 !bio-transfer-atlas/data/modeling/
-!bio-transfer-atlas/data/modeling/**/
-!bio-transfer-atlas/data/modeling/*.json
+!bio-transfer-atlas/data/modeling/feature_groups_genomewide_genomewide.json
+!bio-transfer-atlas/data/modeling/genomewide_manifest_genomewide.json
+!bio-transfer-atlas/data/modeling/ld_block_assignments_genomewide.json
 !bio-transfer-atlas/data/**/README.md
 !bio-transfer-atlas/data/**/MANIFEST.tsv
-!bio-transfer-atlas/data/**/*.yaml
-!bio-transfer-atlas/data/**/*.yml
 !bio-transfer-atlas/data/registry.yaml
 
-# --- Logs & backups ---
-bio-transfer-atlas/logs/
-bio-transfer-atlas/backup/
-bio-transfer-atlas/hf_dataset/
-bio-transfer-atlas/tools/
-bio-transfer-atlas/results/logs/
-bio-transfer-atlas/results/figures/*.png
-bio-transfer-atlas/results/figures/*.pdf
-!bio-transfer-atlas/results/figures/.gitkeep
-
-# Keep small CSV/JSON/MD result tables & reports
-!bio-transfer-atlas/results/tables/
-!bio-transfer-atlas/results/*.md
-!bio-transfer-atlas/results/exports/**/*.csv
-!bio-transfer-atlas/results/exports/**/*.md
-!bio-transfer-atlas/results/exports/**/*.txt
-!bio-transfer-atlas/BTA_robustness_freeze_results_20260720/
-# Drop oversized / redundant result dumps
-bio-transfer-atlas/results/tables/portability_report_card*.tsv
-bio-transfer-atlas/results/tables/shap_xgboost_gpu_attribution.csv
-bio-transfer-atlas/results/exports/
-bio-transfer-atlas/scripts/_test_extract.txt
-bio-transfer-atlas/preprocess.ipynb
-
-# --- OS / IDE ---
-.DS_Store
-Thumbs.db
-Desktop.ini
-.idea/
-.vscode/
-*.swp
-
-# --- Scratch / notes at repo root (optional local) ---
-checklist
-current
-methods
-/results/
+# Freeze pack: keep tables/figures/reports; ignore nested paper duplicate if re-added
+bio-transfer-atlas/BTA_robustness_freeze_results_20260720/paper/

@@ -19,8 +19,8 @@ Under **LD-block** cross-validation (~109k test variants):
 | Duffy / WBC positive control | AFR null-homozygous vs dose&lt;2: Δmean PGS **0.119** [0.024, 0.206] |
 | PAGE LDL (external) | **4,384** variants after allele QC; β correlation ≈ **0.01** |
 
-Full CSV tables: [`bio-transfer-atlas/results/tables/`](bio-transfer-atlas/results/tables/) · pack: [`bio-transfer-atlas/BTA_robustness_freeze_results_20260720/`](bio-transfer-atlas/BTA_robustness_freeze_results_20260720/)  
-Write-up: [`bio-transfer-atlas/paper/`](bio-transfer-atlas/paper/) · [`bio-transfer-atlas/results/BTA_M4_M6_RESULTS_REPORT.md`](bio-transfer-atlas/results/BTA_M4_M6_RESULTS_REPORT.md)
+Full CSV tables and figures: [`bio-transfer-atlas/BTA_robustness_freeze_results_20260720/`](bio-transfer-atlas/BTA_robustness_freeze_results_20260720/)  
+Write-up: [`bio-transfer-atlas/paper/`](bio-transfer-atlas/paper/) · [`bio-transfer-atlas/BTA_robustness_freeze_results_20260720/reports/BTA_M4_M6_RESULTS_REPORT.md`](bio-transfer-atlas/BTA_robustness_freeze_results_20260720/reports/BTA_M4_M6_RESULTS_REPORT.md)
 
 ## Setup
 
@@ -35,7 +35,7 @@ Genotypes, Pan-UKB dumps, and other large inputs are **not** in git. Place them 
 
 ## Reproduce key analyses
 
-All commands below are from `bio-transfer-atlas/` with the `bta` env active. They write CSVs under `results/tables/`.
+From `bio-transfer-atlas/` with the `bta` env active. Scripts write local outputs under `results/tables/`; published tables are in `BTA_robustness_freeze_results_20260720/tables/`.
 
 ```bash
 # Nested AF / LD / SEL ablation + paired ΔAUROC
@@ -75,7 +75,7 @@ bio-transfer-atlas/
 ├── src/bta/          # library code
 ├── workflow/         # Snakemake rules
 ├── paper/            # manuscript
-├── results/tables/   # result CSVs
+├── BTA_robustness_freeze_results_20260720/  # result tables + figures
 ├── tests/
 └── environment.yml
 ```

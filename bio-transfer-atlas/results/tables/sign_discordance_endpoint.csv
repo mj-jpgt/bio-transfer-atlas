@@ -1,3 +1,0 @@
-endpoint,feature_group,AUROC,pos_rate,n_test,status
-high_I2,AF_LD_SEL,0.6271,0.3797,108726,ok
-sign_discordant,AF_LD_SEL,0.7700,0.8895,108726,ok

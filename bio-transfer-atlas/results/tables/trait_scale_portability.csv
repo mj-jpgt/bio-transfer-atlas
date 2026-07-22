@@ -1,9 +1,0 @@
-trait,anc1,anc2,z_concordance,n_variants_sumstat,method,estimand,trait_class,mean_high_I2_rate,n_associated_variants,note
-T2D,EUR,AFR,0.0183829,1521577,"panukbb_zcorr_chr1,22",cross_ancestry_z_score_concordance,metabolic,0.292729,570426,Trait-scale: Z-concordance is a legitimate predictor of aggregate failure rate; not a variant-within-trait ranker.
-T2D,EUR,EAS,0.0185928,891479,"panukbb_zcorr_chr1,22",cross_ancestry_z_score_concordance,metabolic,0.292729,570426,Trait-scale: Z-concordance is a legitimate predictor of aggregate failure rate; not a variant-within-trait ranker.
-CAD,EUR,AFR,0.012208,222196,"panukbb_zcorr_chr1,22",cross_ancestry_z_score_concordance,metabolic,0.291453,397364,Trait-scale: Z-concordance is a legitimate predictor of aggregate failure rate; not a variant-within-trait ranker.
-CAD,EUR,EAS,0.0221366,134215,"panukbb_zcorr_chr1,22",cross_ancestry_z_score_concordance,metabolic,0.291453,397364,Trait-scale: Z-concordance is a legitimate predictor of aggregate failure rate; not a variant-within-trait ranker.
-BMI,EUR,AFR,0.000874112,222204,"panukbb_zcorr_chr1,22",cross_ancestry_z_score_concordance,metabolic,0.444941,1193671,Trait-scale: Z-concordance is a legitimate predictor of aggregate failure rate; not a variant-within-trait ranker.
-BMI,EUR,EAS,0.0781222,134215,"panukbb_zcorr_chr1,22",cross_ancestry_z_score_concordance,metabolic,0.444941,1193671,Trait-scale: Z-concordance is a legitimate predictor of aggregate failure rate; not a variant-within-trait ranker.
-LDL,EUR,AFR,0.00196714,222196,"panukbb_zcorr_chr1,22",cross_ancestry_z_score_concordance,metabolic,0.387172,866413,Trait-scale: Z-concordance is a legitimate predictor of aggregate failure rate; not a variant-within-trait ranker.
-LDL,EUR,EAS,0.0773253,134204,"panukbb_zcorr_chr1,22",cross_ancestry_z_score_concordance,metabolic,0.387172,866413,Trait-scale: Z-concordance is a legitimate predictor of aggregate failure rate; not a variant-within-trait ranker.

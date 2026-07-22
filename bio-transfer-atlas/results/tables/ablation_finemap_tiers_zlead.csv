@@ -1,4 +1,0 @@
-tier,feature_group,tier_method,AUROC,AUPRC,n_train,n_test,pos_rate_test
-fine_mapped,AF_LD_SEL,z_meta_lead,0.5968,0.3980,1249,299,0.3211
-tag_only,AF_LD_SEL,z_meta_lead,0.7154,0.6345,200000,74262,0.3802
-all,AF_LD_SEL,z_meta_lead,0.7149,0.6315,200000,74561,0.3799

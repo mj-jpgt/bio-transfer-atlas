@@ -1,2 +1,0 @@
-split,feature_group,AUROC,AUPRC,n_train,n_test,device,model,max_vram_gb,batch
-split_ld_block,AF_LD_SEL,0.5487,0.4383,391274,108726,cuda,rff_8192_mlp_4096,3.7894,16384
