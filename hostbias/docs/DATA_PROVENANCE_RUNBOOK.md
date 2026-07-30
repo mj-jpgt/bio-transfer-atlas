@@ -22,6 +22,13 @@ python -m hostbias.data_manifest select \
 python -m hostbias.data_manifest validate \
   --manifest config/stage0_samples.tsv \
   --report provenance/stage0_manifest_validation.json
+
+python -m hostbias.metadata_audit \
+  --manifest config/stage0_samples.tsv \
+  --arm tanzania=PRJNA686265 \
+  --arm netherlands=PRJNA319574 \
+  --snapshot-dir provenance/ena \
+  --output results/evidence/live_ena_audit.json
 ```
 
 On 2026-07-30, the canonical ENA responses contained 320 rows for
@@ -31,6 +38,9 @@ respectively. Their hashes are frozen in `config/ena_snapshot_ledger.tsv`.
 Rebuilding from those snapshots produced a byte-identical 60-run manifest with
 SHA-256
 `277a2d2633a3fb563510d2a00ee8c33dd0b9378fce30df10ab24d92753dc4c0d`.
+The live audit exits nonzero if current ENA metadata no longer reproduces the
+freeze. Its aggregate/hash-only JSON is safe to commit; the full snapshots stay
+in the run provenance directory.
 
 For the sentinel check, create a TSV with these columns:
 
@@ -70,4 +80,3 @@ python -m hostbias.reference_manifest verify \
 Do not proceed to cohort labelling until reference verification reports
 `"valid": true`. The exact HPRC group mapping and checksums must come from the
 frozen HPRC catalog; they must never be inferred from cohort outcomes.
-
