@@ -1,0 +1,11 @@
+donor_id	biosample_accession	population_code	superpopulation	panel_role	selection_rank	haplotype_count	metadata_basis
+HG02583	SAMN41021657	GWD	AFR	primary	1	2	HPRC+IGSR exact donor join
+HG02922	SAMN33758788	ESN	AFR	holdout	2	2	HPRC+IGSR exact donor join
+HG01167	SAMN41021679	PUR	AMR	primary	1	2	HPRC+IGSR exact donor join
+NA19682	SAMN41021611	MXL	AMR	holdout	2	2	HPRC+IGSR exact donor join
+HG02040	SAMN33758784	KHV	EAS	primary	1	2	HPRC+IGSR exact donor join
+HG02155	SAMN33621951	CDX	EAS	holdout	2	2	HPRC+IGSR exact donor join
+HG00097	SAMN41021660	GBR	EUR	primary	1	2	HPRC+IGSR exact donor join
+HG00099	SAMN33758778	GBR	EUR	holdout	2	2	HPRC+IGSR exact donor join
+HG03742	SAMN37797111	ITU	SAS	primary	1	2	HPRC+IGSR exact donor join
+HG03784	SAMN41021647	ITU	SAS	holdout	2	2	HPRC+IGSR exact donor join
