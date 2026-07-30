@@ -459,6 +459,14 @@ def test_pair_subsampling_is_exact_synchronized_and_byte_deterministic(
     assert validation.returncode == 0, validation.stderr
 
 
+def test_pair_subsampling_uses_fast_deterministic_gzip_contract() -> None:
+    script = SUBSAMPLE.read_text(encoding="utf-8")
+
+    assert 'filename="", mode="wb", fileobj=raw, compresslevel=1, mtime=0' in (
+        " ".join(script.split())
+    )
+
+
 def test_workflow_has_explicit_privacy_and_resource_boundaries() -> None:
     snakefile = (PROJECT / "workflow" / "Snakefile").read_text(encoding="utf-8")
 

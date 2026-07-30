@@ -19,7 +19,9 @@ def deterministic_gzip_text(path: Path) -> Iterator[TextIO]:
     """Write gzip with a fixed timestamp so identical inputs are byte-identical."""
 
     raw = path.open("wb")
-    compressed = gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0)
+    compressed = gzip.GzipFile(
+        filename="", mode="wb", fileobj=raw, compresslevel=1, mtime=0
+    )
     text = io.TextIOWrapper(compressed, encoding="ascii", newline="\n")
     try:
         yield text
