@@ -141,7 +141,7 @@ BinQcRow.PARSERS = {
     "bin_id": _text,
     "das_tool_selected": _boolean,
     "checkm2_completeness": _fraction,
-    "checkm2_contamination": _fraction,
+    "checkm2_contamination": _finite_nonnegative,
     "gunc_pass": _boolean,
     "gtdb_domain": _text,
     "gtdb_genus": _optional_text,

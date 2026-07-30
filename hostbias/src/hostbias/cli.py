@@ -19,7 +19,11 @@ from hostbias.controls import evaluate_controls
 from hostbias.endpoints import calculate_endpoints
 from hostbias.endpoint_bridge import aggregate_sample_endpoint
 from hostbias.labeling import label_contigs
-from hostbias.mag_bridge import bins_to_scaffolds2bin, depth_to_maxbin_abundance
+from hostbias.mag_bridge import (
+    bins_to_scaffolds2bin,
+    build_mag_contracts,
+    depth_to_maxbin_abundance,
+)
 from hostbias.schemas import (
     AlignmentRow,
     BinQcRow,
@@ -395,6 +399,35 @@ def bins_to_map_command(
 
     count = bins_to_scaffolds2bin(bin_dir, output, bin_prefix)
     typer.echo(f"{count} assignments")
+
+
+@app.command("mag-contract")
+def mag_contract_command(
+    sample_id: Annotated[str, typer.Option()],
+    dastool_map: Annotated[Path, typer.Option(exists=True, readable=True)],
+    checkm2_report: Annotated[Path, typer.Option(exists=True, readable=True)],
+    gunc_report: Annotated[Path, typer.Option(exists=True, readable=True)],
+    gtdb_bacterial_summary: Annotated[
+        Path, typer.Option(exists=True, readable=True)
+    ],
+    gtdb_archaeal_summary: Annotated[
+        Path, typer.Option(exists=True, readable=True)
+    ],
+    contig_bins_output: Annotated[Path, typer.Option()],
+    bin_qc_output: Annotated[Path, typer.Option()],
+) -> None:
+    """Build exact private endpoint inputs from MAG tool reports."""
+
+    count = build_mag_contracts(
+        sample_id,
+        dastool_map,
+        checkm2_report,
+        gunc_report,
+        (gtdb_bacterial_summary, gtdb_archaeal_summary),
+        contig_bins_output,
+        bin_qc_output,
+    )
+    typer.echo(f"{count} selected bins")
 
 
 def _write_json(path: Path, value: object) -> None:
