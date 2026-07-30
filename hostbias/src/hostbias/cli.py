@@ -19,6 +19,7 @@ from hostbias.controls import evaluate_controls
 from hostbias.endpoints import calculate_endpoints
 from hostbias.endpoint_bridge import aggregate_sample_endpoint
 from hostbias.labeling import label_contigs
+from hostbias.mag_bridge import bins_to_scaffolds2bin, depth_to_maxbin_abundance
 from hostbias.schemas import (
     AlignmentRow,
     BinQcRow,
@@ -371,6 +372,29 @@ def aggregate_endpoint_command(
     )
     write_json_atomic(payload, output)
     typer.echo(output)
+
+
+@app.command("maxbin-abundance")
+def maxbin_abundance_command(
+    depth: Annotated[Path, typer.Option(exists=True, readable=True)],
+    output: Annotated[Path, typer.Option()],
+) -> None:
+    """Translate MetaBAT depth output into MaxBin's abundance input."""
+
+    count = depth_to_maxbin_abundance(depth, output)
+    typer.echo(f"{count} contigs")
+
+
+@app.command("bins-to-map")
+def bins_to_map_command(
+    bin_dir: Annotated[Path, typer.Option(exists=True, file_okay=False)],
+    output: Annotated[Path, typer.Option()],
+    bin_prefix: Annotated[str, typer.Option()],
+) -> None:
+    """Translate a FASTA bin directory into DAS Tool scaffolds-to-bin TSV."""
+
+    count = bins_to_scaffolds2bin(bin_dir, output, bin_prefix)
+    typer.echo(f"{count} assignments")
 
 
 def _write_json(path: Path, value: object) -> None:
