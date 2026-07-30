@@ -339,12 +339,14 @@ rule verify_competitive_index:
 rule minimap2_version:
     output:
         version=f"{WORK}/provenance/minimap2.version",
+    log:
+        "logs/downstream/minimap2_version.log",
     conda:
         "../envs/downstream.yaml"
     shell:
         """
-        mkdir -p $(dirname {output.version:q})
-        minimap2 --version > {output.version:q}.partial
+        mkdir -p $(dirname {output.version:q}) $(dirname {log:q})
+        minimap2 --version > {output.version:q}.partial 2> {log:q}
         mv {output.version:q}.partial {output.version:q}
         """
 
@@ -387,6 +389,8 @@ rule alignment_run_spec:
         mapper_version=f"{WORK}/provenance/minimap2.version",
     output:
         spec=f"{WORK}/alignments/{{sample}}/{{mode}}/run_spec.json",
+    log:
+        "logs/downstream/spec/{sample}.{mode}.log",
     params:
         preset=COMPETITIVE["mapper_preset"],
         human_id=COMPETITIVE["human"]["reference_id"],
@@ -397,6 +401,7 @@ rule alignment_run_spec:
         "../envs/downstream.yaml"
     shell:
         """
+        mkdir -p $(dirname {log:q})
         PYTHONPATH=src python workflow/scripts/write_alignment_spec.py \
           --sample-id {wildcards.sample:q} --filter-mode {wildcards.mode:q} \
           --assembly {input.assembly:q} \
@@ -408,7 +413,7 @@ rule alignment_run_spec:
           --gtdb-paf {input.gtdb_paf:q} \
           --gtdb-reference-id {params.gtdb_id:q} \
           --gtdb-reference-sha256 {params.gtdb_sha256:q} \
-          --output {output.spec:q}
+          --output {output.spec:q} > {log:q} 2>&1
         """
 
 
