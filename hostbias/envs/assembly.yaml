@@ -1,0 +1,9 @@
+name: hostbias-assembly
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=3.11
+  - megahit=1.2.9
+  - seqkit=2.8.2
