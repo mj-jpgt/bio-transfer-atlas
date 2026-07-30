@@ -353,6 +353,12 @@ def build_snakemake_command(
         raise OperationError("mem_mb exceeds the production memory cap")
     if not 1 <= disk_mb <= DEFAULT_SCHEDULER["disk_mb"]:
         raise OperationError("disk_mb exceeds the production disk cap")
+    # A published fetch pair has already passed exact byte and MD5 checks and
+    # is write-protected.  Retouching the validation sentinel must not make
+    # Snakemake attempt to replace those immutable outputs on resume.
+    rerun_triggers = ["input", "params", "code", "software-env"]
+    if stage != "fetch":
+        rerun_triggers.insert(0, "mtime")
     command = [
         snakemake_executable,
         STAGE_TARGETS[stage],
@@ -376,11 +382,7 @@ def build_snakemake_command(
         "conda",
         "--printshellcmds",
         "--rerun-triggers",
-        "mtime",
-        "input",
-        "params",
-        "code",
-        "software-env",
+        *rerun_triggers,
     ]
     if dry_run:
         command.append("--dry-run")
@@ -489,6 +491,11 @@ def launch_production(
             "force_outputs": False,
             "delete_outputs": False,
             "same_command_resumes": True,
+            "rerun_triggers": (
+                ["input", "params", "code", "software-env"]
+                if stage == "fetch"
+                else ["mtime", "input", "params", "code", "software-env"]
+            ),
         },
         "privacy": {
             "contains_absolute_paths": False,

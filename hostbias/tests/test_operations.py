@@ -221,6 +221,17 @@ def test_launch_command_has_exact_resume_and_resource_semantics(tmp_path: Path) 
         shutil.rmtree(runtime, ignore_errors=True)
 
 
+def test_fetch_resume_does_not_invalidate_verified_outputs_by_mtime() -> None:
+    command = build_snakemake_command(
+        config_path=PROJECT / "config" / "config.example.yaml",
+        stage="fetch",
+    )
+    triggers = command[command.index("--rerun-triggers") + 1 :]
+
+    assert triggers == ["input", "params", "code", "software-env"]
+    assert "mtime" not in triggers
+
+
 def test_status_reports_only_aggregate_unit_counts(tmp_path: Path) -> None:
     work = tmp_path / "scratch" / "work"
     work.mkdir(parents=True)
