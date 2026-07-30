@@ -113,3 +113,32 @@ bio-transfer-atlas/BTA_robustness_freeze_results_20260720/paper/
 # stray root results artifact
 /results
 results
+
+# Hostbias: code and aggregate evidence are public; sequence-bearing artifacts stay local.
+hostbias/data/
+hostbias/references/
+hostbias/resources/
+hostbias/work/
+hostbias/logs/
+hostbias/benchmarks/
+hostbias/results/**
+!hostbias/results/
+!hostbias/results/aggregate/
+!hostbias/results/aggregate/**
+hostbias/**/*.fastq
+hostbias/**/*.fastq.gz
+hostbias/**/*.fq
+hostbias/**/*.fq.gz
+hostbias/**/*.fasta
+hostbias/**/*.fasta.gz
+hostbias/**/*.fa
+hostbias/**/*.fa.gz
+hostbias/**/*.fna
+hostbias/**/*.fna.gz
+hostbias/**/*.sam
+hostbias/**/*.bam
+hostbias/**/*.bai
+hostbias/**/*.cram
+hostbias/**/*.crai
+hostbias/**/*.bt2
+hostbias/**/*.bt2l
