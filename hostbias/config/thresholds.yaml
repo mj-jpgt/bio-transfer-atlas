@@ -1,0 +1,63 @@
+schema_version: 1
+frozen_at_utc: "2026-07-30T03:30:00Z"
+random_seed: 20260729
+
+normalization:
+  read_length_bp: 100
+  clean_pairs_per_sample: 8000000
+  minimum_clean_pairs: 8000000
+  full_depth_manifest_positions: [1, 7, 14, 20]
+
+sentinel:
+  runs_per_arm: 3
+  streamed_spots_per_run: 1000000
+  minimum_grch38_mapped_pairs_per_million: 100
+  minimum_passing_runs_per_arm: 2
+
+human_contig_label:
+  minimum_aligned_bp: 500
+  primary_identity_fraction: 0.95
+  sensitivity_identity_fractions: [0.90, 0.95, 0.98]
+  minimum_query_coverage_fraction: 0.50
+  minimum_mapping_quality: 20
+  minimum_human_to_gtdb_score_ratio: 1.05
+  ambiguous_matches: exclude
+
+label_controls:
+  minimum_hprc_sensitivity_fraction: 0.95
+  maximum_gtdb_false_positive_bp_fraction: 0.001
+
+endpoint_bin:
+  selected_by: dastool
+  minimum_checkm2_completeness_fraction: 0.50
+  maximum_checkm2_contamination_fraction: 0.05
+  require_gunc_pass: true
+  gtdb_domains: [Bacteria, Archaea]
+  require_named_genus: true
+  require_no_existing_species_placement: true
+  human_fraction_tiers:
+    contact: 0.0
+    material: 0.10
+    dominant: 0.50
+
+statistics:
+  bootstrap_replicates: 50000
+  permutation_replicates: 100000
+  confidence_level: 0.95
+  alternative: greater
+  stratify_bootstrap_by_arm: true
+
+gate_a:
+  required_valid_samples_per_arm: 20
+  minimum_tanzania_mean_p_count: 0.01
+  minimum_mean_ratio: 1.5
+  minimum_ratio_ci_lower: 1.0
+  minimum_absolute_difference_ci_lower: 0.0
+  maximum_one_sided_permutation_p: 0.05
+  minimum_tanzania_samples_with_propagation: 5
+  maximum_single_sample_numerator_fraction: 0.25
+  require_p_bp_same_direction: true
+  require_strict_pair_filter_same_direction: true
+  require_all_identity_sensitivities_same_direction: true
+  require_leave_one_out_never_reverses: true
+
