@@ -359,6 +359,7 @@ def build_snakemake_command(
         "workflow/Snakefile",
         "--configfile",
         str(config_path.resolve()),
+        STAGE_TARGETS[stage],
         "--cores",
         str(cores),
         "--jobs",
@@ -383,7 +384,6 @@ def build_snakemake_command(
     ]
     if dry_run:
         command.append("--dry-run")
-    command.append(STAGE_TARGETS[stage])
     return command
 
 
