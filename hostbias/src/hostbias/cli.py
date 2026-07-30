@@ -30,6 +30,12 @@ from hostbias.schemas import (
 )
 from hostbias.statistics import analyze, attach_groups
 from hostbias.provenance import build_provenance, write_json_atomic
+from hostbias.operations import (
+    OperationError,
+    launch_production,
+    prepare_production_overlay,
+    production_status,
+)
 from hostbias.runtime_manifest import prepare_runtime
 from hostbias.sentinel_runner import LocalExecutor, run_sentinel_panel
 from hostbias.verdict import make_verdict, write_verdict
@@ -175,6 +181,102 @@ def prepare_runtime_command(
         f"valid: {len(report['ordered_accessions'])} {scope} runs; "
         f"config={runtime_dir / f'config.{scope}.yaml'}"
     )
+
+
+@app.command("production-prepare")
+def production_prepare_command(
+    base_config: Annotated[Path, typer.Option(exists=True, readable=True)],
+    nfs_root: Annotated[Path, typer.Option()],
+    run_id: Annotated[str, typer.Option()],
+    output_config: Annotated[Path | None, typer.Option()] = None,
+    evidence: Annotated[Path | None, typer.Option()] = None,
+    allow_non_shared_filesystem: Annotated[bool, typer.Option()] = False,
+) -> None:
+    """Create a private shared-NFS overlay for the 40-sample production run."""
+
+    output = output_config or Path("runtime") / "operations" / f"{run_id}.yaml"
+    evidence_output = evidence or (
+        Path("results") / "aggregate" / "operations" / f"{run_id}.ready.json"
+    )
+    try:
+        report = prepare_production_overlay(
+            base_config=base_config,
+            output_config=output,
+            evidence_output=evidence_output,
+            nfs_root=nfs_root,
+            run_id=run_id,
+            require_shared_fs=not allow_non_shared_filesystem,
+        )
+    except (OperationError, ValidationError) as error:
+        raise typer.BadParameter(str(error)) from error
+    typer.echo(
+        json.dumps(
+            {
+                "status": report["status"],
+                "sample_count": report["sample_count"],
+                "config": str(output),
+                "evidence": str(evidence_output),
+            }
+        )
+    )
+
+
+@app.command("production-launch")
+def production_launch_command(
+    config: Annotated[Path, typer.Option(exists=True, readable=True)],
+    stage: Annotated[str, typer.Option()],
+    evidence: Annotated[Path | None, typer.Option()] = None,
+    cores: Annotated[int, typer.Option(min=1)] = 30,
+    jobs: Annotated[int, typer.Option(min=1)] = 8,
+    mem_mb: Annotated[int, typer.Option(min=1)] = 204_800,
+    disk_mb: Annotated[int, typer.Option(min=1)] = 2_500_000,
+    latency_wait_seconds: Annotated[int, typer.Option(min=1)] = 120,
+    snakemake: Annotated[str, typer.Option()] = "snakemake",
+    dry_run: Annotated[bool, typer.Option()] = False,
+) -> None:
+    """Run or resume one production stage in the foreground."""
+
+    evidence_output = evidence or (
+        Path("results")
+        / "aggregate"
+        / "operations"
+        / f"production.{stage}.launch.json"
+    )
+    try:
+        report = launch_production(
+            config_path=config,
+            stage=stage,
+            evidence_output=evidence_output,
+            cores=cores,
+            jobs=jobs,
+            mem_mb=mem_mb,
+            disk_mb=disk_mb,
+            latency_wait_seconds=latency_wait_seconds,
+            snakemake_executable=snakemake,
+            dry_run=dry_run,
+        )
+    except (OperationError, ValidationError) as error:
+        raise typer.BadParameter(str(error)) from error
+    typer.echo(json.dumps({"status": report["status"], "evidence": str(evidence_output)}))
+    if report["exit_code"] != 0:
+        raise typer.Exit(report["exit_code"])
+
+
+@app.command("production-status")
+def production_status_command(
+    config: Annotated[Path, typer.Option(exists=True, readable=True)],
+    output: Annotated[
+        Path, typer.Option()
+    ] = Path("results/aggregate/operations/production.status.json"),
+) -> None:
+    """Write aggregate-only completion counts for every production stage."""
+
+    try:
+        report = production_status(config)
+    except (OperationError, ValidationError) as error:
+        raise typer.BadParameter(str(error)) from error
+    write_json_atomic(report, output)
+    typer.echo(json.dumps({"stages": report["stages"], "output": str(output)}))
 
 
 @app.command("assembly-qc")

@@ -72,3 +72,17 @@ def test_cli_analyze_command_runs(tmp_path: Path) -> None:
     )
     assert result.exit_code == 0, result.output
     assert result.output.strip() == "FAIL"
+
+
+def test_cli_exposes_foreground_production_operations() -> None:
+    prepare = CliRunner().invoke(app, ["production-prepare", "--help"])
+    launch = CliRunner().invoke(app, ["production-launch", "--help"])
+    status = CliRunner().invoke(app, ["production-status", "--help"])
+
+    assert prepare.exit_code == 0
+    assert "--nfs-root" in prepare.stdout
+    assert launch.exit_code == 0
+    assert "--dry-run" in launch.stdout
+    assert "--stage" in launch.stdout
+    assert status.exit_code == 0
+    assert "--config" in status.stdout
