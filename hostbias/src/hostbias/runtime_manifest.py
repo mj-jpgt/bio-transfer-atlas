@@ -40,6 +40,12 @@ RUNTIME_MANIFEST_FIELDS = (
 )
 SCOPES = {"sentinel", "primary"}
 MD5_PATTERN = re.compile(r"^[a-fA-F0-9]{32}$")
+ALLOWED_REPLACEMENT_REASONS = {
+    "checksum_failure",
+    "wrong_library_layout",
+    "corrupt_or_unsynchronized_pairs",
+    "insufficient_clean_pairs",
+}
 
 
 def _sha256(path: Path) -> str:
@@ -73,8 +79,59 @@ def _positive_size(value: str, *, run: str) -> str:
     return str(size)
 
 
+def _replacement_rows(
+    frozen_rows: Sequence[Mapping[str, str]],
+    replacements: Sequence[Mapping[str, object]],
+) -> dict[str, Mapping[str, str]]:
+    """Validate technical substitutions without changing the frozen ranking."""
+
+    by_accession = {row["run_accession"]: row for row in frozen_rows}
+    selected: dict[str, Mapping[str, str]] = {}
+    used_replacements: set[str] = set()
+    replaced_accessions: set[str] = set()
+    for replacement in replacements:
+        required = {"arm", "replaced_accession", "replacement_accession", "reason"}
+        missing = required.difference(replacement)
+        if missing:
+            raise ManifestError(f"replacement missing fields {sorted(missing)}")
+        arm = str(replacement["arm"])
+        replaced = str(replacement["replaced_accession"])
+        candidate = str(replacement["replacement_accession"])
+        reason = str(replacement["reason"])
+        if reason not in ALLOWED_REPLACEMENT_REASONS:
+            raise ManifestError(f"{replaced}: replacement reason is not technical")
+        source = by_accession.get(replaced)
+        reserve = by_accession.get(candidate)
+        if source is None or reserve is None:
+            raise ManifestError("replacement accession absent from frozen manifest")
+        if source["arm"] != arm or reserve["arm"] != arm:
+            raise ManifestError(f"{replaced}: replacement must remain within arm")
+        if source["role"] != "primary" or reserve["role"] != "reserve":
+            raise ManifestError(f"{replaced}: replacement must be primary-to-reserve")
+        if replaced in replaced_accessions or candidate in used_replacements:
+            raise ManifestError("replacement ledger contains duplicate accessions")
+        earlier_available = [
+            row
+            for row in frozen_rows
+            if row["arm"] == arm
+            and row["role"] == "reserve"
+            and row["run_accession"] not in used_replacements
+        ]
+        first_available = min(earlier_available, key=lambda row: int(row["rank"]))
+        if candidate != first_available["run_accession"]:
+            raise ManifestError(
+                f"{replaced}: replacement must use the next reserve in frozen rank order"
+            )
+        selected[replaced] = reserve
+        used_replacements.add(candidate)
+        replaced_accessions.add(replaced)
+    return selected
+
+
 def _selected_rows(
-    frozen_rows: Sequence[Mapping[str, str]], scope: str
+    frozen_rows: Sequence[Mapping[str, str]],
+    scope: str,
+    replacements: Sequence[Mapping[str, object]] = (),
 ) -> list[Mapping[str, str]]:
     if scope not in SCOPES:
         raise ManifestError(f"scope must be one of {sorted(SCOPES)}")
@@ -94,6 +151,9 @@ def _selected_rows(
             f"{scope}: expected two arms with {expected_per_arm} runs each; "
             f"observed {dict(counts)}"
         )
+    if scope == "primary" and replacements:
+        substitution = _replacement_rows(frozen_rows, replacements)
+        selected = [substitution.get(row["run_accession"], row) for row in selected]
     return selected
 
 
@@ -102,10 +162,11 @@ def build_runtime_rows(
     snapshots: Mapping[str, Sequence[Mapping[str, str]]],
     *,
     scope: str,
+    replacements: Sequence[Mapping[str, object]] = (),
 ) -> list[dict[str, str]]:
     """Join a frozen scope to checksum/size-pinned ENA FASTQ metadata."""
 
-    selected = _selected_rows(frozen_rows, scope)
+    selected = _selected_rows(frozen_rows, scope, replacements)
     frozen_arms = {row["arm"] for row in frozen_rows}
     if set(snapshots) != frozen_arms:
         raise ManifestError(
@@ -216,10 +277,22 @@ def prepare_runtime(
     evidence_output: Path,
     project_root: Path,
     scope: str,
+    replacement_ledger: Path | None = None,
 ) -> dict[str, object]:
     frozen_rows = read_tsv(frozen_manifest)
     snapshots = {arm: read_tsv(path) for arm, path in snapshot_paths.items()}
-    runtime_rows = build_runtime_rows(frozen_rows, snapshots, scope=scope)
+    replacements: Sequence[Mapping[str, object]] = ()
+    if replacement_ledger is not None:
+        ledger = yaml.safe_load(replacement_ledger.read_text(encoding="utf-8"))
+        if not isinstance(ledger, dict) or ledger.get("schema_version") != 1:
+            raise ManifestError("replacement ledger must have schema_version 1")
+        candidate = ledger.get("replacements", [])
+        if not isinstance(candidate, list) or not all(isinstance(row, dict) for row in candidate):
+            raise ManifestError("replacement ledger replacements must be a list")
+        replacements = candidate
+    runtime_rows = build_runtime_rows(
+        frozen_rows, snapshots, scope=scope, replacements=replacements
+    )
     manifest_sha = write_runtime_manifest(runtime_manifest, runtime_rows)
     config_sha = write_runtime_config(
         template=config_template,
@@ -251,6 +324,9 @@ def prepare_runtime(
             "ena_snapshot_sha256": {
                 arm: _sha256(path) for arm, path in sorted(snapshot_paths.items())
             },
+            "replacement_ledger_sha256": (
+                _sha256(replacement_ledger) if replacement_ledger is not None else None
+            ),
         },
         "outputs": {
             "runtime_manifest_sha256": manifest_sha,

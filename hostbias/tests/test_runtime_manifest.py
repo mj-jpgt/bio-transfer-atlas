@@ -69,6 +69,46 @@ def test_primary_scope_has_exactly_twenty_runs_per_arm() -> None:
     assert sum(row["cohort"] == "netherlands" for row in rows) == 20
 
 
+def test_primary_scope_applies_only_the_next_technical_reserve() -> None:
+    frozen = frozen_rows()
+    rows = build_runtime_rows(
+        frozen,
+        snapshots(frozen),
+        scope="primary",
+        replacements=[
+            {
+                "arm": "netherlands",
+                "replaced_accession": "SRR5127666",
+                "replacement_accession": "SRR5127623",
+                "reason": "insufficient_clean_pairs",
+            }
+        ],
+    )
+
+    accessions = [row["accession"] for row in rows]
+    assert "SRR5127666" not in accessions
+    assert "SRR5127623" in accessions
+    assert len(accessions) == 40
+
+
+def test_primary_scope_rejects_skipping_the_next_reserve() -> None:
+    frozen = frozen_rows()
+    with pytest.raises(ManifestError, match="next reserve"):
+        build_runtime_rows(
+            frozen,
+            snapshots(frozen),
+            scope="primary",
+            replacements=[
+                {
+                    "arm": "netherlands",
+                    "replaced_accession": "SRR5127666",
+                    "replacement_accession": "SRR5127543",
+                    "reason": "insufficient_clean_pairs",
+                }
+            ],
+        )
+
+
 def test_duplicate_snapshot_accession_is_rejected() -> None:
     frozen = frozen_rows()
     metadata = snapshots(frozen)

@@ -269,6 +269,9 @@ def prepare_runtime_command(
     ] = Path("config/config.example.yaml"),
     runtime_dir: Annotated[Path, typer.Option()] = Path("runtime"),
     evidence: Annotated[Path | None, typer.Option()] = None,
+    replacement_ledger: Annotated[
+        Path | None, typer.Option(exists=True, readable=True)
+    ] = None,
 ) -> None:
     """Create checksum/size-pinned runtime inputs and aggregate-safe evidence."""
 
@@ -289,6 +292,7 @@ def prepare_runtime_command(
             evidence_output=evidence_output,
             project_root=project_root,
             scope=scope,
+            replacement_ledger=replacement_ledger,
         )
     except (ValidationError, ValueError) as error:
         raise typer.BadParameter(str(error)) from error
