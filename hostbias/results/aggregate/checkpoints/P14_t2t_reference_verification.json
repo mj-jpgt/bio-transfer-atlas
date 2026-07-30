@@ -9,7 +9,9 @@
     "bytes": 932696125,
     "ncbi_md5": "9280657210e4161147cbe13b022225b9",
     "md5_verified": true,
-    "sha256": "a2f8b712a1958a41b590ce67743c324d64462e17b6b4fdc62747ff4de4b09c75"
+    "sha256": "a2f8b712a1958a41b590ce67743c324d64462e17b6b4fdc62747ff4de4b09c75",
+    "uncompressed_bytes": 3156259565,
+    "uncompressed_sha256": "51ab7d3c2a375ecff53ee2a1be03e58d57cc1601c948a860c03a78d724f26e4c"
   },
   "privacy": {
     "sequence_file_committed": false,
