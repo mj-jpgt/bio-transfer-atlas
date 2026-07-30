@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import gzip
 import hashlib
+import importlib.util
 import subprocess
 import sys
 from pathlib import Path
@@ -34,6 +35,14 @@ def run_process(*arguments: str) -> subprocess.CompletedProcess[str]:
         capture_output=True,
         text=True,
     )
+
+
+def load_fetch_module():
+    spec = importlib.util.spec_from_file_location("fetch_pair", FETCH)
+    assert spec and spec.loader
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
 
 
 def test_fetch_pair_publishes_only_checksum_verified_mates(tmp_path: Path) -> None:
@@ -134,6 +143,59 @@ def test_fetch_pair_size_failure_publishes_neither_mate(tmp_path: Path) -> None:
     assert "size mismatch" in result.stderr
     assert not output1.exists()
     assert not output2.exists()
+
+
+def test_fetch_pair_converts_ena_ftp_to_https() -> None:
+    module = load_fetch_module()
+
+    assert module.ena_https_url(
+        "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/SRR000/001/example.fastq.gz"
+    ) == "https://ftp.sra.ebi.ac.uk/vol1/fastq/SRR000/001/example.fastq.gz"
+    assert module.ena_https_url("ftp://example.org/file") == "ftp://example.org/file"
+
+
+def test_fetch_pair_resumes_a_persistent_partial_file(tmp_path: Path, monkeypatch) -> None:
+    module = load_fetch_module()
+    payload = b"0123456789"
+    destination = tmp_path / ".R1.fastq.gz.partial"
+    destination.write_bytes(payload[:4])
+    requests = []
+
+    class Response:
+        status = 206
+
+        def __init__(self):
+            self.payload = payload[4:]
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return None
+
+        def read(self, size):
+            remaining, self.payload = self.payload, b""
+            return remaining
+
+    def urlopen(request, timeout):
+        requests.append((request.full_url, request.headers, timeout))
+        return Response()
+
+    monkeypatch.setattr(module.urllib.request, "urlopen", urlopen)
+    module.fetch(
+        "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/example.fastq.gz",
+        destination,
+        len(payload),
+    )
+
+    assert destination.read_bytes() == payload
+    assert requests == [
+        (
+            "https://ftp.sra.ebi.ac.uk/vol1/fastq/example.fastq.gz",
+            {"User-agent": "hostbias/0.1", "Range": "bytes=4-"},
+            120,
+        )
+    ]
 
 
 def test_fastq_pair_validator_accepts_synchronized_exact_length(tmp_path: Path) -> None:
