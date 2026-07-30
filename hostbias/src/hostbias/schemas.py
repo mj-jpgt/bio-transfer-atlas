@@ -163,6 +163,46 @@ ControlTruthRow.PARSERS = {
 }
 
 
+@dataclass(frozen=True)
+class SampleGroupRow:
+    sample_id: str
+    cohort: str
+
+    PARSERS: ClassVar[dict[str, Callable[[str], object]]]
+
+    def __post_init__(self) -> None:
+        if self.cohort not in {"tanzania", "netherlands"}:
+            raise SchemaError("cohort must be 'tanzania' or 'netherlands'")
+
+
+SampleGroupRow.PARSERS = {
+    "sample_id": _text,
+    "cohort": _text,
+}
+
+
+@dataclass(frozen=True)
+class SensitivityRow:
+    analysis_id: str
+    metric: str
+    tanzania_mean: float
+    netherlands_mean: float
+
+    PARSERS: ClassVar[dict[str, Callable[[str], object]]]
+
+    def __post_init__(self) -> None:
+        if self.metric not in {"p_count", "p_bp"}:
+            raise SchemaError("metric must be 'p_count' or 'p_bp'")
+
+
+SensitivityRow.PARSERS = {
+    "analysis_id": _text,
+    "metric": _text,
+    "tanzania_mean": _fraction,
+    "netherlands_mean": _fraction,
+}
+
+
 RowT = TypeVar("RowT")
 
 
