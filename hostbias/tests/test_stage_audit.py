@@ -4,7 +4,9 @@ import json
 from pathlib import Path
 
 import pytest
+from typer.testing import CliRunner
 
+from hostbias.cli import app
 from hostbias.stage_audit import StageAuditError, audit_stage, inspect_fastq_pair
 
 
@@ -96,3 +98,52 @@ def test_pair_audit_rejects_desynchronization_without_leaking_names(
 
     assert str(error.value) == "mate identifiers differ at pair 1"
     assert "sensitive" not in str(error.value)
+
+
+def test_stage_audit_cli_writes_only_aggregate_evidence(tmp_path: Path) -> None:
+    normalized = _write_pair(tmp_path, "normalized", ["read-a", "read-b"])
+    source = _write_pair(tmp_path, "source", ["read-a"])
+    strict = _write_pair(tmp_path, "strict", [])
+    output = tmp_path / "aggregate.json"
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "stage-audit",
+            "--sample-id",
+            "SRR1",
+            "--normalized-r1",
+            str(normalized[0]),
+            "--normalized-r2",
+            str(normalized[1]),
+            "--source-r1",
+            str(source[0]),
+            "--source-r2",
+            str(source[1]),
+            "--strict-r1",
+            str(strict[0]),
+            "--strict-r2",
+            str(strict[1]),
+            "--expected-r1-sha256",
+            _sha256(normalized[0]),
+            "--expected-r2-sha256",
+            _sha256(normalized[1]),
+            "--expected-r1-bytes",
+            str(normalized[0].stat().st_size),
+            "--expected-r2-bytes",
+            str(normalized[1].stat().st_size),
+            "--expected-pairs",
+            "2",
+            "--expected-length",
+            "4",
+            "--output",
+            str(output),
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert json.loads(result.output) == {"status": "PASS", "sample_id": "SRR1"}
+    payload = json.loads(output.read_text(encoding="utf-8"))
+    assert payload["grch38_filter"]["source"]["removed_pairs"] == 1
+    assert payload["grch38_filter"]["strict"]["removed_pairs"] == 2
+    assert str(tmp_path) not in output.read_text(encoding="utf-8")

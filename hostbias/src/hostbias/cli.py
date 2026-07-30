@@ -44,6 +44,7 @@ from hostbias.operations import (
 from hostbias.reference_acquisition import Minimap2IndexBuilder, build_reference_panel
 from hostbias.runtime_manifest import prepare_runtime
 from hostbias.sentinel_runner import LocalExecutor, run_sentinel_panel
+from hostbias.stage_audit import audit_stage
 from hostbias.verdict import make_verdict, write_verdict
 
 
@@ -164,6 +165,44 @@ def sentinel_run_command(
     )
     if report["status"] != "complete":
         raise typer.Exit(2)
+
+
+@app.command("stage-audit")
+def stage_audit_command(
+    sample_id: Annotated[str, typer.Option()],
+    normalized_r1: Annotated[Path, typer.Option(exists=True, readable=True)],
+    normalized_r2: Annotated[Path, typer.Option(exists=True, readable=True)],
+    source_r1: Annotated[Path, typer.Option(exists=True, readable=True)],
+    source_r2: Annotated[Path, typer.Option(exists=True, readable=True)],
+    strict_r1: Annotated[Path, typer.Option(exists=True, readable=True)],
+    strict_r2: Annotated[Path, typer.Option(exists=True, readable=True)],
+    expected_r1_sha256: Annotated[str, typer.Option()],
+    expected_r2_sha256: Annotated[str, typer.Option()],
+    expected_r1_bytes: Annotated[int, typer.Option(min=1)],
+    expected_r2_bytes: Annotated[int, typer.Option(min=1)],
+    output: Annotated[Path, typer.Option()],
+    expected_pairs: Annotated[int, typer.Option(min=1)] = 8_000_000,
+    expected_length: Annotated[int, typer.Option(min=1)] = 100,
+) -> None:
+    """Audit normalized and GRCh38-filtered pairs without exposing reads."""
+
+    report = audit_stage(
+        sample_id=sample_id,
+        normalized_r1=normalized_r1,
+        normalized_r2=normalized_r2,
+        source_r1=source_r1,
+        source_r2=source_r2,
+        strict_r1=strict_r1,
+        strict_r2=strict_r2,
+        expected_r1_sha256=expected_r1_sha256,
+        expected_r2_sha256=expected_r2_sha256,
+        expected_r1_bytes=expected_r1_bytes,
+        expected_r2_bytes=expected_r2_bytes,
+        expected_pairs=expected_pairs,
+        expected_length=expected_length,
+    )
+    write_json_atomic(report, output)
+    typer.echo(json.dumps({"status": report["status"], "sample_id": sample_id}))
 
 
 def _snapshot_specs(values: list[str]) -> dict[str, Path]:
