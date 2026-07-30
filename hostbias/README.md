@@ -25,14 +25,19 @@ cd hostbias
 mamba env create -f envs/control.yaml
 mamba activate hostbias-control
 python -m pip install -e .
-hostbias validate --config config/config.yaml
-hostbias provenance --config config/config.yaml --output results/aggregate/provenance.json
-snakemake --profile profiles/vm --dry-run all
+# Generate runtime/config.sentinel.yaml using docs/DATA_PROVENANCE_RUNBOOK.md.
+hostbias validate --config runtime/config.sentinel.yaml
+hostbias provenance --config runtime/config.sentinel.yaml \
+  --output results/aggregate/provenance.json
+snakemake --profile profiles/vm \
+  --configfile runtime/config.sentinel.yaml \
+  --dry-run all
 ```
 
-The workflow expects an explicit sample manifest and reference paths. It never
-downloads or commits controlled-access data. See `config/config.example.yaml`
-for the complete interface.
+The workflow expects an ENA-resolved runtime manifest and explicit reference
+paths. It never downloads or commits controlled-access data. See
+`config/config.example.yaml` for the configuration interface and
+`docs/DATA_PROVENANCE_RUNBOOK.md` for exact runtime-generation commands.
 
 The six-run dataset-eligibility sentinel is executable independently before the
 full workflow. See `docs/SENTINEL_RUNBOOK.md` for the exact restartable VM

@@ -42,6 +42,55 @@ The live audit exits nonzero if current ENA metadata no longer reproduces the
 freeze. Its aggregate/hash-only JSON is safe to commit; the full snapshots stay
 in the run provenance directory.
 
+## Generate executable runtime inputs
+
+The selection snapshots above intentionally reproduce the frozen ranking hash.
+Execution needs one additional ENA field, `fastq_bytes`, so fetch canonical
+runtime snapshots separately:
+
+```bash
+python -m hostbias.data_manifest fetch-runtime-ena \
+  --project PRJNA686265 \
+  --output provenance/ena/PRJNA686265.runtime.ena.tsv
+
+python -m hostbias.data_manifest fetch-runtime-ena \
+  --project PRJNA319574 \
+  --output provenance/ena/PRJNA319574.runtime.ena.tsv
+```
+
+Join those snapshots to the frozen selection. Start with the six-run sentinel;
+generate the 40-run primary scope with the same inputs only after the sentinel
+eligibility decision.
+
+```bash
+hostbias prepare-runtime \
+  --snapshot tanzania=provenance/ena/PRJNA686265.runtime.ena.tsv \
+  --snapshot netherlands=provenance/ena/PRJNA319574.runtime.ena.tsv \
+  --scope sentinel \
+  --evidence results/aggregate/checkpoints/P13_runtime_manifest_sentinel.json
+
+hostbias validate --config runtime/config.sentinel.yaml
+snakemake --profile profiles/vm \
+  --configfile runtime/config.sentinel.yaml \
+  --dry-run all
+```
+
+For the primary scope, replace `sentinel` with `primary` and write evidence to
+`P14_runtime_manifest_primary.json`. The generated `runtime/` files and source
+snapshots under `provenance/` contain public FASTQ locations and checksums, so
+both directories are Git-ignored. The evidence JSON contains only ordered run
+accessions, aggregate byte counts, and content hashes and is safe to commit.
+
+Runtime generation fails if an accession is missing or duplicated, snapshot
+order is non-canonical, frozen metadata has drifted, a run does not have exactly
+two FASTQs/checksums/sizes, or a URL contains credentials or query tokens.
+Downloads are accepted only when both ENA byte counts and MD5 checksums match.
+
+The 2026-07-30 live runtime snapshots resolved 6 sentinel runs to
+26,543,719,200 compressed FASTQ bytes and 40 primary runs to
+153,851,026,418 compressed FASTQ bytes. Their exact hashes and ordered
+accessions are recorded in the two checkpoint JSON files.
+
 For the sentinel check, create a TSV with these columns:
 
 ```text
