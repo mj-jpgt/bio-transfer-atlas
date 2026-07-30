@@ -27,7 +27,7 @@ mamba activate hostbias-control
 python -m pip install -e .
 hostbias validate --config config/config.yaml
 hostbias provenance --config config/config.yaml --output results/aggregate/provenance.json
-snakemake --profile profiles/vm --dry-run gate_a
+snakemake --profile profiles/vm --dry-run all
 ```
 
 The workflow expects an explicit sample manifest and reference paths. It never
@@ -42,6 +42,7 @@ for the complete interface.
 4. Assemble retained reads with MEGAHIT.
 5. Hand assemblies to the separately versioned labelling/QC stages.
 
-Every rule writes atomically, declares threads and memory, and is restartable.
-The `gate_a` target is intentionally blocked until the downstream labelling,
-binning, statistics, and verdict slices are present.
+Paired-read stages validate checksums or synchronization before publication.
+Every compute rule declares threads and memory and is restartable. The current
+`all` target ends at assemblies; downstream labelling, binning, statistics, and
+verdict slices extend that target.
