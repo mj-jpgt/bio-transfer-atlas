@@ -282,6 +282,12 @@ def test_mag_consensus_uses_shared_coverage_and_three_binners() -> None:
     assert f'{chr(34)}rules/mag.smk{chr(34)}' in (
         PROJECT / "workflow" / "Snakefile"
     ).read_text(encoding="utf-8")
+    assert (
+        (PROJECT / "workflow" / "Snakefile")
+        .read_text(encoding="utf-8")
+        .rstrip()
+        .endswith('include: "rules/mag.smk"')
+    )
 
 
 def test_mag_qc_taxonomy_and_contract_are_private_and_pinned() -> None:

@@ -502,9 +502,6 @@ rule aggregate_endpoint:
         "../envs/downstream.yaml"
     shell:
         """
-
-
-include: "rules/mag.smk"
         mkdir -p $(dirname {log:q})
         PYTHONPATH=src python -m hostbias.cli aggregate-endpoint \
           --alignments {input.alignments:q} --contig-bins {input.bins:q} \
@@ -512,3 +509,6 @@ include: "rules/mag.smk"
           --filter-mode {wildcards.mode:q} --thresholds {input.thresholds:q} \
           --output {output.endpoint:q} > {log:q} 2>&1
         """
+
+
+include: "rules/mag.smk"
