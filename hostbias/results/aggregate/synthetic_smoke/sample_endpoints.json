@@ -1,0 +1,50 @@
+[
+  {
+    "denominator_state": "zero",
+    "endpoint_bin_count": 0,
+    "endpoint_bins_with_human": 0,
+    "human_bp": 0,
+    "human_contig_count": 0,
+    "p_bp": 0.0,
+    "p_count": 0.0,
+    "propagated_human_bp": 0,
+    "propagated_human_contig_count": 0,
+    "sample_id": "N01"
+  },
+  {
+    "denominator_state": "zero",
+    "endpoint_bin_count": 0,
+    "endpoint_bins_with_human": 0,
+    "human_bp": 0,
+    "human_contig_count": 0,
+    "p_bp": 0.0,
+    "p_count": 0.0,
+    "propagated_human_bp": 0,
+    "propagated_human_contig_count": 0,
+    "sample_id": "N02"
+  },
+  {
+    "denominator_state": "observed",
+    "endpoint_bin_count": 1,
+    "endpoint_bins_with_human": 1,
+    "human_bp": 1000,
+    "human_contig_count": 1,
+    "p_bp": 1.0,
+    "p_count": 1.0,
+    "propagated_human_bp": 1000,
+    "propagated_human_contig_count": 1,
+    "sample_id": "T01"
+  },
+  {
+    "denominator_state": "zero",
+    "endpoint_bin_count": 0,
+    "endpoint_bins_with_human": 0,
+    "human_bp": 0,
+    "human_contig_count": 0,
+    "p_bp": 0.0,
+    "p_count": 0.0,
+    "propagated_human_bp": 0,
+    "propagated_human_contig_count": 0,
+    "sample_id": "T02"
+  }
+]

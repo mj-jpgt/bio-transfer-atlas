@@ -1,0 +1,38 @@
+{
+  "controls": {
+    "max_false_positive_bp_rate": 0.001,
+    "min_sensitivity": 0.95
+  },
+  "endpoints": {
+    "dominant_human_fraction": 0.5,
+    "material_human_fraction": 0.1,
+    "max_contamination": 0.05,
+    "min_completeness": 0.5
+  },
+  "gate": {
+    "max_permutation_p": 1.0,
+    "max_sample_numerator_share": 1.0,
+    "min_positive_tanzania_samples": 1,
+    "min_ratio": 1.5,
+    "min_tanzania_p_count": 0.01,
+    "required_sensitivity_analyses": [
+      "strict_pair",
+      "identity_0.90",
+      "identity_0.95",
+      "identity_0.98"
+    ],
+    "samples_per_cohort": 2
+  },
+  "labeling": {
+    "min_aligned_bp": 500,
+    "min_human_score_ratio": 1.05,
+    "min_identity": 0.95,
+    "min_mapq": 20,
+    "min_query_coverage": 0.5
+  },
+  "statistics": {
+    "bootstrap_iterations": 200,
+    "permutation_iterations": 200,
+    "seed": 20260729
+  }
+}

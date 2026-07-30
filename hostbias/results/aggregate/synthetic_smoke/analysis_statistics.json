@@ -1,0 +1,39 @@
+{
+  "bootstrap_iterations": 200,
+  "group_sizes": {
+    "netherlands": 2,
+    "tanzania": 2
+  },
+  "leave_one_out_min_difference": 0.0,
+  "leave_one_out_preserves_p_count_direction": false,
+  "max_tanzania_numerator_share": 1.0,
+  "p_bp": {
+    "difference": 0.5,
+    "difference_ci_high": 1.0,
+    "difference_ci_low": 0.0,
+    "metric": "p_bp",
+    "netherlands_mean": 0.0,
+    "permutation_p_one_sided": 0.4975124378109453,
+    "ratio": null,
+    "ratio_ci_high": null,
+    "ratio_ci_low": 1.0,
+    "ratio_is_infinite": true,
+    "tanzania_mean": 0.5
+  },
+  "p_count": {
+    "difference": 0.5,
+    "difference_ci_high": 1.0,
+    "difference_ci_low": 0.0,
+    "metric": "p_count",
+    "netherlands_mean": 0.0,
+    "permutation_p_one_sided": 0.5074626865671642,
+    "ratio": null,
+    "ratio_ci_high": null,
+    "ratio_ci_low": 1.0,
+    "ratio_is_infinite": true,
+    "tanzania_mean": 0.5
+  },
+  "permutation_iterations": 200,
+  "seed": 20260729,
+  "tanzania_positive_samples": 1
+}
