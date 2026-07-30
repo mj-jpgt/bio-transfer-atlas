@@ -221,6 +221,10 @@ def test_workflow_has_explicit_privacy_and_resource_boundaries() -> None:
         "rule trim_and_normalize:",
         "rule filter_host:",
         "rule assemble:",
+        "rule assembly_qc:",
+        "rule map_competitive:",
+        "rule alignment_contract:",
+        "rule aggregate_endpoint:",
     ):
         assert rule in snakefile
     assert "resources:" in snakefile
@@ -231,3 +235,6 @@ def test_workflow_has_explicit_privacy_and_resource_boundaries() -> None:
     assert "subsample_fastq_pair.py" in snakefile
     assert "seqtk sample" not in snakefile
     assert "results/aggregate" not in snakefile
+    assert "minimap2 -c -x {params.preset:q} --secondary=yes -N 5" in snakefile
+    assert "work/analysis_inputs" not in snakefile
+    assert "PYTHONPATH=src python -m hostbias.cli" in snakefile

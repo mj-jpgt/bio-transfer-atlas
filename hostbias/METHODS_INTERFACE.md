@@ -39,3 +39,29 @@ The command always writes intermediate calls, sample endpoints, bin human
 fractions, controls, statistics, effective thresholds, and sibling JSON/Markdown
 verdicts. `OPERATIONAL_FAILURE` means controls, sample counts, or sensitivity
 inputs are incomplete; only valid analyses receive a scientific `PASS` or `FAIL`.
+
+## Assembly-to-analysis bridge
+
+The restartable `downstream_bridge` Snakemake target runs minimap2 `asm20`
+against independently checksum-verified balanced-human and GTDB indexes. PAFs,
+run specs, contig IDs, and the resulting `alignments.tsv` remain under `work/`.
+Only aggregate assembly QC and mapping manifests are written below
+`results/aggregate/`; their JSON Schemas explicitly prohibit paths and
+sequence-derived identifiers.
+
+The binning lane must supply exact `ContigBinRow` and `BinQcRow` TSVs at
+`work/binning/{sample}/{mode}/contig_bins.tsv` and `bin_qc.tsv`. The
+`gate_a_endpoint_aggregates` target then publishes privacy-safe sample endpoints.
+
+The equivalent commands for one unit are:
+
+```bash
+hostbias assembly-qc --assembly final.contigs.fa --sample-id T01 \
+  --filter-mode source --output assembly_qc.json
+hostbias build-alignment-table --spec run_spec.json \
+  --output-tsv alignments.tsv --output-manifest alignment_manifest.json
+hostbias aggregate-endpoint --alignments alignments.tsv \
+  --contig-bins contig_bins.tsv --bin-qc bin_qc.tsv --sample-id T01 \
+  --filter-mode source --thresholds config/thresholds.yaml \
+  --output endpoint.json
+```

@@ -32,6 +32,8 @@ SAMPLES = {
 }
 SAMPLE_IDS = sorted(SAMPLES)
 FILTER_MODES = tuple(config["filtering"]["modes"])
+COMPETITIVE = config["references"]["competitive"]
+COMPETITIVE_DOMAINS = ("human", "gtdb")
 INDEX_PREFIX = config["references"]["grch38"]["bowtie2_index"]
 INDEX_FILES = [f"{INDEX_PREFIX}.{part}.bt2" for part in (1, 2, 3, 4, "rev.1", "rev.2")]
 
@@ -43,6 +45,29 @@ rule all:
     input:
         expand(
             f"{WORK}/assembly/{{sample}}/{{mode}}/final.contigs.fa",
+            sample=SAMPLE_IDS,
+            mode=FILTER_MODES,
+        )
+
+
+rule downstream_bridge:
+    input:
+        expand(
+            f"{RESULTS}/aggregate/assembly_qc/{{sample}}.{{mode}}.json",
+            sample=SAMPLE_IDS,
+            mode=FILTER_MODES,
+        ),
+        expand(
+            f"{RESULTS}/aggregate/alignment_manifests/{{sample}}.{{mode}}.json",
+            sample=SAMPLE_IDS,
+            mode=FILTER_MODES,
+        )
+
+
+rule gate_a_endpoint_aggregates:
+    input:
+        expand(
+            f"{RESULTS}/aggregate/sample_endpoints/{{sample}}.{{mode}}.json",
             sample=SAMPLE_IDS,
             mode=FILTER_MODES,
         )
@@ -266,4 +291,170 @@ rule assemble:
         mv {params.outdir:q}.partial/final.contigs.fa {output.contigs:q}
         mv {params.outdir:q}.partial/log {output.log:q}
         rm -rf {params.outdir:q}.partial
+        """
+
+
+rule assembly_qc:
+    input:
+        assembly=f"{WORK}/assembly/{{sample}}/{{mode}}/final.contigs.fa",
+    output:
+        qc=f"{RESULTS}/aggregate/assembly_qc/{{sample}}.{{mode}}.json",
+    log:
+        "logs/downstream/assembly_qc/{sample}.{mode}.log",
+    wildcard_constraints:
+        mode="|".join(FILTER_MODES),
+    conda:
+        "../envs/downstream.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {log:q})
+        PYTHONPATH=src python -m hostbias.cli assembly-qc \
+          --assembly {input.assembly:q} \
+          --sample-id {wildcards.sample:q} --filter-mode {wildcards.mode:q} \
+          --output {output.qc:q} > {log:q} 2>&1
+        """
+
+
+rule verify_competitive_index:
+    input:
+        index=lambda wildcards: COMPETITIVE[wildcards.domain]["minimap2_index"],
+    output:
+        verified=touch(f"{WORK}/references/competitive/{{domain}}.verified"),
+    log:
+        "logs/downstream/reference/{domain}.log",
+    params:
+        expected_sha256=lambda wildcards: COMPETITIVE[wildcards.domain]["sha256"],
+    wildcard_constraints:
+        domain="human|gtdb",
+    conda:
+        "../envs/downstream.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {log:q}) $(dirname {output.verified:q})
+        printf '%s  %s\n' {params.expected_sha256:q} {input.index:q} \
+          | sha256sum --check - > {log:q} 2>&1
+        """
+
+
+rule minimap2_version:
+    output:
+        version=f"{WORK}/provenance/minimap2.version",
+    conda:
+        "../envs/downstream.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {output.version:q})
+        minimap2 --version > {output.version:q}.partial
+        mv {output.version:q}.partial {output.version:q}
+        """
+
+
+rule map_competitive:
+    input:
+        assembly=f"{WORK}/assembly/{{sample}}/{{mode}}/final.contigs.fa",
+        index=lambda wildcards: COMPETITIVE[wildcards.domain]["minimap2_index"],
+        verified=f"{WORK}/references/competitive/{{domain}}.verified",
+    output:
+        paf=f"{WORK}/alignments/{{sample}}/{{mode}}/{{domain}}.paf",
+    log:
+        "logs/downstream/map/{sample}.{mode}.{domain}.log",
+    params:
+        preset=COMPETITIVE["mapper_preset"],
+    wildcard_constraints:
+        mode="|".join(FILTER_MODES),
+        domain="human|gtdb",
+    threads:
+        config["resources"]["mapper"]["threads"]
+    resources:
+        mem_mb=config["resources"]["mapper"]["mem_mb"],
+    conda:
+        "../envs/downstream.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {log:q}) $(dirname {output.paf:q})
+        minimap2 -c -x {params.preset:q} --secondary=yes -N 5 -t {threads} \
+          {input.index:q} {input.assembly:q} \
+          > {output.paf:q}.partial 2> {log:q}
+        mv {output.paf:q}.partial {output.paf:q}
+        """
+
+
+rule alignment_run_spec:
+    input:
+        assembly=f"{WORK}/assembly/{{sample}}/{{mode}}/final.contigs.fa",
+        human_paf=f"{WORK}/alignments/{{sample}}/{{mode}}/human.paf",
+        gtdb_paf=f"{WORK}/alignments/{{sample}}/{{mode}}/gtdb.paf",
+        mapper_version=f"{WORK}/provenance/minimap2.version",
+    output:
+        spec=f"{WORK}/alignments/{{sample}}/{{mode}}/run_spec.json",
+    params:
+        preset=COMPETITIVE["mapper_preset"],
+        human_id=COMPETITIVE["human"]["reference_id"],
+        human_sha256=COMPETITIVE["human"]["sha256"],
+        gtdb_id=COMPETITIVE["gtdb"]["reference_id"],
+        gtdb_sha256=COMPETITIVE["gtdb"]["sha256"],
+    conda:
+        "../envs/downstream.yaml"
+    shell:
+        """
+        PYTHONPATH=src python workflow/scripts/write_alignment_spec.py \
+          --sample-id {wildcards.sample:q} --filter-mode {wildcards.mode:q} \
+          --assembly {input.assembly:q} \
+          --mapper-version-file {input.mapper_version:q} \
+          --mapper-preset {params.preset:q} \
+          --human-paf {input.human_paf:q} \
+          --human-reference-id {params.human_id:q} \
+          --human-reference-sha256 {params.human_sha256:q} \
+          --gtdb-paf {input.gtdb_paf:q} \
+          --gtdb-reference-id {params.gtdb_id:q} \
+          --gtdb-reference-sha256 {params.gtdb_sha256:q} \
+          --output {output.spec:q}
+        """
+
+
+rule alignment_contract:
+    input:
+        spec=f"{WORK}/alignments/{{sample}}/{{mode}}/run_spec.json",
+    output:
+        # Sensitive TSV remains under work; only the manifest is publishable.
+        table=f"{WORK}/analysis_inputs/{{sample}}/{{mode}}/alignments.tsv",
+        manifest=f"{RESULTS}/aggregate/alignment_manifests/{{sample}}.{{mode}}.json",
+    log:
+        "logs/downstream/alignment_contract/{sample}.{mode}.log",
+    conda:
+        "../envs/downstream.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {log:q})
+        PYTHONPATH=src python -m hostbias.cli build-alignment-table \
+          --spec {input.spec:q} --output-tsv {output.table:q} \
+          --output-manifest {output.manifest:q} > {log:q} 2>&1
+        """
+
+
+rule aggregate_endpoint:
+    input:
+        alignments=f"{WORK}/analysis_inputs/{{sample}}/{{mode}}/alignments.tsv",
+        # The binning lane publishes these two strict TSV contracts under work.
+        bins=f"{WORK}/binning/{{sample}}/{{mode}}/contig_bins.tsv",
+        qc=f"{WORK}/binning/{{sample}}/{{mode}}/bin_qc.tsv",
+        thresholds="config/thresholds.yaml",
+    output:
+        endpoint=f"{RESULTS}/aggregate/sample_endpoints/{{sample}}.{{mode}}.json",
+    log:
+        "logs/downstream/endpoint/{sample}.{mode}.log",
+    threads:
+        config["resources"]["endpoint"]["threads"]
+    resources:
+        mem_mb=config["resources"]["endpoint"]["mem_mb"],
+    conda:
+        "../envs/downstream.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {log:q})
+        PYTHONPATH=src python -m hostbias.cli aggregate-endpoint \
+          --alignments {input.alignments:q} --contig-bins {input.bins:q} \
+          --bin-qc {input.qc:q} --sample-id {wildcards.sample:q} \
+          --filter-mode {wildcards.mode:q} --thresholds {input.thresholds:q} \
+          --output {output.endpoint:q} > {log:q} 2>&1
         """

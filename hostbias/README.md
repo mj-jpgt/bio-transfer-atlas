@@ -49,9 +49,19 @@ command and its aggregate-only output contract.
 2. Trim, synchronize, and deterministically normalize read pairs.
 3. Apply GRCh38 host filtering with source-style and strict pair semantics.
 4. Assemble retained reads with MEGAHIT.
-5. Hand assemblies to the separately versioned labelling/QC stages.
+5. Produce identifier-free assembly QC.
+6. Align contigs independently to checksum-verified human and GTDB minimap2
+   indexes, then convert PAF records into the competitive-label TSV contract.
+7. Combine externally produced bin assignments/QC with competitive labels and
+   publish identifier-free sample endpoint aggregates.
 
 Paired-read stages validate checksums or synchronization before publication.
-Every compute rule declares threads and memory and is restartable. The current
-`all` target ends at assemblies; downstream labelling, binning, statistics, and
-verdict slices extend that target.
+Every compute rule declares threads and memory and is restartable. `all` ends at
+assemblies. `downstream_bridge` runs assembly QC and competitive mapping.
+`gate_a_endpoint_aggregates` additionally expects standardized binning contracts
+under `work/binning/{sample}/{mode}/` and publishes sample aggregates.
+
+```bash
+snakemake --profile profiles/vm downstream_bridge
+snakemake --profile profiles/vm gate_a_endpoint_aggregates
+```

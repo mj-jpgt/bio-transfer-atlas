@@ -38,7 +38,7 @@
     "references": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["grch38"],
+      "required": ["grch38", "competitive"],
       "properties": {
         "grch38": {
           "type": "object",
@@ -47,6 +47,16 @@
           "properties": {
             "fasta": {"type": "string", "minLength": 1},
             "bowtie2_index": {"type": "string", "minLength": 1}
+          }
+        },
+        "competitive": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mapper_preset", "human", "gtdb"],
+          "properties": {
+            "mapper_preset": {"const": "asm20"},
+            "human": {"$ref": "#/$defs/competitive_reference"},
+            "gtdb": {"$ref": "#/$defs/competitive_reference"}
           }
         }
       }
@@ -89,12 +99,14 @@
     "resources": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["fetch", "preprocess", "filter", "assembly"],
+      "required": ["fetch", "preprocess", "filter", "assembly", "mapper", "endpoint"],
       "properties": {
         "fetch": {"$ref": "#/$defs/resource"},
         "preprocess": {"$ref": "#/$defs/resource"},
         "filter": {"$ref": "#/$defs/resource"},
-        "assembly": {"$ref": "#/$defs/resource"}
+        "assembly": {"$ref": "#/$defs/resource"},
+        "mapper": {"$ref": "#/$defs/resource"},
+        "endpoint": {"$ref": "#/$defs/resource"}
       }
     }
   },
@@ -106,6 +118,16 @@
       "properties": {
         "threads": {"type": "integer", "minimum": 1},
         "mem_mb": {"type": "integer", "minimum": 256}
+      }
+    },
+    "competitive_reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reference_id", "minimap2_index", "sha256"],
+      "properties": {
+        "reference_id": {"type": "string", "minLength": 1},
+        "minimap2_index": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
       }
     }
   }

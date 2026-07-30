@@ -10,6 +10,16 @@ references:
   grch38:
     fasta: references/grch38_no_alt.fa
     bowtie2_index: references/indexes/grch38_no_alt
+  competitive:
+    mapper_preset: asm20
+    human:
+      reference_id: hprc-balanced-chm13-v1
+      minimap2_index: references/indexes/hprc-balanced-chm13-v1.mmi
+      sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+    gtdb:
+      reference_id: gtdb-r220-genomes
+      minimap2_index: references/indexes/gtdb-r220-genomes.mmi
+      sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
 normalization:
   read_length: 100
   read_pairs: 8000000
@@ -33,3 +43,9 @@ resources:
   assembly:
     threads: 24
     mem_mb: 64000
+  mapper:
+    threads: 24
+    mem_mb: 64000
+  endpoint:
+    threads: 2
+    mem_mb: 8000
