@@ -262,7 +262,15 @@ rule filter_host:
         "logs/filter/{sample}.log",
     params:
         index=lambda wildcards, input: str(input.index[0]).removesuffix(".1.bt2"),
-        source_pattern=lambda wildcards: f"{WORK}/filtered/{wildcards.sample}/source_R%.fastq.gz",
+        source_temp_pattern=lambda wildcards: (
+            f"{WORK}/filtered/{wildcards.sample}/.source_R%.partial.fastq.gz"
+        ),
+        source_temp_r1=lambda wildcards: (
+            f"{WORK}/filtered/{wildcards.sample}/.source_R1.partial.fastq.gz"
+        ),
+        source_temp_r2=lambda wildcards: (
+            f"{WORK}/filtered/{wildcards.sample}/.source_R2.partial.fastq.gz"
+        ),
         temp_bam=lambda wildcards: f"{WORK}/filtered/{wildcards.sample}/strict.namesort.bam",
         strict_temp_r1=lambda wildcards: (
             f"{WORK}/filtered/{wildcards.sample}/.strict_R1.partial.fastq.gz"
@@ -284,16 +292,18 @@ rule filter_host:
         bowtie2 --very-sensitive-local \
           -x {params.index:q} -1 {input.r1:q} -2 {input.r2:q} \
           --threads {threads} --met-file {output.metrics:q}.partial \
-          --un-conc-gz {params.source_pattern:q} \
+          --un-conc-gz {params.source_temp_pattern:q} \
           | samtools view -u -f 12 -F 2304 - \
           | samtools sort -n -@ {threads} -o {params.temp_bam:q} -
         samtools fastq -@ {threads} -n \
           -1 {params.strict_temp_r1:q} -2 {params.strict_temp_r2:q} \
           -0 /dev/null -s /dev/null {params.temp_bam:q}
         python workflow/scripts/validate_fastq_pair.py \
-          --r1 {output.source_r1:q} --r2 {output.source_r2:q}
+          --r1 {params.source_temp_r1:q} --r2 {params.source_temp_r2:q}
         python workflow/scripts/validate_fastq_pair.py \
           --r1 {params.strict_temp_r1:q} --r2 {params.strict_temp_r2:q}
+        mv {params.source_temp_r1:q} {output.source_r1:q}
+        mv {params.source_temp_r2:q} {output.source_r2:q}
         mv {params.strict_temp_r1:q} {output.strict_r1:q}
         mv {params.strict_temp_r2:q} {output.strict_r2:q}
         mv {output.metrics:q}.partial {output.metrics:q}

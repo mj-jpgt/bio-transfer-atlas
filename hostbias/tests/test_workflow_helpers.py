@@ -541,6 +541,17 @@ def test_workflow_has_explicit_privacy_and_resource_boundaries() -> None:
     assert trim_rule.count("validate_fastq_pair.py") == 0
     assert "The subsampler validates every trimmed pair" in trim_rule
     assert "seqtk sample" not in snakefile
+    filter_rule = snakefile.split("rule filter_host:", 1)[1].split(
+        "rule assemble:", 1
+    )[0]
+    assert "--un-conc-gz {params.source_temp_pattern:q}" in filter_rule
+    assert "--r1 {params.source_temp_r1:q} --r2 {params.source_temp_r2:q}" in (
+        filter_rule
+    )
+    assert filter_rule.index("validate_fastq_pair.py") < filter_rule.index(
+        "mv {params.source_temp_r1:q} {output.source_r1:q}"
+    )
+    assert filter_rule.count(".partial.fastq.gz") >= 4
     assert "results/aggregate" not in snakefile
 
 
