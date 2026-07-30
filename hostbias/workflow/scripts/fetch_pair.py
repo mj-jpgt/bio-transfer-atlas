@@ -141,6 +141,31 @@ def fetch(url: str, destination: Path, expected_size: int, attempts: int = 12) -
     fetch_with_urllib(url, destination, expected_size, attempts)
 
 
+def fetch_verified(
+    url: str,
+    expected_md5: str,
+    expected_size: int,
+    output: Path,
+    temporary: Path,
+    checksum_attempts: int = 3,
+) -> None:
+    """Fetch one mate, retrying a full clean transfer after checksum corruption."""
+    observed_md5 = ""
+    for attempt in range(checksum_attempts):
+        fetch(url, temporary, expected_size)
+        observed_md5 = md5_file(temporary)
+        if observed_md5 == expected_md5:
+            return
+        temporary.unlink(missing_ok=True)
+        aria2_control_path(temporary).unlink(missing_ok=True)
+        if attempt + 1 < checksum_attempts:
+            time.sleep(min(2**attempt, 30))
+    raise ValueError(
+        f"checksum mismatch for {output.name}: expected {expected_md5}, "
+        f"observed {observed_md5}"
+    )
+
+
 def fetch_pair(
     url1: str,
     md5_1: str,
@@ -162,13 +187,7 @@ def fetch_pair(
         (url1, md5_1.lower(), bytes_1, output1, temporary_paths[0]),
         (url2, md5_2.lower(), bytes_2, output2, temporary_paths[1]),
     ):
-        fetch(url, temporary, expected_size)
-        observed = md5_file(temporary)
-        if observed != expected:
-            temporary.unlink(missing_ok=True)
-            raise ValueError(
-                f"checksum mismatch for {output.name}: expected {expected}, observed {observed}"
-            )
+        fetch_verified(url, expected, expected_size, output, temporary)
     os.replace(temporary_paths[0], output1)
     os.replace(temporary_paths[1], output2)
 

@@ -7,6 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import pytest
 import yaml
 
 
@@ -293,6 +294,89 @@ def test_segmented_fetch_preserves_controlled_partial_across_retry(
 
     assert destination.read_bytes() == payload
     assert len(calls) == 2
+
+
+def test_checksum_corruption_recovers_with_clean_redownload(
+    tmp_path: Path, monkeypatch
+) -> None:
+    module = load_fetch_module()
+    output1 = tmp_path / "out" / "R1.fastq.gz"
+    output2 = tmp_path / "out" / "R2.fastq.gz"
+    payload1 = b"correct mate one"
+    payload2 = b"correct mate two"
+    calls = []
+
+    def fetch(url, destination, expected_size):
+        calls.append(url)
+        if url == "mate1" and calls.count("mate1") == 1:
+            destination.write_bytes(b"x" * expected_size)
+            module.aria2_control_path(destination).write_bytes(b"bad session")
+        else:
+            destination.write_bytes(payload1 if url == "mate1" else payload2)
+
+    monkeypatch.setattr(module, "fetch", fetch)
+    monkeypatch.setattr(module.time, "sleep", lambda seconds: None)
+    module.fetch_pair(
+        "mate1",
+        hashlib.md5(payload1, usedforsecurity=False).hexdigest(),
+        len(payload1),
+        output1,
+        "mate2",
+        hashlib.md5(payload2, usedforsecurity=False).hexdigest(),
+        len(payload2),
+        output2,
+    )
+
+    assert calls == ["mate1", "mate1", "mate2"]
+    assert output1.read_bytes() == payload1
+    assert output2.read_bytes() == payload2
+    assert not module.aria2_control_path(
+        output1.with_name(f".{output1.name}.partial")
+    ).exists()
+
+
+def test_checksum_corruption_exhaustion_publishes_neither_mate(
+    tmp_path: Path, monkeypatch
+) -> None:
+    module = load_fetch_module()
+    output1 = tmp_path / "out" / "R1.fastq.gz"
+    output2 = tmp_path / "out" / "R2.fastq.gz"
+    expected_payload = b"expected bytes"
+    corrupt_payload = b"corrupt! bytes"
+    expected_md5 = hashlib.md5(
+        expected_payload, usedforsecurity=False
+    ).hexdigest()
+    observed_md5 = hashlib.md5(corrupt_payload, usedforsecurity=False).hexdigest()
+    calls = []
+
+    def fetch(url, destination, expected_size):
+        calls.append(url)
+        destination.write_bytes(corrupt_payload)
+        module.aria2_control_path(destination).write_bytes(b"bad session")
+
+    monkeypatch.setattr(module, "fetch", fetch)
+    monkeypatch.setattr(module.time, "sleep", lambda seconds: None)
+    with pytest.raises(
+        ValueError,
+        match=rf"expected {expected_md5}, observed {observed_md5}",
+    ):
+        module.fetch_pair(
+            "mate1",
+            expected_md5,
+            len(corrupt_payload),
+            output1,
+            "mate2",
+            expected_md5,
+            len(corrupt_payload),
+            output2,
+        )
+
+    assert calls == ["mate1", "mate1", "mate1"]
+    assert not output1.exists()
+    assert not output2.exists()
+    temporary = output1.with_name(f".{output1.name}.partial")
+    assert not temporary.exists()
+    assert not module.aria2_control_path(temporary).exists()
 
 
 def test_fastq_pair_validator_accepts_synchronized_exact_length(tmp_path: Path) -> None:
