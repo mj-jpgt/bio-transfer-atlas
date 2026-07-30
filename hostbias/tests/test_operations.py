@@ -208,7 +208,8 @@ def test_launch_command_has_exact_resume_and_resource_semantics(tmp_path: Path) 
         assert "--rerun-incomplete" in command
         assert "--keep-going" in command
         assert "--dry-run" in command
-        assert command[-1] == "filter_stage"
+        assert command[1] == "filter_stage"
+        assert command.index("filter_stage") < command.index("--rerun-triggers")
         assert ["--cores", "30"] == command[
             command.index("--cores") : command.index("--cores") + 2
         ]
