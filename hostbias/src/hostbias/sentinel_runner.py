@@ -124,30 +124,24 @@ class LocalExecutor:
     def __init__(
         self,
         *,
-        fasterq_dump: str = "fasterq-dump",
+        fastq_dump: str = "fastq-dump",
         bowtie2: str = "bowtie2",
     ) -> None:
-        self.fasterq_dump = fasterq_dump
+        self.fastq_dump = fastq_dump
         self.bowtie2 = bowtie2
 
     def tool_versions(self) -> dict[str, str]:
         return {
-            "fasterq_dump": _tool_version(self.fasterq_dump),
+            "fastq_dump": _tool_version(self.fastq_dump),
             "bowtie2": _tool_version(self.bowtie2),
         }
 
     def fetch(
         self, accession: str, scratch: Path, spots: int, threads: int
     ) -> tuple[Path, Path]:
-        temporary = scratch / "fasterq_tmp"
-        temporary.mkdir(parents=True, exist_ok=True)
         command = [
-            self.fasterq_dump,
+            self.fastq_dump,
             "--split-files",
-            "-e",
-            str(threads),
-            "-t",
-            str(temporary),
             "-O",
             str(scratch),
             "-N",
@@ -165,12 +159,12 @@ class LocalExecutor:
             )
         except OSError as exc:
             raise SentinelExecutionError(
-                "fetch", "fasterq-dump could not start"
+                "fetch", "fastq-dump could not start"
             ) from exc
         if completed.returncode:
             raise SentinelExecutionError(
                 "fetch",
-                "fasterq-dump failed",
+                "fastq-dump failed",
                 return_code=completed.returncode,
                 stderr=completed.stderr,
             )
@@ -180,7 +174,7 @@ class LocalExecutor:
         if not r1.is_file() or not r2.is_file() or observed_fastqs != [r1, r2]:
             raise SentinelExecutionError(
                 "pair_validation",
-                "fasterq-dump did not produce exactly two mate FASTQs",
+                "fastq-dump did not produce exactly two mate FASTQs",
             )
         return r1, r2
 

@@ -2,9 +2,13 @@
 
 This command tests the first three frozen primary runs in each arm before any
 full-cohort download. It requests SRA spots 1 through 1,000,000 for each run,
-validates that fasterq-dump produced exactly two synchronized mate files, and
+validates that fastq-dump produced exactly two synchronized mate files, and
 streams Bowtie2 SAM output directly into an aggregate mapped-pair counter.
 No SAM or BAM is created.
+
+The legacy `fastq-dump` command is intentional here: SRA Toolkit 3.1.1
+supports the preregistered `-N`/`-X` spot interval only through `fastq-dump`;
+`fasterq-dump` cannot cap a remote run to the first 1,000,000 spots.
 
 ## One-time VM preparation
 

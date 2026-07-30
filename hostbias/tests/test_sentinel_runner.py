@@ -76,7 +76,7 @@ class FakeExecutor:
         self.fail_once = fail_once
 
     def tool_versions(self) -> dict[str, str]:
-        return {"fasterq_dump": "mock fasterq 1", "bowtie2": "mock bowtie2 1"}
+        return {"fastq_dump": "mock fastq 1", "bowtie2": "mock bowtie2 1"}
 
     def fetch(
         self, accession: str, scratch: Path, spots: int, threads: int
