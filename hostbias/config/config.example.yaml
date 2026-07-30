@@ -15,7 +15,7 @@ references:
     human:
       reference_id: hprc-balanced-chm13-v1
       minimap2_index: references/indexes/hprc-balanced-chm13-v1.mmi
-      sha256: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+      sha256: 0db61e7d07ee3955c6a0e4888a55258a5d337c29fa30d7f8ac17ab7b18b98c1b
     gtdb:
       reference_id: gtdb-r220-genomes
       minimap2_index: references/indexes/gtdb-r220-genomes.mmi
