@@ -34,6 +34,10 @@ The workflow expects an explicit sample manifest and reference paths. It never
 downloads or commits controlled-access data. See `config/config.example.yaml`
 for the complete interface.
 
+The six-run dataset-eligibility sentinel is executable independently before the
+full workflow. See `docs/SENTINEL_RUNBOOK.md` for the exact restartable VM
+command and its aggregate-only output contract.
+
 ## Workflow stages
 
 1. Fetch checksum-pinned public paired FASTQs.
