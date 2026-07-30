@@ -165,12 +165,16 @@ rule maxbin_abundance:
         depth=f"{WORK}/coverage/{{sample}}/{{mode}}/contig_depth.tsv",
     output:
         abundance=f"{WORK}/coverage/{{sample}}/{{mode}}/maxbin_abundance.tsv",
+    log:
+        "logs/mag/maxbin_abundance/{sample}.{mode}.log",
     conda:
         "../../envs/assembly.yaml"
     shell:
         """
+        mkdir -p $(dirname {log:q})
         PYTHONPATH=src python workflow/scripts/mag_translate.py abundance \
-          --depth {input.depth:q} --output {output.abundance:q}
+          --depth {input.depth:q} --output {output.abundance:q} \
+          > {log:q} 2>&1
         """
 
 
