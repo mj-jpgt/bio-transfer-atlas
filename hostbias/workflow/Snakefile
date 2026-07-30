@@ -1,0 +1,257 @@
+"""Hostbias preprocessing and assembly workflow.
+
+Run from the ``hostbias`` project directory. Downstream labelling, binning, and
+statistics rules extend the ``all`` target in their own rule modules.
+"""
+
+from __future__ import annotations
+
+import csv
+from pathlib import Path
+
+
+configfile: "config/config.example.yaml"
+
+
+PROJECT_ROOT = Path(workflow.basedir).parent.resolve()
+WORK = config["paths"]["work_dir"].rstrip("/")
+RESULTS = config["paths"]["results_dir"].rstrip("/")
+MANIFEST = Path(config["paths"]["sample_manifest"])
+if not MANIFEST.is_absolute():
+    MANIFEST = PROJECT_ROOT / MANIFEST
+
+with MANIFEST.open(newline="", encoding="utf-8") as handle:
+    sample_rows = list(csv.DictReader(handle, delimiter="\t"))
+
+SAMPLES = {
+    row["sample_id"]: row
+    for row in sample_rows
+    if row["status"] == "primary"
+}
+SAMPLE_IDS = sorted(SAMPLES)
+FILTER_MODES = tuple(config["filtering"]["modes"])
+INDEX_PREFIX = config["references"]["grch38"]["bowtie2_index"]
+INDEX_FILES = [f"{INDEX_PREFIX}.{part}.bt2" for part in (1, 2, 3, 4, "rev.1", "rev.2")]
+
+if not SAMPLES:
+    raise WorkflowError("sample manifest contains no primary samples")
+
+
+rule all:
+    input:
+        expand(
+            f"{WORK}/assembly/{{sample}}/{{mode}}/final.contigs.fa",
+            sample=SAMPLE_IDS,
+            mode=FILTER_MODES,
+        )
+
+
+rule validate_inputs:
+    input:
+        config="config/config.example.yaml",
+        manifest=str(MANIFEST),
+    output:
+        touch(f"{WORK}/validated.ok"),
+    log:
+        "logs/validate.log",
+    conda:
+        "../envs/control.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {log:q})
+        hostbias validate --config {input.config:q} > {log:q} 2>&1
+        """
+
+
+rule fetch_fastq_pair:
+    input:
+        validation=f"{WORK}/validated.ok",
+    output:
+        r1=protected(f"{WORK}/raw/{{sample}}_R1.fastq.gz"),
+        r2=protected(f"{WORK}/raw/{{sample}}_R2.fastq.gz"),
+    log:
+        "logs/fetch/{sample}.log",
+    params:
+        url1=lambda wildcards: SAMPLES[wildcards.sample]["fastq1_url"],
+        url2=lambda wildcards: SAMPLES[wildcards.sample]["fastq2_url"],
+        md5_1=lambda wildcards: SAMPLES[wildcards.sample]["fastq1_md5"],
+        md5_2=lambda wildcards: SAMPLES[wildcards.sample]["fastq2_md5"],
+    threads:
+        config["resources"]["fetch"]["threads"]
+    resources:
+        mem_mb=config["resources"]["fetch"]["mem_mb"],
+    conda:
+        "../envs/control.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {log:q})
+        python workflow/scripts/fetch_pair.py \
+          --url1 {params.url1:q} --md5-1 {params.md5_1:q} --output1 {output.r1:q} \
+          --url2 {params.url2:q} --md5-2 {params.md5_2:q} --output2 {output.r2:q} \
+          > {log:q} 2>&1
+        """
+
+
+rule trim_and_normalize:
+    input:
+        r1=f"{WORK}/raw/{{sample}}_R1.fastq.gz",
+        r2=f"{WORK}/raw/{{sample}}_R2.fastq.gz",
+    output:
+        r1=f"{WORK}/normalized/{{sample}}_R1.fastq.gz",
+        r2=f"{WORK}/normalized/{{sample}}_R2.fastq.gz",
+        report=f"{WORK}/normalized/{{sample}}.fastp.json",
+    log:
+        "logs/preprocess/{sample}.log",
+    params:
+        length=config["normalization"]["read_length"],
+        pairs=config["normalization"]["read_pairs"],
+        seed=config["experiment"]["seed"],
+        temp=lambda wildcards: f"{WORK}/normalized/.{wildcards.sample}",
+    threads:
+        config["resources"]["preprocess"]["threads"]
+    resources:
+        mem_mb=config["resources"]["preprocess"]["mem_mb"],
+    conda:
+        "../envs/preprocess.yaml"
+    shell:
+        r"""
+        mkdir -p $(dirname {log:q})
+        exec > {log:q} 2>&1
+        rm -rf {params.temp:q}
+        mkdir -p {params.temp:q}
+        fastp \
+          --in1 {input.r1:q} --in2 {input.r2:q} \
+          --out1 {params.temp:q}/trimmed_R1.fastq.gz \
+          --out2 {params.temp:q}/trimmed_R2.fastq.gz \
+          --max_len1 {params.length} --max_len2 {params.length} \
+          --length_required {params.length} \
+          --thread {threads} --json {params.temp:q}/fastp.json \
+          --html {params.temp:q}/fastp.html
+        seqtk sample -s {params.seed} {params.temp:q}/trimmed_R1.fastq.gz {params.pairs} \
+          | pigz -p {threads} > {output.r1:q}.partial
+        seqtk sample -s {params.seed} {params.temp:q}/trimmed_R2.fastq.gz {params.pairs} \
+          | pigz -p {threads} > {output.r2:q}.partial
+        python workflow/scripts/validate_fastq_pair.py \
+          --r1 {output.r1:q}.partial --r2 {output.r2:q}.partial \
+          --expected-pairs {params.pairs} --expected-length {params.length}
+        mv {output.r1:q}.partial {output.r1:q}
+        mv {output.r2:q}.partial {output.r2:q}
+        mv {params.temp:q}/fastp.json {output.report:q}
+        rm -rf {params.temp:q}
+        """
+
+
+rule build_grch38_index:
+    input:
+        fasta=config["references"]["grch38"]["fasta"],
+    output:
+        index=INDEX_FILES,
+    log:
+        "logs/reference/grch38_index.log",
+    params:
+        prefix=lambda wildcards, output: str(output.index[0]).removesuffix(".1.bt2"),
+    threads:
+        config["resources"]["filter"]["threads"]
+    resources:
+        mem_mb=config["resources"]["filter"]["mem_mb"],
+    conda:
+        "../envs/preprocess.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {log:q})
+        mkdir -p $(dirname {params.prefix:q})
+        bowtie2-build --threads {threads} {input.fasta:q} {params.prefix:q} \
+          > {log:q} 2>&1
+        """
+
+
+rule filter_host:
+    input:
+        r1=f"{WORK}/normalized/{{sample}}_R1.fastq.gz",
+        r2=f"{WORK}/normalized/{{sample}}_R2.fastq.gz",
+        index=INDEX_FILES,
+    output:
+        source_r1=f"{WORK}/filtered/{{sample}}/source_R1.fastq.gz",
+        source_r2=f"{WORK}/filtered/{{sample}}/source_R2.fastq.gz",
+        strict_r1=f"{WORK}/filtered/{{sample}}/strict_R1.fastq.gz",
+        strict_r2=f"{WORK}/filtered/{{sample}}/strict_R2.fastq.gz",
+        metrics=f"{WORK}/filtered/{{sample}}/bowtie2.metrics.txt",
+    log:
+        "logs/filter/{sample}.log",
+    params:
+        index=lambda wildcards, input: str(input.index[0]).removesuffix(".1.bt2"),
+        source_pattern=lambda wildcards: f"{WORK}/filtered/{wildcards.sample}/source_R%.fastq.gz",
+        temp_bam=lambda wildcards: f"{WORK}/filtered/{wildcards.sample}/strict.namesort.bam",
+        strict_temp_r1=lambda wildcards: (
+            f"{WORK}/filtered/{wildcards.sample}/.strict_R1.partial.fastq.gz"
+        ),
+        strict_temp_r2=lambda wildcards: (
+            f"{WORK}/filtered/{wildcards.sample}/.strict_R2.partial.fastq.gz"
+        ),
+    threads:
+        config["resources"]["filter"]["threads"]
+    resources:
+        mem_mb=config["resources"]["filter"]["mem_mb"],
+    conda:
+        "../envs/preprocess.yaml"
+    shell:
+        r"""
+        mkdir -p $(dirname {log:q})
+        exec > {log:q} 2>&1
+        mkdir -p $(dirname {output.source_r1:q})
+        bowtie2 --very-sensitive-local \
+          -x {params.index:q} -1 {input.r1:q} -2 {input.r2:q} \
+          --threads {threads} --met-file {output.metrics:q}.partial \
+          --un-conc-gz {params.source_pattern:q} \
+          | samtools view -u -f 12 -F 2304 - \
+          | samtools sort -n -@ {threads} -o {params.temp_bam:q} -
+        samtools fastq -@ {threads} -n \
+          -1 {params.strict_temp_r1:q} -2 {params.strict_temp_r2:q} \
+          -0 /dev/null -s /dev/null {params.temp_bam:q}
+        python workflow/scripts/validate_fastq_pair.py \
+          --r1 {output.source_r1:q} --r2 {output.source_r2:q}
+        python workflow/scripts/validate_fastq_pair.py \
+          --r1 {params.strict_temp_r1:q} --r2 {params.strict_temp_r2:q}
+        mv {params.strict_temp_r1:q} {output.strict_r1:q}
+        mv {params.strict_temp_r2:q} {output.strict_r2:q}
+        mv {output.metrics:q}.partial {output.metrics:q}
+        rm -f {params.temp_bam:q}
+        """
+
+
+rule assemble:
+    input:
+        r1=f"{WORK}/filtered/{{sample}}/{{mode}}_R1.fastq.gz",
+        r2=f"{WORK}/filtered/{{sample}}/{{mode}}_R2.fastq.gz",
+    output:
+        contigs=f"{WORK}/assembly/{{sample}}/{{mode}}/final.contigs.fa",
+        log=f"{WORK}/assembly/{{sample}}/{{mode}}/megahit.log",
+    log:
+        run="logs/assembly/{sample}.{mode}.log",
+    params:
+        outdir=lambda wildcards: f"{WORK}/assembly/{wildcards.sample}/{wildcards.mode}",
+        min_contig=config["assembly"]["min_contig_length"],
+    wildcard_constraints:
+        mode="|".join(FILTER_MODES),
+    threads:
+        config["resources"]["assembly"]["threads"]
+    resources:
+        mem_mb=config["resources"]["assembly"]["mem_mb"],
+    conda:
+        "../envs/assembly.yaml"
+    shell:
+        r"""
+        mkdir -p $(dirname {log.run:q})
+        exec > {log.run:q} 2>&1
+        mkdir -p {params.outdir:q}
+        rm -rf {params.outdir:q}.partial
+        megahit \
+          -1 {input.r1:q} -2 {input.r2:q} \
+          --min-contig-len {params.min_contig} \
+          --num-cpu-threads {threads} \
+          --memory 0.9 \
+          --out-dir {params.outdir:q}.partial
+        mv {params.outdir:q}.partial/final.contigs.fa {output.contigs:q}
+        mv {params.outdir:q}.partial/log {output.log:q}
+        rm -rf {params.outdir:q}.partial
+        """

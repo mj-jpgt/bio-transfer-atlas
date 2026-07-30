@@ -142,3 +142,5 @@ hostbias/**/*.cram
 hostbias/**/*.crai
 hostbias/**/*.bt2
 hostbias/**/*.bt2l
+!hostbias/workflow/scripts/
+!hostbias/workflow/scripts/*.py
