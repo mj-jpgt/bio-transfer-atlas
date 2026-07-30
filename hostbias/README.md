@@ -58,16 +58,26 @@ HPRC sources with a reproducible HPRC/IGSR donor join. See
 5. Produce identifier-free assembly QC.
 6. Align contigs independently to checksum-verified human and GTDB minimap2
    indexes, then convert PAF records into the competitive-label TSV contract.
-7. Combine externally produced bin assignments/QC with competitive labels and
-   publish identifier-free sample endpoint aggregates.
+7. Generate shared contig coverage; bin independently with MetaBAT2, MaxBin2,
+   and CONCOCT; select a non-redundant DAS Tool consensus.
+8. Run CheckM2, GUNC, and GTDB-Tk R220 and translate their reports into strict
+   private endpoint inputs.
+9. Combine MAG QC/taxonomy with competitive labels and publish identifier-free
+   sample endpoint aggregates.
 
 Paired-read stages validate checksums or synchronization before publication.
 Every compute rule declares threads and memory and is restartable. `all` ends at
 assemblies. `downstream_bridge` runs assembly QC and competitive mapping.
-`gate_a_endpoint_aggregates` additionally expects standardized binning contracts
-under `work/binning/{sample}/{mode}/` and publishes sample aggregates.
+`mag_consensus` produces the three-binner DAS Tool consensus.
+`mag_endpoint_inputs` runs QC/taxonomy and creates standardized private
+contracts. `gate_a_endpoint_aggregates` publishes sample aggregates.
 
 ```bash
 snakemake --profile profiles/vm downstream_bridge
+snakemake --profile profiles/vm mag_consensus
+snakemake --profile profiles/vm mag_endpoint_inputs
 snakemake --profile profiles/vm gate_a_endpoint_aggregates
 ```
+
+Database variables and exact live commands are documented in
+`docs/MAG_RUNBOOK.md`.

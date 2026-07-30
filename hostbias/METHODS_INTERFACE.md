@@ -49,9 +49,10 @@ Only aggregate assembly QC and mapping manifests are written below
 `results/aggregate/`; their JSON Schemas explicitly prohibit paths and
 sequence-derived identifiers.
 
-The binning lane must supply exact `ContigBinRow` and `BinQcRow` TSVs at
-`work/binning/{sample}/{mode}/contig_bins.tsv` and `bin_qc.tsv`. The
-`gate_a_endpoint_aggregates` target then publishes privacy-safe sample endpoints.
+The `mag_endpoint_inputs` target supplies exact `ContigBinRow` and `BinQcRow`
+TSVs at `work/binning/{sample}/{mode}/contig_bins.tsv` and `bin_qc.tsv`.
+The `gate_a_endpoint_aggregates` target then publishes privacy-safe sample
+endpoints. See `docs/MAG_RUNBOOK.md` for database variables and live commands.
 
 The equivalent commands for one unit are:
 
