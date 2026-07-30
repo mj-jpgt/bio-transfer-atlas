@@ -463,10 +463,11 @@ def _run_one(
                 "total": round(time.monotonic() - start_total, 6),
             },
         }
+        _remove_run_scratch(run_scratch, scratch_root)
         write_json_atomic(result, checkpoint_path)
         diagnostic_path.unlink(missing_ok=True)
         return result
-    except BaseException as error:
+    except Exception as error:
         if isinstance(error, SentinelExecutionError):
             stage = error.stage
             return_code = error.return_code
@@ -477,6 +478,13 @@ def _run_one(
             return_code = None
             safe_tail, stderr_bytes, stderr_sha256 = "", 0, hashlib.sha256(b"").hexdigest()
             message = type(error).__name__
+        scratch_removed = False
+        cleanup_error: SentinelExecutionError | None = None
+        try:
+            _remove_run_scratch(run_scratch, scratch_root)
+            scratch_removed = True
+        except SentinelExecutionError as cleanup_failure:
+            cleanup_error = cleanup_failure
         diagnostic = {
             "schema_version": 1,
             "status": "failed",
@@ -490,12 +498,14 @@ def _run_one(
             "stderr_sha256": stderr_sha256,
             "sanitized_stderr_tail": safe_tail,
             "sequence_data_recorded": False,
-            "scratch_removed": True,
+            "scratch_removed": scratch_removed,
         }
+        if cleanup_error is not None:
+            diagnostic["cleanup_error"] = str(cleanup_error)
         write_json_atomic(diagnostic, diagnostic_path)
+        if cleanup_error is not None:
+            raise cleanup_error from error
         raise
-    finally:
-        _remove_run_scratch(run_scratch, scratch_root)
 
 
 def run_sentinel_panel(
@@ -545,7 +555,7 @@ def run_sentinel_panel(
                     executor=executor,
                 )
             )
-        except BaseException:
+        except Exception:
             diagnostic_path = (
                 output_dir / "diagnostics" / f"{sample['run_accession']}.json"
             )
