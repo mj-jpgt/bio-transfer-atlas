@@ -34,7 +34,9 @@ def aria2_control_path(destination: Path) -> Path:
     return destination.with_name(f"{destination.name}.aria2")
 
 
-def fetch_with_aria2(url: str, destination: Path, expected_size: int) -> None:
+def fetch_with_aria2(
+    url: str, destination: Path, expected_size: int, attempts: int
+) -> None:
     """Download one object with resumable segmented HTTP ranges."""
     control = aria2_control_path(destination)
     observed = destination.stat().st_size if destination.exists() else 0
@@ -50,8 +52,8 @@ def fetch_with_aria2(url: str, destination: Path, expected_size: int) -> None:
         "--auto-file-renaming=false",
         "--continue=true",
         "--file-allocation=none",
-        "--max-connection-per-server=8",
-        "--split=8",
+        "--max-connection-per-server=4",
+        "--split=4",
         "--min-split-size=16M",
         "--max-tries=12",
         "--retry-wait=3",
@@ -63,14 +65,24 @@ def fetch_with_aria2(url: str, destination: Path, expected_size: int) -> None:
         f"--out={destination.name}",
         url,
     ]
-    result = subprocess.run(command, check=False, capture_output=True, text=True)
-    observed = destination.stat().st_size if destination.exists() else 0
-    if result.returncode != 0 or observed != expected_size or control.exists():
-        detail = (result.stderr or result.stdout).strip()[-1000:]
-        raise ValueError(
-            f"size mismatch for {destination.name}: expected {expected_size}, "
-            f"observed {observed}; aria2c exit code {result.returncode}: {detail}"
-        )
+    result = None
+    for attempt in range(attempts):
+        result = subprocess.run(command, check=False, capture_output=True, text=True)
+        observed = destination.stat().st_size if destination.exists() else 0
+        if result.returncode == 0 and observed == expected_size and not control.exists():
+            return
+        if result.returncode == 0:
+            destination.unlink(missing_ok=True)
+            control.unlink(missing_ok=True)
+        if attempt + 1 < attempts:
+            time.sleep(min(2**attempt, 30))
+
+    assert result is not None
+    detail = (result.stderr or result.stdout).strip()[-1000:]
+    raise ValueError(
+        f"size mismatch for {destination.name}: expected {expected_size}, "
+        f"observed {observed}; aria2c exit code {result.returncode}: {detail}"
+    )
 
 
 def fetch_with_urllib(
@@ -124,7 +136,7 @@ def fetch(url: str, destination: Path, expected_size: int, attempts: int = 12) -
     url = ena_https_url(url)
     is_network = urlsplit(url).scheme in {"http", "https", "ftp"}
     if is_network and shutil.which("aria2c"):
-        fetch_with_aria2(url, destination, expected_size)
+        fetch_with_aria2(url, destination, expected_size, attempts)
         return
     fetch_with_urllib(url, destination, expected_size, attempts)
 

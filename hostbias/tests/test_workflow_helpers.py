@@ -225,12 +225,74 @@ def test_fetch_pair_uses_resumable_segmented_aria2(tmp_path: Path, monkeypatch) 
     assert command[0] == "aria2c"
     assert "--continue=true" in command
     assert "--file-allocation=none" in command
-    assert "--max-connection-per-server=8" in command
-    assert "--split=8" in command
+    assert "--max-connection-per-server=4" in command
+    assert "--split=4" in command
     assert command[-1] == (
         "https://ftp.sra.ebi.ac.uk/vol1/fastq/example.fastq.gz"
     )
     assert (check, capture_output, text) == (False, True, True)
+
+
+def test_segmented_fetch_retries_http_success_with_wrong_size(
+    tmp_path: Path, monkeypatch
+) -> None:
+    module = load_fetch_module()
+    destination = tmp_path / ".R1.fastq.gz.partial"
+    payload = b"0123456789"
+    calls = []
+    sleeps = []
+
+    def run(command, check, capture_output, text):
+        calls.append(command)
+        destination.write_bytes(b"service unavailable" if len(calls) == 1 else payload)
+        return subprocess.CompletedProcess(command, 0, "", "")
+
+    monkeypatch.setattr(module.subprocess, "run", run)
+    monkeypatch.setattr(module.time, "sleep", sleeps.append)
+    module.fetch_with_aria2(
+        "https://ftp.sra.ebi.ac.uk/example.fastq.gz",
+        destination,
+        len(payload),
+        attempts=2,
+    )
+
+    assert destination.read_bytes() == payload
+    assert len(calls) == 2
+    assert sleeps == [1]
+
+
+def test_segmented_fetch_preserves_controlled_partial_across_retry(
+    tmp_path: Path, monkeypatch
+) -> None:
+    module = load_fetch_module()
+    destination = tmp_path / ".R1.fastq.gz.partial"
+    control = module.aria2_control_path(destination)
+    payload = b"0123456789"
+    calls = []
+
+    def run(command, check, capture_output, text):
+        calls.append(command)
+        if len(calls) == 1:
+            destination.write_bytes(payload[:4])
+            control.write_bytes(b"aria2 session")
+            return subprocess.CompletedProcess(command, 1, "", "interrupted")
+        assert destination.read_bytes() == payload[:4]
+        assert control.exists()
+        destination.write_bytes(payload)
+        control.unlink()
+        return subprocess.CompletedProcess(command, 0, "", "")
+
+    monkeypatch.setattr(module.subprocess, "run", run)
+    monkeypatch.setattr(module.time, "sleep", lambda seconds: None)
+    module.fetch_with_aria2(
+        "https://ftp.sra.ebi.ac.uk/example.fastq.gz",
+        destination,
+        len(payload),
+        attempts=2,
+    )
+
+    assert destination.read_bytes() == payload
+    assert len(calls) == 2
 
 
 def test_fastq_pair_validator_accepts_synchronized_exact_length(tmp_path: Path) -> None:
