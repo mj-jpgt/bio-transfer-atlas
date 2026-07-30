@@ -6,6 +6,8 @@ from __future__ import annotations
 import argparse
 import hashlib
 import os
+import shutil
+import subprocess
 import time
 import urllib.request
 from pathlib import Path
@@ -28,9 +30,53 @@ def ena_https_url(url: str) -> str:
     return url
 
 
-def fetch(url: str, destination: Path, expected_size: int, attempts: int = 12) -> None:
-    """Download to a persistent partial file, resuming short network transfers."""
-    url = ena_https_url(url)
+def aria2_control_path(destination: Path) -> Path:
+    return destination.with_name(f"{destination.name}.aria2")
+
+
+def fetch_with_aria2(url: str, destination: Path, expected_size: int) -> None:
+    """Download one object with resumable segmented HTTP ranges."""
+    control = aria2_control_path(destination)
+    observed = destination.stat().st_size if destination.exists() else 0
+    if observed == expected_size and not control.exists():
+        return
+    if observed > expected_size:
+        destination.unlink()
+        control.unlink(missing_ok=True)
+
+    command = [
+        "aria2c",
+        "--allow-overwrite=true",
+        "--auto-file-renaming=false",
+        "--continue=true",
+        "--file-allocation=none",
+        "--max-connection-per-server=8",
+        "--split=8",
+        "--min-split-size=16M",
+        "--max-tries=12",
+        "--retry-wait=3",
+        "--connect-timeout=30",
+        "--timeout=120",
+        "--summary-interval=0",
+        "--console-log-level=warn",
+        f"--dir={destination.parent}",
+        f"--out={destination.name}",
+        url,
+    ]
+    result = subprocess.run(command, check=False, capture_output=True, text=True)
+    observed = destination.stat().st_size if destination.exists() else 0
+    if result.returncode != 0 or observed != expected_size or control.exists():
+        detail = (result.stderr or result.stdout).strip()[-1000:]
+        raise ValueError(
+            f"size mismatch for {destination.name}: expected {expected_size}, "
+            f"observed {observed}; aria2c exit code {result.returncode}: {detail}"
+        )
+
+
+def fetch_with_urllib(
+    url: str, destination: Path, expected_size: int, attempts: int
+) -> None:
+    """Portable single-stream fallback for local files and minimal environments."""
     is_network = urlsplit(url).scheme in {"http", "https", "ftp"}
     attempts = attempts if is_network else 1
     last_error: Exception | None = None
@@ -71,6 +117,16 @@ def fetch(url: str, destination: Path, expected_size: int, attempts: int = 12) -
         f"size mismatch for {destination.name}: expected {expected_size}, "
         f"observed {observed}{detail}"
     )
+
+
+def fetch(url: str, destination: Path, expected_size: int, attempts: int = 12) -> None:
+    """Download to a persistent partial file and verify its exact byte count."""
+    url = ena_https_url(url)
+    is_network = urlsplit(url).scheme in {"http", "https", "ftp"}
+    if is_network and shutil.which("aria2c"):
+        fetch_with_aria2(url, destination, expected_size)
+        return
+    fetch_with_urllib(url, destination, expected_size, attempts)
 
 
 def fetch_pair(

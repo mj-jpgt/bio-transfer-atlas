@@ -156,6 +156,7 @@ def test_fetch_pair_converts_ena_ftp_to_https() -> None:
 
 def test_fetch_pair_resumes_a_persistent_partial_file(tmp_path: Path, monkeypatch) -> None:
     module = load_fetch_module()
+    monkeypatch.setattr(module.shutil, "which", lambda executable: None)
     payload = b"0123456789"
     destination = tmp_path / ".R1.fastq.gz.partial"
     destination.write_bytes(payload[:4])
@@ -196,6 +197,40 @@ def test_fetch_pair_resumes_a_persistent_partial_file(tmp_path: Path, monkeypatc
             120,
         )
     ]
+
+
+def test_fetch_pair_uses_resumable_segmented_aria2(tmp_path: Path, monkeypatch) -> None:
+    module = load_fetch_module()
+    destination = tmp_path / ".R1.fastq.gz.partial"
+    payload = b"0123456789"
+    calls = []
+
+    monkeypatch.setattr(
+        module.shutil, "which", lambda executable: "/usr/bin/aria2c"
+    )
+
+    def run(command, check, capture_output, text):
+        calls.append((command, check, capture_output, text))
+        destination.write_bytes(payload)
+        return subprocess.CompletedProcess(command, 0, "", "")
+
+    monkeypatch.setattr(module.subprocess, "run", run)
+    module.fetch(
+        "ftp://ftp.sra.ebi.ac.uk/vol1/fastq/example.fastq.gz",
+        destination,
+        len(payload),
+    )
+
+    command, check, capture_output, text = calls[0]
+    assert command[0] == "aria2c"
+    assert "--continue=true" in command
+    assert "--file-allocation=none" in command
+    assert "--max-connection-per-server=8" in command
+    assert "--split=8" in command
+    assert command[-1] == (
+        "https://ftp.sra.ebi.ac.uk/vol1/fastq/example.fastq.gz"
+    )
+    assert (check, capture_output, text) == (False, True, True)
 
 
 def test_fastq_pair_validator_accepts_synchronized_exact_length(tmp_path: Path) -> None:
