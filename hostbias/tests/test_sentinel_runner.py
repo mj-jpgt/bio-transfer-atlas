@@ -10,9 +10,11 @@ import yaml
 from typer.testing import CliRunner
 
 from hostbias.cli import app
+from hostbias.data_manifest import read_tsv
 from hostbias.sentinel_runner import (
     LocalExecutor,
     SentinelExecutionError,
+    _selected_sentinels,
     consume_mapped_pair_sam,
     run_sentinel_panel,
     validate_fastq_pair,
@@ -271,3 +273,16 @@ def test_cli_exposes_restartable_sentinel_command() -> None:
     assert "--grch38-index" in result.stdout
     assert "--scratch-root" in result.stdout
     assert "--output-dir" in result.stdout
+
+
+def test_frozen_manifest_selects_exact_preregistered_sentinels() -> None:
+    manifest = read_tsv(Path(__file__).parents[1] / "config" / "stage0_samples.tsv")
+    selected = _selected_sentinels(manifest, 3)
+    assert [row["run_accession"] for row in selected] == [
+        "SRR13348579",
+        "SRR13348648",
+        "SRR13348823",
+        "SRR5127734",
+        "SRR5127631",
+        "SRR5127544",
+    ]
