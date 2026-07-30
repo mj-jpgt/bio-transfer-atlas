@@ -18,6 +18,7 @@ from hostbias.config import (
 from hostbias.controls import evaluate_controls
 from hostbias.endpoints import calculate_endpoints
 from hostbias.endpoint_bridge import aggregate_sample_endpoint
+from hostbias.fetch_audit import audit_fetch
 from hostbias.labeling import label_contigs
 from hostbias.mag_bridge import (
     bins_to_scaffolds2bin,
@@ -203,6 +204,33 @@ def stage_audit_command(
     )
     write_json_atomic(report, output)
     typer.echo(json.dumps({"status": report["status"], "sample_id": sample_id}))
+
+
+@app.command("fetch-audit")
+def fetch_audit_command(
+    manifest: Annotated[Path, typer.Option(exists=True, readable=True)],
+    raw_root: Annotated[Path, typer.Option(exists=True, file_okay=False)],
+    output: Annotated[Path, typer.Option()],
+    expected_pairs: Annotated[int, typer.Option(min=1)] = 40,
+    threads: Annotated[int, typer.Option(min=1)] = 4,
+) -> None:
+    """Verify atomic FASTQ acquisition and write aggregate-only evidence."""
+
+    report = audit_fetch(
+        manifest=manifest,
+        raw_root=raw_root,
+        expected_pairs=expected_pairs,
+        threads=threads,
+    )
+    write_json_atomic(report, output)
+    typer.echo(
+        json.dumps(
+            {
+                "status": report["status"],
+                "complete_pairs": report["observed"]["complete_pairs"],
+            }
+        )
+    )
 
 
 def _snapshot_specs(values: list[str]) -> dict[str, Path]:

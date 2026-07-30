@@ -3,7 +3,9 @@ import json
 from pathlib import Path
 
 import pytest
+from typer.testing import CliRunner
 
+from hostbias.cli import app
 from hostbias.fetch_audit import FetchAuditError, audit_fetch
 
 
@@ -87,3 +89,35 @@ def test_fetch_audit_rejects_md5_mismatch_without_naming_file(tmp_path: Path) ->
 
     assert "md5_matches=1" in str(error.value)
     assert "sensitive" not in str(error.value)
+
+
+def test_fetch_audit_cli_writes_aggregate_checkpoint(tmp_path: Path) -> None:
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    row = _prepare_pair(raw, "SRR1", b"first", b"second")
+    manifest = tmp_path / "manifest.tsv"
+    manifest.write_text(HEADER + row + "\n", encoding="utf-8")
+    output = tmp_path / "aggregate.json"
+
+    result = CliRunner().invoke(
+        app,
+        [
+            "fetch-audit",
+            "--manifest",
+            str(manifest),
+            "--raw-root",
+            str(raw),
+            "--output",
+            str(output),
+            "--expected-pairs",
+            "1",
+            "--threads",
+            "1",
+        ],
+    )
+
+    assert result.exit_code == 0, result.output
+    assert json.loads(result.output) == {"status": "PASS", "complete_pairs": 1}
+    serialized = output.read_text(encoding="utf-8")
+    assert str(tmp_path) not in serialized
+    assert "SRR1" not in serialized
