@@ -7,7 +7,9 @@ from types import SimpleNamespace
 
 import pytest
 import yaml
+from typer.testing import CliRunner
 
+from hostbias.cli import app
 from hostbias.sentinel_runner import (
     LocalExecutor,
     SentinelExecutionError,
@@ -261,3 +263,11 @@ def test_local_alignment_streams_sam_without_writing_alignment(
     assert "--no-unal" in observed_command
     assert not list(tmp_path.glob("*.sam"))
     assert not list(tmp_path.glob("*.bam"))
+
+
+def test_cli_exposes_restartable_sentinel_command() -> None:
+    result = CliRunner().invoke(app, ["sentinel-run", "--help"])
+    assert result.exit_code == 0
+    assert "--grch38-index" in result.stdout
+    assert "--scratch-root" in result.stdout
+    assert "--output-dir" in result.stdout

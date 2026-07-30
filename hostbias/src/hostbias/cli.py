@@ -27,6 +27,7 @@ from hostbias.schemas import (
 )
 from hostbias.statistics import analyze, attach_groups
 from hostbias.provenance import build_provenance, write_json_atomic
+from hostbias.sentinel_runner import LocalExecutor, run_sentinel_panel
 from hostbias.verdict import make_verdict, write_verdict
 
 
@@ -70,6 +71,41 @@ def provenance_command(
         raise typer.BadParameter(str(error), param_hint="--config") from error
     write_json_atomic(build_provenance(inputs), output)
     typer.echo(output)
+
+
+@app.command("sentinel-run")
+def sentinel_run_command(
+    manifest: Annotated[Path, typer.Option(exists=True, readable=True)],
+    thresholds: Annotated[Path, typer.Option(exists=True, readable=True)],
+    grch38_index: Annotated[Path, typer.Option()],
+    scratch_root: Annotated[Path, typer.Option()],
+    output_dir: Annotated[Path, typer.Option()],
+    threads: Annotated[int, typer.Option(min=1)] = 16,
+    fasterq_dump: Annotated[str, typer.Option()] = "fasterq-dump",
+    bowtie2: Annotated[str, typer.Option()] = "bowtie2",
+) -> None:
+    """Run or resume the six aggregate-only Stage 0 sentinel checks."""
+
+    report = run_sentinel_panel(
+        manifest_path=manifest,
+        thresholds_path=thresholds,
+        grch38_index=grch38_index,
+        scratch_root=scratch_root,
+        output_dir=output_dir,
+        threads=threads,
+        executor=LocalExecutor(fasterq_dump=fasterq_dump, bowtie2=bowtie2),
+    )
+    typer.echo(
+        json.dumps(
+            {
+                "status": report["status"],
+                "eligible": report["eligible"],
+                "report": str(output_dir / "sentinel_eligibility.json"),
+            }
+        )
+    )
+    if report["status"] != "complete":
+        raise typer.Exit(2)
 
 
 def _write_json(path: Path, value: object) -> None:
