@@ -1,0 +1,23 @@
+{
+  "checkpoint": "P03_vm_preflight",
+  "captured_at_utc": "2026-07-30T03:34:00Z",
+  "status": "PASS",
+  "compute": {
+    "os": "Ubuntu 22.04",
+    "kernel": "6.8.0-1046-nvidia",
+    "logical_cores": 30,
+    "memory_kib": 226763288,
+    "system_disk_available_gib": 472,
+    "scratch_mount": "virtiofs_nfs",
+    "scratch_access": "read_write"
+  },
+  "requirements": {
+    "minimum_logical_cores": 30,
+    "minimum_memory_gib": 128,
+    "scratch_location": "shared_nfs"
+  },
+  "privacy": {
+    "scratch_permissions": "0700",
+    "sequence_outputs_committed": false
+  }
+}
