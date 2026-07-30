@@ -38,6 +38,8 @@ The workflow expects an ENA-resolved runtime manifest and explicit reference
 paths. It never downloads or commits controlled-access data. See
 `config/config.example.yaml` for the configuration interface and
 `docs/DATA_PROVENANCE_RUNBOOK.md` for exact runtime-generation commands.
+For the 40-sample VM launch, resource caps, staged targets, status reporting,
+and restart commands are frozen in `docs/PRODUCTION_RUNBOOK.md`.
 
 The six-run dataset-eligibility sentinel is executable independently before the
 full workflow. See `docs/SENTINEL_RUNBOOK.md` for the exact restartable VM
