@@ -479,6 +479,11 @@ def test_workflow_has_explicit_privacy_and_resource_boundaries() -> None:
     assert "--max_len1" in snakefile and "--max_len2" in snakefile
     assert "--length_limit" not in snakefile
     assert "subsample_fastq_pair.py" in snakefile
+    trim_rule = snakefile.split("rule trim_and_normalize:", 1)[1].split(
+        "rule build_grch38_index:", 1
+    )[0]
+    assert trim_rule.count("validate_fastq_pair.py") == 0
+    assert "The subsampler validates every trimmed pair" in trim_rule
     assert "seqtk sample" not in snakefile
     assert "results/aggregate" not in snakefile
 

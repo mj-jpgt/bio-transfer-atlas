@@ -205,12 +205,9 @@ rule trim_and_normalize:
           --thread {threads} --json {params.temp:q}/fastp.json \
           --html {params.temp:q}/fastp.html
         # fastp --max_len truncates tails; --length_required removes pairs that
-        # became shorter. Validate that its paired outputs are exactly 100 bp
-        # before one shared RNG samples pair records in lockstep.
-        python workflow/scripts/validate_fastq_pair.py \
-          --r1 {params.temp:q}/trimmed_R1.fastq.gz \
-          --r2 {params.temp:q}/trimmed_R2.fastq.gz \
-          --expected-length {params.length}
+        # became shorter. The subsampler validates every trimmed pair as
+        # synchronized and exactly 100 bp before selecting with one shared RNG,
+        # then validates the exact-size outputs again before returning.
         python workflow/scripts/subsample_fastq_pair.py \
           --r1 {params.temp:q}/trimmed_R1.fastq.gz \
           --r2 {params.temp:q}/trimmed_R2.fastq.gz \
