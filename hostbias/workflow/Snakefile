@@ -14,6 +14,8 @@ configfile: "config/config.example.yaml"
 
 
 PROJECT_ROOT = Path(workflow.basedir).parent.resolve()
+CLI_CONFIGFILES = tuple(workflow.overwrite_configfiles or ())
+ACTIVE_CONFIG = str(CLI_CONFIGFILES[-1]) if CLI_CONFIGFILES else "config/config.example.yaml"
 WORK = config["paths"]["work_dir"].rstrip("/")
 RESULTS = config["paths"]["results_dir"].rstrip("/")
 MANIFEST = Path(config["paths"]["sample_manifest"])
@@ -48,7 +50,7 @@ rule all:
 
 rule validate_inputs:
     input:
-        config="config/config.example.yaml",
+        config=ACTIVE_CONFIG,
         manifest=str(MANIFEST),
     output:
         touch(f"{WORK}/validated.ok"),
