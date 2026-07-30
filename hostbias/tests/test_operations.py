@@ -199,6 +199,7 @@ def test_launch_command_has_exact_resume_and_resource_semantics(tmp_path: Path) 
             evidence_output=evidence,
             dry_run=True,
             require_clean_git=False,
+            require_shared_fs=False,
             runner=runner,
         )
 

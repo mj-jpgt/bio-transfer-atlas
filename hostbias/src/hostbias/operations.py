@@ -405,6 +405,7 @@ def launch_production(
     snakemake_executable: str = "snakemake",
     dry_run: bool = False,
     require_clean_git: bool = True,
+    require_shared_fs: bool = True,
     runner: Runner | None = None,
 ) -> dict[str, Any]:
     """Run one production stage in the foreground and record restart evidence."""
@@ -414,6 +415,36 @@ def launch_production(
         raise OperationError(
             f"production launch requires 40 samples; observed {len(inputs.samples)}"
         )
+    work_dir = Path(inputs.config["paths"]["work_dir"])
+    results_dir = Path(inputs.config["paths"]["results_dir"])
+    if require_shared_fs:
+        if not work_dir.is_absolute() or not work_dir.is_dir():
+            raise OperationError("production work directory must already exist on NFS")
+        filesystem = detect_mount_fstype(work_dir)
+        if filesystem not in SHARED_FILESYSTEMS:
+            raise OperationError(
+                "production work directory is not on an approved shared filesystem"
+            )
+        if stat.S_IMODE(work_dir.parent.stat().st_mode) != 0o700:
+            raise OperationError("production scratch root must have exact mode 0700")
+        if results_dir.resolve() != (inputs.root / "results").resolve():
+            raise OperationError(
+                "production aggregate results must stay in the project results tree"
+            )
+        references = [
+            inputs.config["references"]["grch38"]["fasta"],
+            inputs.config["references"]["grch38"]["bowtie2_index"],
+            inputs.config["references"]["competitive"]["human"]["minimap2_index"],
+            inputs.config["references"]["competitive"]["gtdb"]["minimap2_index"],
+        ]
+        if any(
+            not Path(reference).is_absolute()
+            or detect_mount_fstype(Path(reference).parent) not in SHARED_FILESYSTEMS
+            for reference in references
+        ):
+            raise OperationError(
+                "all production references must resolve to shared storage"
+            )
     tracked_status = _git_value(
         inputs.root, "status", "--porcelain", "--untracked-files=no"
     )
