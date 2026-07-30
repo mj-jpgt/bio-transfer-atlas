@@ -54,11 +54,12 @@ rule mag_database_preflight:
         """
         mkdir -p $(dirname {log:q}) $(dirname {output.ok:q})
         rm -rf {params.temporary:q}
-        mkdir -p {params.temporary:q}/gunc
+        mkdir -p {params.temporary:q}
         exec > {log:q} 2>&1
         test -s {params.checkm2:q}
-        gunc check --db_file {params.gunc:q} \
-          --out_dir {params.temporary:q}/gunc
+        test -s {params.gunc:q}
+        diamond dbinfo --db {params.checkm2:q}
+        diamond dbinfo --db {params.gunc:q}
         GTDBTK_DATA_PATH={params.gtdbtk:q} gtdbtk check_install
         {{
           checkm2 --version
@@ -257,6 +258,7 @@ rule concoct_bins:
         "logs/mag/concoct/{sample}.{mode}.log",
     params:
         chunk=BINNING["concoct_chunk_length"],
+        minimum=BINNING["minimum_contig_length"],
         temporary=lambda wildcards: (
             f"{WORK}/binning/{wildcards.sample}/{wildcards.mode}/.concoct.partial"
         ),
@@ -272,7 +274,10 @@ rule concoct_bins:
         rm -rf {params.temporary:q}
         mkdir -p {params.temporary:q}/run {params.temporary:q}/bins
         exec > {log:q} 2>&1
-        cut_up_fasta.py {input.assembly:q} -c {params.chunk} -o 0 --merge_last \
+        seqkit seq -m {params.minimum} {input.assembly:q} \
+          > {params.temporary:q}/eligible.fa
+        cut_up_fasta.py {params.temporary:q}/eligible.fa \
+          -c {params.chunk} -o 0 --merge_last \
           -b {params.temporary:q}/cut.bed > {params.temporary:q}/cut.fa
         concoct_coverage_table.py {params.temporary:q}/cut.bed {input.bam:q} \
           > {params.temporary:q}/coverage.tsv
@@ -283,7 +288,7 @@ rule concoct_bins:
         merge_cutup_clustering.py \
           {params.temporary:q}/run/clustering_gt1000.csv \
           > {params.temporary:q}/clustering_merged.csv
-        extract_fasta_bins.py {input.assembly:q} \
+        extract_fasta_bins.py {params.temporary:q}/eligible.fa \
           {params.temporary:q}/clustering_merged.csv \
           --output_path {params.temporary:q}/bins
         PYTHONPATH=src python workflow/scripts/mag_translate.py bins-to-map \
@@ -362,11 +367,17 @@ rule checkm2_qc:
         """
         mkdir -p $(dirname {log:q}) $(dirname {output.report:q})
         rm -rf {params.temporary:q}
-        checkm2 predict --threads {threads} --input {input.bins:q} \
-          --output-directory {params.temporary:q} \
-          --database_path {params.database:q} > {log:q} 2>&1
-        mv {params.temporary:q}/quality_report.tsv {output.report:q}
-        rm -rf {params.temporary:q}
+        if find {input.bins:q} -maxdepth 1 -type f -name '*.fa' \
+          -print -quit | grep -q .; then
+          checkm2 predict --threads {threads} --input {input.bins:q} \
+            --output-directory {params.temporary:q} \
+            --database_path {params.database:q} > {log:q} 2>&1
+          mv {params.temporary:q}/quality_report.tsv {output.report:q}
+          rm -rf {params.temporary:q}
+        else
+          printf 'Name\tCompleteness\tContamination\n' > {output.report:q}
+          printf 'No DAS Tool bins selected; CheckM2 skipped.\n' > {log:q}
+        fi
         """
 
 
@@ -394,13 +405,19 @@ rule gunc_qc:
         mkdir -p $(dirname {log:q}) $(dirname {output.report:q})
         rm -rf {params.temporary:q}
         mkdir -p {params.temporary:q}
-        gunc run --input_dir {input.bins:q} --file_suffix .fa \
-          --db_file {params.database:q} --threads {threads} \
-          --out_dir {params.temporary:q} > {log:q} 2>&1
-        reports=({params.temporary:q}/GUNC.*.maxCSS_level.tsv)
-        test "${{#reports[@]}}" -eq 1
-        mv "${{reports[0]}}" {output.report:q}
-        rm -rf {params.temporary:q}
+        if find {input.bins:q} -maxdepth 1 -type f -name '*.fa' \
+          -print -quit | grep -q .; then
+          gunc run --input_dir {input.bins:q} --file_suffix .fa \
+            --db_file {params.database:q} --threads {threads} \
+            --out_dir {params.temporary:q} > {log:q} 2>&1
+          reports=({params.temporary:q}/GUNC.*.maxCSS_level.tsv)
+          test "${{#reports[@]}}" -eq 1
+          mv "${{reports[0]}}" {output.report:q}
+          rm -rf {params.temporary:q}
+        else
+          printf 'genome\tpass.GUNC\n' > {output.report:q}
+          printf 'No DAS Tool bins selected; GUNC skipped.\n' > {log:q}
+        fi
         """
 
 
@@ -429,15 +446,22 @@ rule gtdbtk_r220_taxonomy:
         """
         mkdir -p $(dirname {log:q}) $(dirname {output.bacterial:q})
         rm -rf {params.temporary:q}
-        GTDBTK_DATA_PATH={params.database:q} gtdbtk classify_wf \
-          --genome_dir {input.bins:q} --out_dir {params.temporary:q} \
-          --extension fa --cpus {threads} --prefix gtdbtk \
-          > {log:q} 2>&1
-        mv {params.temporary:q}/gtdbtk.bac120.summary.tsv \
-          {output.bacterial:q}
-        mv {params.temporary:q}/gtdbtk.ar53.summary.tsv \
-          {output.archaeal:q}
-        rm -rf {params.temporary:q}
+        if find {input.bins:q} -maxdepth 1 -type f -name '*.fa' \
+          -print -quit | grep -q .; then
+          GTDBTK_DATA_PATH={params.database:q} gtdbtk classify_wf \
+            --genome_dir {input.bins:q} --out_dir {params.temporary:q} \
+            --extension fa --cpus {threads} --prefix gtdbtk \
+            > {log:q} 2>&1
+          mv {params.temporary:q}/gtdbtk.bac120.summary.tsv \
+            {output.bacterial:q}
+          mv {params.temporary:q}/gtdbtk.ar53.summary.tsv \
+            {output.archaeal:q}
+          rm -rf {params.temporary:q}
+        else
+          printf 'user_genome\tclassification\n' > {output.bacterial:q}
+          printf 'user_genome\tclassification\n' > {output.archaeal:q}
+          printf 'No DAS Tool bins selected; GTDB-Tk skipped.\n' > {log:q}
+        fi
         """
 
 

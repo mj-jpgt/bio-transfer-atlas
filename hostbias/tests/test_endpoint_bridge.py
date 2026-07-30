@@ -77,3 +77,25 @@ def test_bridge_cli_commands_emit_real_artifacts(tmp_path: Path) -> None:
     )
     assert result.exit_code == 0, result.output
     assert json.loads(endpoint.read_text())["p_bp"] == 1.0
+
+
+def test_no_selected_bins_is_valid_zero_propagation(tmp_path: Path) -> None:
+    bins = tmp_path / "bins.tsv"
+    qc = tmp_path / "qc.tsv"
+    bins.write_text("sample_id\tcontig_id\tbin_id\n", encoding="utf-8")
+    qc.write_text(
+        "sample_id\tbin_id\tdas_tool_selected\tcheckm2_completeness\t"
+        "checkm2_contamination\tgunc_pass\tgtdb_domain\tgtdb_genus\t"
+        "gtdb_species\n",
+        encoding="utf-8",
+    )
+    payload = aggregate_sample_endpoint(
+        FIXTURES / "alignments.tsv",
+        bins,
+        qc,
+        "T01",
+        "source",
+    )
+    assert payload["endpoint_bin_count"] == 0
+    assert payload["propagated_human_contig_count"] == 0
+    assert payload["p_count"] == 0

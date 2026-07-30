@@ -216,7 +216,9 @@ SensitivityRow.PARSERS = {
 RowT = TypeVar("RowT")
 
 
-def read_tsv(path: str | Path, row_type: type[RowT]) -> list[RowT]:
+def read_tsv(
+    path: str | Path, row_type: type[RowT], *, allow_empty: bool = False
+) -> list[RowT]:
     """Read a TSV with an exact header and report row/column validation errors."""
 
     path = Path(path)
@@ -242,7 +244,7 @@ def read_tsv(path: str | Path, row_type: type[RowT]) -> list[RowT]:
                 rows.append(row_type(**parsed))
             except (TypeError, ValueError) as exc:
                 raise SchemaError(f"{path}:{line_number}: {exc}") from exc
-    if not rows:
+    if not rows and not allow_empty:
         raise SchemaError(f"{path}: table must contain at least one data row")
     return rows
 

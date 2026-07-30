@@ -108,3 +108,24 @@ def test_mag_contract_rejects_missing_tool_bin(tmp_path: Path) -> None:
             tmp_path / "bins.tsv",
             tmp_path / "qc.tsv",
         )
+
+
+def test_zero_dastool_bins_produce_valid_empty_contracts(tmp_path: Path) -> None:
+    empty_map = tmp_path / "empty.tsv"
+    empty_map.write_text("", encoding="utf-8")
+    contig_bins = tmp_path / "contig_bins.tsv"
+    bin_qc = tmp_path / "bin_qc.tsv"
+    assert (
+        build_mag_contracts(
+            "T01",
+            empty_map,
+            tmp_path / "unused-checkm.tsv",
+            tmp_path / "unused-gunc.tsv",
+            (tmp_path / "unused-bac.tsv", tmp_path / "unused-arc.tsv"),
+            contig_bins,
+            bin_qc,
+        )
+        == 0
+    )
+    assert read_tsv(contig_bins, ContigBinRow, allow_empty=True) == []
+    assert read_tsv(bin_qc, BinQcRow, allow_empty=True) == []

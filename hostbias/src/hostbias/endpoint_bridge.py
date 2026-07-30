@@ -80,8 +80,8 @@ def aggregate_sample_endpoint(
     if filter_mode not in {"source", "strict"}:
         raise SchemaError("filter_mode must be 'source' or 'strict'")
     alignments = read_tsv(alignments_path, AlignmentRow)
-    contig_bins = read_tsv(contig_bins_path, ContigBinRow)
-    bin_qc = read_tsv(bin_qc_path, BinQcRow)
+    contig_bins = read_tsv(contig_bins_path, ContigBinRow, allow_empty=True)
+    bin_qc = read_tsv(bin_qc_path, BinQcRow, allow_empty=True)
     observed_samples = (
         {row.sample_id for row in alignments}
         | {row.sample_id for row in contig_bins}

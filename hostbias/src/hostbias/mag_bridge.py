@@ -146,8 +146,6 @@ def _parse_dastool_map(path: Path) -> list[tuple[str, str]]:
                 )
             seen_contigs.add(contig_id)
             assignments.append((contig_id, bin_id))
-    if not assignments:
-        raise SchemaError(f"{path}: DAS Tool selected no contigs")
     return sorted(assignments)
 
 
@@ -252,6 +250,28 @@ def build_mag_contracts(
 
     assignments = _parse_dastool_map(dastool_map)
     selected_bins = {bin_id for _, bin_id in assignments}
+    if not selected_bins:
+        _atomic_tsv(
+            contig_bins_output,
+            ("sample_id", "contig_id", "bin_id"),
+            (),
+        )
+        _atomic_tsv(
+            bin_qc_output,
+            (
+                "sample_id",
+                "bin_id",
+                "das_tool_selected",
+                "checkm2_completeness",
+                "checkm2_contamination",
+                "gunc_pass",
+                "gtdb_domain",
+                "gtdb_genus",
+                "gtdb_species",
+            ),
+            (),
+        )
+        return 0
     checkm2 = _parse_checkm2(checkm2_report)
     gunc = _parse_gunc(gunc_report)
     gtdb = _parse_gtdb(gtdb_summaries)
