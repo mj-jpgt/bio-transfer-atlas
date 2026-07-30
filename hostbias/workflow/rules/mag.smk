@@ -3,6 +3,9 @@
 
 BINNING = config["binning"]
 DATABASES = config["databases"]
+CHECKM2_DATABASE = os.environ.get("CHECKM2DB", DATABASES["checkm2"])
+GUNC_DATABASE = os.environ.get("GUNC_DB", DATABASES["gunc"])
+GTDBTK_DATABASE = os.environ.get("GTDBTK_DATA_PATH", DATABASES["gtdbtk"])
 ASSEMBLY_INDEX_SUFFIXES = (".1.bt2", ".2.bt2", ".3.bt2", ".4.bt2", ".rev.1.bt2", ".rev.2.bt2")
 
 
@@ -13,6 +16,59 @@ rule mag_consensus:
             sample=SAMPLE_IDS,
             mode=FILTER_MODES,
         )
+
+
+rule mag_endpoint_inputs:
+    input:
+        expand(
+            f"{WORK}/binning/{{sample}}/{{mode}}/contig_bins.tsv",
+            sample=SAMPLE_IDS,
+            mode=FILTER_MODES,
+        ),
+        expand(
+            f"{WORK}/binning/{{sample}}/{{mode}}/bin_qc.tsv",
+            sample=SAMPLE_IDS,
+            mode=FILTER_MODES,
+        )
+
+
+rule mag_database_preflight:
+    output:
+        ok=touch(f"{WORK}/databases/mag/preflight.ok"),
+        versions=f"{WORK}/databases/mag/tool_versions.txt",
+    log:
+        "logs/mag/database_preflight.log",
+    params:
+        checkm2=CHECKM2_DATABASE,
+        gunc=GUNC_DATABASE,
+        gtdbtk=GTDBTK_DATABASE,
+        release=DATABASES["gtdb_release"],
+        temporary=f"{WORK}/databases/mag/.preflight.partial",
+    threads:
+        2
+    resources:
+        mem_mb=8000,
+    conda:
+        "../../envs/qc.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {log:q}) $(dirname {output.ok:q})
+        rm -rf {params.temporary:q}
+        mkdir -p {params.temporary:q}/gunc
+        exec > {log:q} 2>&1
+        test -s {params.checkm2:q}
+        gunc check --db_file {params.gunc:q} \
+          --out_dir {params.temporary:q}/gunc
+        GTDBTK_DATA_PATH={params.gtdbtk:q} gtdbtk check_install
+        {{
+          checkm2 --version
+          gunc --version
+          GTDBTK_DATA_PATH={params.gtdbtk:q} gtdbtk --version
+          printf 'GTDB release: %s\n' {params.release:q}
+        }} > {output.versions:q}.partial
+        mv {output.versions:q}.partial {output.versions:q}
+        rm -rf {params.temporary:q}
+        """
 
 
 rule build_assembly_coverage_index:
@@ -279,4 +335,138 @@ rule dastool_consensus:
           {output.mapping:q}
         mv {params.temporary:q}/consensus_DASTool_summary.txt {output.summary:q}
         rm -rf {params.temporary:q}
+        """
+
+
+rule checkm2_qc:
+    input:
+        bins=f"{WORK}/binning/{{sample}}/{{mode}}/dastool_bins",
+        preflight=f"{WORK}/databases/mag/preflight.ok",
+    output:
+        report=f"{WORK}/binning/{{sample}}/{{mode}}/qc/checkm2_quality.tsv",
+    log:
+        "logs/mag/checkm2/{sample}.{mode}.log",
+    params:
+        database=CHECKM2_DATABASE,
+        temporary=lambda wildcards: (
+            f"{WORK}/binning/{wildcards.sample}/{wildcards.mode}/qc/"
+            ".checkm2.partial"
+        ),
+    threads:
+        config["resources"]["checkm2"]["threads"]
+    resources:
+        mem_mb=config["resources"]["checkm2"]["mem_mb"],
+    conda:
+        "../../envs/qc.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {log:q}) $(dirname {output.report:q})
+        rm -rf {params.temporary:q}
+        checkm2 predict --threads {threads} --input {input.bins:q} \
+          --output-directory {params.temporary:q} \
+          --database_path {params.database:q} > {log:q} 2>&1
+        mv {params.temporary:q}/quality_report.tsv {output.report:q}
+        rm -rf {params.temporary:q}
+        """
+
+
+rule gunc_qc:
+    input:
+        bins=f"{WORK}/binning/{{sample}}/{{mode}}/dastool_bins",
+        preflight=f"{WORK}/databases/mag/preflight.ok",
+    output:
+        report=f"{WORK}/binning/{{sample}}/{{mode}}/qc/gunc_maxcss.tsv",
+    log:
+        "logs/mag/gunc/{sample}.{mode}.log",
+    params:
+        database=GUNC_DATABASE,
+        temporary=lambda wildcards: (
+            f"{WORK}/binning/{wildcards.sample}/{wildcards.mode}/qc/.gunc.partial"
+        ),
+    threads:
+        config["resources"]["gunc"]["threads"]
+    resources:
+        mem_mb=config["resources"]["gunc"]["mem_mb"],
+    conda:
+        "../../envs/qc.yaml"
+    shell:
+        r"""
+        mkdir -p $(dirname {log:q}) $(dirname {output.report:q})
+        rm -rf {params.temporary:q}
+        mkdir -p {params.temporary:q}
+        gunc run --input_dir {input.bins:q} --file_suffix .fa \
+          --db_file {params.database:q} --threads {threads} \
+          --out_dir {params.temporary:q} > {log:q} 2>&1
+        reports=({params.temporary:q}/GUNC.*.maxCSS_level.tsv)
+        test "${{#reports[@]}}" -eq 1
+        mv "${{reports[0]}}" {output.report:q}
+        rm -rf {params.temporary:q}
+        """
+
+
+rule gtdbtk_r220_taxonomy:
+    input:
+        bins=f"{WORK}/binning/{{sample}}/{{mode}}/dastool_bins",
+        preflight=f"{WORK}/databases/mag/preflight.ok",
+    output:
+        bacterial=f"{WORK}/binning/{{sample}}/{{mode}}/taxonomy/gtdbtk.bac120.summary.tsv",
+        archaeal=f"{WORK}/binning/{{sample}}/{{mode}}/taxonomy/gtdbtk.ar53.summary.tsv",
+    log:
+        "logs/mag/gtdbtk/{sample}.{mode}.log",
+    params:
+        database=GTDBTK_DATABASE,
+        temporary=lambda wildcards: (
+            f"{WORK}/binning/{wildcards.sample}/{wildcards.mode}/taxonomy/"
+            ".gtdbtk.partial"
+        ),
+    threads:
+        config["resources"]["gtdbtk"]["threads"]
+    resources:
+        mem_mb=config["resources"]["gtdbtk"]["mem_mb"],
+    conda:
+        "../../envs/qc.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {log:q}) $(dirname {output.bacterial:q})
+        rm -rf {params.temporary:q}
+        GTDBTK_DATA_PATH={params.database:q} gtdbtk classify_wf \
+          --genome_dir {input.bins:q} --out_dir {params.temporary:q} \
+          --extension fa --cpus {threads} --prefix gtdbtk \
+          > {log:q} 2>&1
+        mv {params.temporary:q}/gtdbtk.bac120.summary.tsv \
+          {output.bacterial:q}
+        mv {params.temporary:q}/gtdbtk.ar53.summary.tsv \
+          {output.archaeal:q}
+        rm -rf {params.temporary:q}
+        """
+
+
+rule mag_private_contract:
+    input:
+        dastool=f"{WORK}/binning/{{sample}}/{{mode}}/dastool_scaffolds2bin.tsv",
+        checkm2=f"{WORK}/binning/{{sample}}/{{mode}}/qc/checkm2_quality.tsv",
+        gunc=f"{WORK}/binning/{{sample}}/{{mode}}/qc/gunc_maxcss.tsv",
+        bacterial=f"{WORK}/binning/{{sample}}/{{mode}}/taxonomy/gtdbtk.bac120.summary.tsv",
+        archaeal=f"{WORK}/binning/{{sample}}/{{mode}}/taxonomy/gtdbtk.ar53.summary.tsv",
+    output:
+        bins=f"{WORK}/binning/{{sample}}/{{mode}}/contig_bins.tsv",
+        qc=f"{WORK}/binning/{{sample}}/{{mode}}/bin_qc.tsv",
+    log:
+        "logs/mag/contract/{sample}.{mode}.log",
+    threads:
+        config["resources"]["mag_contract"]["threads"]
+    resources:
+        mem_mb=config["resources"]["mag_contract"]["mem_mb"],
+    conda:
+        "../../envs/qc.yaml"
+    shell:
+        """
+        mkdir -p $(dirname {log:q})
+        PYTHONPATH=src python workflow/scripts/mag_translate.py contract \
+          --sample-id {wildcards.sample:q} --dastool-map {input.dastool:q} \
+          --checkm2-report {input.checkm2:q} --gunc-report {input.gunc:q} \
+          --gtdb-bacterial-summary {input.bacterial:q} \
+          --gtdb-archaeal-summary {input.archaeal:q} \
+          --contig-bins-output {output.bins:q} \
+          --bin-qc-output {output.qc:q} > {log:q} 2>&1
         """

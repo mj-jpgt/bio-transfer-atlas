@@ -282,3 +282,19 @@ def test_mag_consensus_uses_shared_coverage_and_three_binners() -> None:
     assert f'{chr(34)}rules/mag.smk{chr(34)}' in (
         PROJECT / "workflow" / "Snakefile"
     ).read_text(encoding="utf-8")
+
+
+def test_mag_qc_taxonomy_and_contract_are_private_and_pinned() -> None:
+    rules = MAG_RULES.read_text(encoding="utf-8")
+    for command in (
+        "checkm2 predict",
+        "gunc run",
+        "gtdbtk classify_wf",
+        "mag_translate.py contract",
+    ):
+        assert command in rules
+    assert "GTDBTK_DATA_PATH=" in rules
+    assert 'os.environ.get("CHECKM2DB"' in rules
+    assert 'os.environ.get("GUNC_DB"' in rules
+    assert 'os.environ.get("GTDBTK_DATA_PATH"' in rules
+    assert "results/" not in rules
