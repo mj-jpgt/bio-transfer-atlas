@@ -12,6 +12,8 @@
     "normalization",
     "filtering",
     "assembly",
+    "binning",
+    "databases",
     "resources"
   ],
   "properties": {
@@ -96,17 +98,71 @@
         "min_contig_length": {"type": "integer", "minimum": 200}
       }
     },
+    "binning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_contig_length",
+        "concoct_chunk_length",
+        "maxbin_markerset",
+        "dastool_score_threshold",
+        "dastool_search_engine"
+      ],
+      "properties": {
+        "minimum_contig_length": {"type": "integer", "minimum": 1000},
+        "concoct_chunk_length": {"type": "integer", "minimum": 5000},
+        "maxbin_markerset": {"enum": [40, 107]},
+        "dastool_score_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "dastool_search_engine": {"enum": ["diamond", "blast", "usearch"]}
+      }
+    },
+    "databases": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["checkm2", "gunc", "gtdbtk", "gtdb_release"],
+      "properties": {
+        "checkm2": {"type": "string", "minLength": 1},
+        "gunc": {"type": "string", "minLength": 1},
+        "gtdbtk": {"type": "string", "minLength": 1},
+        "gtdb_release": {"const": "R220"}
+      }
+    },
     "resources": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["fetch", "preprocess", "filter", "assembly", "mapper", "endpoint"],
+      "required": [
+        "fetch",
+        "preprocess",
+        "filter",
+        "assembly",
+        "mapper",
+        "endpoint",
+        "coverage",
+        "binner",
+        "dastool",
+        "checkm2",
+        "gunc",
+        "gtdbtk",
+        "mag_contract"
+      ],
       "properties": {
         "fetch": {"$ref": "#/$defs/resource"},
         "preprocess": {"$ref": "#/$defs/resource"},
         "filter": {"$ref": "#/$defs/resource"},
         "assembly": {"$ref": "#/$defs/resource"},
         "mapper": {"$ref": "#/$defs/resource"},
-        "endpoint": {"$ref": "#/$defs/resource"}
+        "endpoint": {"$ref": "#/$defs/resource"},
+        "coverage": {"$ref": "#/$defs/resource"},
+        "binner": {"$ref": "#/$defs/resource"},
+        "dastool": {"$ref": "#/$defs/resource"},
+        "checkm2": {"$ref": "#/$defs/resource"},
+        "gunc": {"$ref": "#/$defs/resource"},
+        "gtdbtk": {"$ref": "#/$defs/resource"},
+        "mag_contract": {"$ref": "#/$defs/resource"}
       }
     }
   },

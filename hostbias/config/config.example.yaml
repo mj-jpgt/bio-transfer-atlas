@@ -30,6 +30,17 @@ filtering:
     - strict
 assembly:
   min_contig_length: 500
+binning:
+  minimum_contig_length: 1500
+  concoct_chunk_length: 10000
+  maxbin_markerset: 40
+  dastool_score_threshold: 0.5
+  dastool_search_engine: diamond
+databases:
+  checkm2: databases/checkm2/uniref100.KO.1.dmnd
+  gunc: databases/gunc/gunc_db_progenomes2.1.dmnd
+  gtdbtk: databases/gtdbtk/release220
+  gtdb_release: R220
 resources:
   fetch:
     threads: 4
@@ -47,5 +58,26 @@ resources:
     threads: 24
     mem_mb: 64000
   endpoint:
+    threads: 2
+    mem_mb: 8000
+  coverage:
+    threads: 16
+    mem_mb: 32000
+  binner:
+    threads: 16
+    mem_mb: 64000
+  dastool:
+    threads: 16
+    mem_mb: 64000
+  checkm2:
+    threads: 16
+    mem_mb: 64000
+  gunc:
+    threads: 16
+    mem_mb: 64000
+  gtdbtk:
+    threads: 24
+    mem_mb: 120000
+  mag_contract:
     threads: 2
     mem_mb: 8000

@@ -16,6 +16,8 @@ def test_example_configuration_is_valid() -> None:
     inputs = load_and_validate(PROJECT / "config" / "config.example.yaml")
     assert inputs.config["experiment"]["seed"] == 20260729
     assert {sample["cohort"] for sample in inputs.samples} == {"Tanzania", "Netherlands"}
+    assert inputs.config["databases"]["gtdb_release"] == "R220"
+    assert inputs.config["binning"]["maxbin_markerset"] == 40
 
 
 def test_duplicate_sample_ids_are_rejected(tmp_path: Path) -> None:
