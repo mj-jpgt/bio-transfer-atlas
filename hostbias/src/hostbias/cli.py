@@ -8,6 +8,8 @@ from typing import Annotated
 
 import typer
 
+from hostbias.alignment_bridge import run_alignment_bridge
+from hostbias.assembly_qc import assembly_qc
 from hostbias.config import (
     ValidationError,
     load_and_validate,
@@ -15,6 +17,7 @@ from hostbias.config import (
 )
 from hostbias.controls import evaluate_controls
 from hostbias.endpoints import calculate_endpoints
+from hostbias.endpoint_bridge import aggregate_sample_endpoint
 from hostbias.labeling import label_contigs
 from hostbias.schemas import (
     AlignmentRow,
@@ -172,6 +175,57 @@ def prepare_runtime_command(
         f"valid: {len(report['ordered_accessions'])} {scope} runs; "
         f"config={runtime_dir / f'config.{scope}.yaml'}"
     )
+
+
+@app.command("assembly-qc")
+def assembly_qc_command(
+    assembly: Annotated[Path, typer.Option(exists=True, readable=True)],
+    sample_id: Annotated[str, typer.Option()],
+    filter_mode: Annotated[str, typer.Option()],
+    output: Annotated[Path, typer.Option()],
+) -> None:
+    """Write identifier-free assembly QC aggregates."""
+
+    write_json_atomic(assembly_qc(assembly, sample_id, filter_mode), output)
+    typer.echo(output)
+
+
+@app.command("build-alignment-table")
+def build_alignment_table_command(
+    spec: Annotated[Path, typer.Option(exists=True, readable=True)],
+    output_tsv: Annotated[Path, typer.Option()],
+    output_manifest: Annotated[Path, typer.Option()],
+) -> None:
+    """Convert private minimap2 PAFs into the strict competitive-label table."""
+
+    run_alignment_bridge(spec, output_tsv, output_manifest)
+    typer.echo(output_tsv)
+
+
+@app.command("aggregate-endpoint")
+def aggregate_endpoint_command(
+    alignments: Annotated[Path, typer.Option(exists=True, readable=True)],
+    contig_bins: Annotated[Path, typer.Option(exists=True, readable=True)],
+    bin_qc: Annotated[Path, typer.Option(exists=True, readable=True)],
+    sample_id: Annotated[str, typer.Option()],
+    filter_mode: Annotated[str, typer.Option()],
+    output: Annotated[Path, typer.Option()],
+    thresholds: Annotated[
+        Path | None, typer.Option(exists=True, readable=True)
+    ] = None,
+) -> None:
+    """Aggregate bin propagation without publishing sequence-derived identifiers."""
+
+    payload = aggregate_sample_endpoint(
+        alignments,
+        contig_bins,
+        bin_qc,
+        sample_id,
+        filter_mode,
+        thresholds,
+    )
+    write_json_atomic(payload, output)
+    typer.echo(output)
 
 
 def _write_json(path: Path, value: object) -> None:
