@@ -16,6 +16,21 @@ class EndpointThresholds:
     material_human_fraction: float = 0.10
     dominant_human_fraction: float = 0.50
 
+    def __post_init__(self) -> None:
+        if not 0 <= self.min_completeness <= 1:
+            raise ValueError("min_completeness must be in [0, 1]")
+        if not 0 <= self.max_contamination <= 1:
+            raise ValueError("max_contamination must be in [0, 1]")
+        if not (
+            0
+            <= self.material_human_fraction
+            <= self.dominant_human_fraction
+            <= 1
+        ):
+            raise ValueError(
+                "human fraction tiers must satisfy 0 <= material <= dominant <= 1"
+            )
+
 
 def is_endpoint_bin(row: BinQcRow, thresholds: EndpointThresholds | None = None) -> bool:
     """Apply the preregistered endpoint definition exactly."""

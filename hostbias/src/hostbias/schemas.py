@@ -70,12 +70,22 @@ class AlignmentRow:
     PARSERS: ClassVar[dict[str, Callable[[str], object]]]
 
     def __post_init__(self) -> None:
-        if self.target_domain not in {"human", "gtdb"}:
-            raise SchemaError("target_domain must be 'human' or 'gtdb'")
+        if self.target_domain not in {"human", "gtdb", "none"}:
+            raise SchemaError("target_domain must be 'human', 'gtdb', or 'none'")
         if self.contig_length <= 0:
             raise SchemaError("contig_length must be positive")
         if self.aligned_bp > self.contig_length:
             raise SchemaError("aligned_bp cannot exceed contig_length")
+        if self.target_domain == "none" and any(
+            (
+                self.aligned_bp,
+                self.identity,
+                self.query_coverage,
+                self.mapq,
+                self.alignment_score,
+            )
+        ):
+            raise SchemaError("'none' alignments must have zero-valued metrics")
 
 
 AlignmentRow.PARSERS = {
@@ -251,4 +261,8 @@ def assert_unique(rows: Iterable[object], key_fields: tuple[str, ...]) -> None:
 def row_field_names(row_type: type[object]) -> list[str]:
     """Expose serializable fields without the class-level parser registry."""
 
-    return [field.name for field in fields(row_type) if field.name != "PARSERS"]
+    return [
+        field.name
+        for field in fields(row_type)  # type: ignore[arg-type]
+        if field.name != "PARSERS"
+    ]

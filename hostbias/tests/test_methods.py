@@ -30,6 +30,13 @@ def test_competitive_labeling_and_identity_sensitivity() -> None:
     assert calls_98["human_clear"].label == ContigLabel.HUMAN
 
 
+def test_no_hit_placeholder_is_non_human() -> None:
+    row = AlignmentRow("T", "unmatched", 1000, "none", 0, 0, 0, 0, 0)
+    assert label_contigs([row])[0].label == ContigLabel.NON_HUMAN
+    with pytest.raises(SchemaError, match="zero-valued"):
+        AlignmentRow("T", "bad", 1000, "none", 1, 0, 0, 0, 0)
+
+
 def test_endpoint_definition_and_sample_rates() -> None:
     calls = label_contigs(read_tsv(FIXTURES / "alignments.tsv", AlignmentRow))
     bins = read_tsv(FIXTURES / "bins.tsv", ContigBinRow)

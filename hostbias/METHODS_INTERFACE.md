@@ -17,6 +17,8 @@ The threshold file has five optional top-level mappings: `labeling`, `endpoints`
 `controls`, `statistics`, and `gate`. Unknown names are errors. Omitted values use
 the preregistered defaults. CheckM2 completeness/contamination, identity,
 coverage, rates, and fractions are represented on the `[0, 1]` scale.
+Every assembled contig must have a row. Contigs with no human or GTDB hit use
+`target_domain=none` and zero for all alignment metrics.
 
 Example:
 

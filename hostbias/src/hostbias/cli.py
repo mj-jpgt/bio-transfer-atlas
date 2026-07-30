@@ -36,6 +36,11 @@ app = typer.Typer(
 )
 
 
+@app.callback()
+def main() -> None:
+    """HostBias workflow-facing analysis commands."""
+
+
 @app.command("validate")
 def validate_command(
     config: Annotated[Path, typer.Option(exists=True, readable=True)],

@@ -43,3 +43,32 @@ def test_cli_help_exposes_single_complete_entrypoint() -> None:
     assert result.exit_code == 0
     assert "--control-alignments" in result.stdout
     assert "--sensitivities" in result.stdout
+
+
+def test_cli_analyze_command_runs(tmp_path: Path) -> None:
+    result = CliRunner().invoke(
+        app,
+        [
+            "analyze",
+            "--alignments",
+            str(FIXTURES / "alignments.tsv"),
+            "--contig-bins",
+            str(FIXTURES / "bins.tsv"),
+            "--bin-qc",
+            str(FIXTURES / "bin_qc.tsv"),
+            "--sample-groups",
+            str(FIXTURES / "sample_groups.tsv"),
+            "--control-alignments",
+            str(FIXTURES / "control_alignments.tsv"),
+            "--control-truth",
+            str(FIXTURES / "control_truth.tsv"),
+            "--sensitivities",
+            str(FIXTURES / "sensitivities.tsv"),
+            "--thresholds",
+            str(FIXTURES / "thresholds.yaml"),
+            "--output-dir",
+            str(tmp_path),
+        ],
+    )
+    assert result.exit_code == 0, result.output
+    assert result.output.strip() == "FAIL"

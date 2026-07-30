@@ -181,6 +181,18 @@ def analyze(
     unsupported = {row.cohort for row in rows} - {"tanzania", "netherlands"}
     if unsupported:
         raise SchemaError(f"unsupported cohorts: {unsupported}")
+    for row in rows:
+        if (
+            not math.isfinite(row.p_count)
+            or not math.isfinite(row.p_bp)
+            or not 0 <= row.p_count <= 1
+            or not 0 <= row.p_bp <= 1
+        ):
+            raise SchemaError(f"invalid propagation rate for sample {row.sample_id}")
+        if row.propagated_human_contig_count < 0:
+            raise SchemaError(
+                f"negative propagated count for sample {row.sample_id}"
+            )
 
     seed_sequence = np.random.SeedSequence(seed)
     rng_count, rng_bp = [

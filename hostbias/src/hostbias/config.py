@@ -9,7 +9,7 @@ from pathlib import Path
 from typing import Any, TypeVar
 
 import jsonschema
-import yaml
+import yaml  # type: ignore[import-untyped]
 
 from hostbias.endpoints import EndpointThresholds
 from hostbias.labeling import LabelThresholds
@@ -40,7 +40,7 @@ def _construct(section: str, cls: type[T], values: object) -> T:
         return cls()
     if not isinstance(values, dict):
         raise SchemaError(f"threshold section {section!r} must be a mapping")
-    allowed = {field.name for field in fields(cls)}
+    allowed = {field.name for field in fields(cls)}  # type: ignore[arg-type]
     unknown = set(values) - allowed
     if unknown:
         raise SchemaError(f"unknown {section} thresholds: {sorted(unknown)}")
@@ -97,6 +97,26 @@ def load_thresholds(
         )
     control_defaults.update(controls)
     statistics_defaults.update(statistics)
+    if not 0 <= control_defaults["min_sensitivity"] <= 1:
+        raise SchemaError("controls.min_sensitivity must be in [0, 1]")
+    if not 0 <= control_defaults["max_false_positive_bp_rate"] <= 1:
+        raise SchemaError(
+            "controls.max_false_positive_bp_rate must be in [0, 1]"
+        )
+    if (
+        not isinstance(statistics_defaults["bootstrap_iterations"], int)
+        or statistics_defaults["bootstrap_iterations"] < 100
+    ):
+        raise SchemaError("statistics.bootstrap_iterations must be an integer >= 100")
+    if (
+        not isinstance(statistics_defaults["permutation_iterations"], int)
+        or statistics_defaults["permutation_iterations"] < 100
+    ):
+        raise SchemaError(
+            "statistics.permutation_iterations must be an integer >= 100"
+        )
+    if not isinstance(statistics_defaults["seed"], int):
+        raise SchemaError("statistics.seed must be an integer")
     effective = {
         "labeling": asdict(labels),
         "endpoints": asdict(endpoints),

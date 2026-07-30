@@ -27,6 +27,22 @@ class GateThresholds:
         "identity_0.98",
     )
 
+    def __post_init__(self) -> None:
+        if self.samples_per_cohort < 1:
+            raise ValueError("samples_per_cohort must be positive")
+        if not 0 <= self.min_tanzania_p_count <= 1:
+            raise ValueError("min_tanzania_p_count must be in [0, 1]")
+        if self.min_ratio <= 1:
+            raise ValueError("min_ratio must be greater than 1")
+        if not 0 < self.max_permutation_p <= 1:
+            raise ValueError("max_permutation_p must be in (0, 1]")
+        if self.min_positive_tanzania_samples < 1:
+            raise ValueError("min_positive_tanzania_samples must be positive")
+        if not 0 < self.max_sample_numerator_share <= 1:
+            raise ValueError("max_sample_numerator_share must be in (0, 1]")
+        if not self.required_sensitivity_analyses:
+            raise ValueError("at least one sensitivity analysis is required")
+
 
 @dataclass(frozen=True)
 class Criterion:
@@ -109,9 +125,7 @@ def make_verdict(
     primary = statistics.p_count
     ratio_value = float("inf") if primary.ratio_is_infinite else primary.ratio
     ratio_ci_low = (
-        float("inf")
-        if primary.ratio_ci_low is None and primary.ratio_is_infinite
-        else primary.ratio_ci_low
+        float("inf") if primary.ratio_ci_low is None else primary.ratio_ci_low
     )
     sensitivity_direction = all(
         sensitivity_by_id[(analysis_id, "p_count")].tanzania_mean

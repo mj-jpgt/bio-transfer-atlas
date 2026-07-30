@@ -1,7 +1,9 @@
 import json
 
+import pytest
+
 from hostbias.controls import ControlResult
-from hostbias.schemas import SensitivityRow
+from hostbias.schemas import SchemaError, SensitivityRow
 from hostbias.statistics import GroupedEndpoint, analyze
 from hostbias.verdict import make_verdict, write_verdict
 
@@ -91,3 +93,10 @@ def test_missing_sensitivity_is_operational_failure() -> None:
     )
     assert verdict.status == "OPERATIONAL_FAILURE"
     assert verdict.first_failed_criterion == "complete_sensitivity_matrix"
+
+
+def test_invalid_sample_rate_is_rejected() -> None:
+    rows = _passing_rows()
+    rows[0] = GroupedEndpoint("T00", "tanzania", 1.01, 0.08, 2)
+    with pytest.raises(SchemaError, match="invalid propagation rate"):
+        analyze(rows, 200, 200)
