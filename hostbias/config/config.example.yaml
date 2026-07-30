@@ -1,0 +1,35 @@
+schema_version: 1
+experiment:
+  id: gate-a-20260729
+  seed: 20260729
+paths:
+  sample_manifest: config/stage0_samples.example.tsv
+  work_dir: work
+  results_dir: results
+references:
+  grch38:
+    fasta: references/grch38_no_alt.fa
+    bowtie2_index: references/indexes/grch38_no_alt
+normalization:
+  read_length: 100
+  read_pairs: 8000000
+filtering:
+  bowtie2_preset: very-sensitive-local
+  modes:
+    - source
+    - strict
+assembly:
+  min_contig_length: 500
+resources:
+  fetch:
+    threads: 4
+    mem_mb: 8000
+  preprocess:
+    threads: 8
+    mem_mb: 16000
+  filter:
+    threads: 16
+    mem_mb: 32000
+  assembly:
+    threads: 24
+    mem_mb: 64000

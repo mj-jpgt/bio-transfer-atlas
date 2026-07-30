@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hostbias.example/schemas/config.schema.json",
+  "title": "Hostbias experiment configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "experiment",
+    "paths",
+    "references",
+    "normalization",
+    "filtering",
+    "assembly",
+    "resources"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "experiment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "seed"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9._-]+$"},
+        "seed": {"type": "integer", "minimum": 0, "maximum": 4294967295}
+      }
+    },
+    "paths": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sample_manifest", "work_dir", "results_dir"],
+      "properties": {
+        "sample_manifest": {"type": "string", "minLength": 1},
+        "work_dir": {"type": "string", "minLength": 1},
+        "results_dir": {"type": "string", "minLength": 1}
+      }
+    },
+    "references": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["grch38"],
+      "properties": {
+        "grch38": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["fasta", "bowtie2_index"],
+          "properties": {
+            "fasta": {"type": "string", "minLength": 1},
+            "bowtie2_index": {"type": "string", "minLength": 1}
+          }
+        }
+      }
+    },
+    "normalization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["read_length", "read_pairs"],
+      "properties": {
+        "read_length": {"type": "integer", "minimum": 30, "maximum": 1000},
+        "read_pairs": {"type": "integer", "minimum": 1}
+      }
+    },
+    "filtering": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bowtie2_preset", "modes"],
+      "properties": {
+        "bowtie2_preset": {"const": "very-sensitive-local"},
+        "modes": {
+          "type": "array",
+          "uniqueItems": true,
+          "minItems": 2,
+          "items": {"enum": ["source", "strict"]},
+          "allOf": [
+            {"contains": {"const": "source"}},
+            {"contains": {"const": "strict"}}
+          ]
+        }
+      }
+    },
+    "assembly": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["min_contig_length"],
+      "properties": {
+        "min_contig_length": {"type": "integer", "minimum": 200}
+      }
+    },
+    "resources": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fetch", "preprocess", "filter", "assembly"],
+      "properties": {
+        "fetch": {"$ref": "#/$defs/resource"},
+        "preprocess": {"$ref": "#/$defs/resource"},
+        "filter": {"$ref": "#/$defs/resource"},
+        "assembly": {"$ref": "#/$defs/resource"}
+      }
+    }
+  },
+  "$defs": {
+    "resource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["threads", "mem_mb"],
+      "properties": {
+        "threads": {"type": "integer", "minimum": 1},
+        "mem_mb": {"type": "integer", "minimum": 256}
+      }
+    }
+  }
+}

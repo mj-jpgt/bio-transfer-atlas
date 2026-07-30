@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hostbias.example/schemas/sample_manifest.schema.json",
+  "title": "Hostbias sample-manifest row",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "sample_id",
+    "cohort",
+    "accession",
+    "layout",
+    "fastq1_url",
+    "fastq1_md5",
+    "fastq2_url",
+    "fastq2_md5",
+    "status",
+    "rank"
+  ],
+  "properties": {
+    "sample_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+    "cohort": {"type": "string", "minLength": 1},
+    "accession": {"type": "string", "pattern": "^SRR[0-9]+$"},
+    "layout": {"const": "PAIRED"},
+    "fastq1_url": {"type": "string", "pattern": "^(https|ftp)://"},
+    "fastq1_md5": {"type": "string", "pattern": "^[a-fA-F0-9]{32}$"},
+    "fastq2_url": {"type": "string", "pattern": "^(https|ftp)://"},
+    "fastq2_md5": {"type": "string", "pattern": "^[a-fA-F0-9]{32}$"},
+    "status": {"enum": ["primary", "reserve"]},
+    "rank": {"type": "string", "pattern": "^[1-9][0-9]*$"}
+  }
+}
