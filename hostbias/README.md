@@ -45,6 +45,10 @@ The six-run dataset-eligibility sentinel is executable independently before the
 full workflow. See `docs/SENTINEL_RUNBOOK.md` for the exact restartable VM
 command and its aggregate-only output contract.
 
+The competitive human reference is acquired from checksum-pinned CHM13 and
+HPRC sources with a reproducible HPRC/IGSR donor join. See
+`docs/REFERENCE_PANEL_RUNBOOK.md`.
+
 ## Workflow stages
 
 1. Fetch checksum-pinned public paired FASTQs.
