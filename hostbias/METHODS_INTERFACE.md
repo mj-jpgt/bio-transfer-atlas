@@ -42,7 +42,7 @@ inputs are incomplete; only valid analyses receive a scientific `PASS` or `FAIL`
 
 ## Assembly-to-analysis bridge
 
-The restartable `downstream_bridge` Snakemake target runs minimap2 `asm20`
+The restartable `downstream_bridge` Snakemake target runs minimap2 `asm5`
 against independently checksum-verified balanced-human and GTDB indexes. PAFs,
 run specs, contig IDs, and the resulting `alignments.tsv` remain under `work/`.
 Only aggregate assembly QC and mapping manifests are written below

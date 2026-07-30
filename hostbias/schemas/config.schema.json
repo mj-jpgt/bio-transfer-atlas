@@ -54,7 +54,7 @@
           "additionalProperties": false,
           "required": ["mapper_preset", "human", "gtdb"],
           "properties": {
-            "mapper_preset": {"const": "asm20"},
+            "mapper_preset": {"const": "asm5"},
             "human": {"$ref": "#/$defs/competitive_reference"},
             "gtdb": {"$ref": "#/$defs/competitive_reference"}
           }

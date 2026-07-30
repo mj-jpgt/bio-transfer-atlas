@@ -11,7 +11,7 @@ references:
     fasta: references/grch38_no_alt.fa
     bowtie2_index: references/indexes/grch38_no_alt
   competitive:
-    mapper_preset: asm20
+    mapper_preset: asm5
     human:
       reference_id: hprc-balanced-chm13-v1
       minimap2_index: references/indexes/hprc-balanced-chm13-v1.mmi

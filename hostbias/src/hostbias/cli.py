@@ -36,6 +36,7 @@ from hostbias.operations import (
     prepare_production_overlay,
     production_status,
 )
+from hostbias.reference_acquisition import Minimap2IndexBuilder, build_reference_panel
 from hostbias.runtime_manifest import prepare_runtime
 from hostbias.sentinel_runner import LocalExecutor, run_sentinel_panel
 from hostbias.verdict import make_verdict, write_verdict
@@ -81,6 +82,48 @@ def provenance_command(
         raise typer.BadParameter(str(error), param_hint="--config") from error
     write_json_atomic(build_provenance(inputs), output)
     typer.echo(output)
+
+
+@app.command("reference-build")
+def reference_build_command(
+    metadata_sources: Annotated[
+        Path, typer.Option(exists=True, readable=True)
+    ] = Path("config/reference_metadata_sources.tsv"),
+    donors: Annotated[Path, typer.Option(exists=True, readable=True)] = Path(
+        "config/hprc_balanced_donors.tsv"
+    ),
+    panel: Annotated[Path, typer.Option(exists=True, readable=True)] = Path(
+        "config/competitive_human_panel.tsv"
+    ),
+    reference_root: Annotated[Path, typer.Option()] = Path("references"),
+    checkpoint: Annotated[Path, typer.Option()] = Path(
+        "results/aggregate/checkpoints/competitive_human_reference_panel.json"
+    ),
+    threads: Annotated[int, typer.Option(min=1)] = 32,
+    index_batch: Annotated[str, typer.Option()] = "64G",
+    minimap2: Annotated[str, typer.Option()] = "minimap2",
+) -> None:
+    """Acquire and index the verified ancestry-balanced human panel."""
+
+    report = build_reference_panel(
+        metadata_sources_path=metadata_sources,
+        donors_path=donors,
+        panel_path=panel,
+        reference_root=reference_root,
+        checkpoint_path=checkpoint,
+        threads=threads,
+        index_batch=index_batch,
+        index_builder=Minimap2IndexBuilder(minimap2),
+    )
+    typer.echo(
+        json.dumps(
+            {
+                "status": report["status"],
+                "reference_id": report["reference_id"],
+                "checkpoint": str(checkpoint),
+            }
+        )
+    )
 
 
 @app.command("sentinel-run")

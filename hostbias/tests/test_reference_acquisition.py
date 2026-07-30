@@ -7,7 +7,9 @@ from pathlib import Path
 from typing import Mapping, Sequence
 
 import pytest
+from typer.testing import CliRunner
 
+from hostbias.cli import app
 from hostbias.data_manifest import canonical_tsv
 from hostbias.reference_acquisition import (
     METADATA_FIELDS,
@@ -336,3 +338,11 @@ def test_md5_sidecar_requires_exact_filename() -> None:
     )
     with pytest.raises(AcquisitionError, match="found 0"):
         _expected_md5_from_sidecar("a" * 32 + "  other.fa.gz\n", "target.fa.gz")
+
+
+def test_cli_exposes_reference_acquisition_command() -> None:
+    result = CliRunner().invoke(app, ["reference-build", "--help"])
+    assert result.exit_code == 0
+    assert "--metadata-sources" in result.stdout
+    assert "--reference-root" in result.stdout
+    assert "--index-batch" in result.stdout
