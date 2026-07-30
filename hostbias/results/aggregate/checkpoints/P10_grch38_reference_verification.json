@@ -1,6 +1,6 @@
 {
   "checkpoint": "P10_grch38_reference_verification",
-  "captured_at_utc": "2026-07-30T03:33:00Z",
+  "captured_at_utc": "2026-07-30T04:05:00Z",
   "status": "PASS",
   "reference": {
     "name": "Homo_sapiens_assembly38",
@@ -12,6 +12,9 @@
     "tool": "bowtie2-build",
     "version": "2.5.4",
     "threads": 30,
-    "state": "building"
+    "state": "complete",
+    "shards": 6,
+    "combined_sha256": "c5f55efb14243a1d9f3d4da102df3d830230809aefede2cf686e3f1a6df6a2a3",
+    "verified_by_live_sentinel": true
   }
 }
