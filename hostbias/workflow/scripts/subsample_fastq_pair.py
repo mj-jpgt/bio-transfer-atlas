@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import gzip
 import io
+import json
 import random
 from contextlib import ExitStack, contextmanager
 from pathlib import Path
@@ -48,6 +49,17 @@ def read_record(handle: TextIO) -> tuple[str, tuple[str, str, str, str]] | None:
     )
 
 
+def fastp_pair_count(path: Path) -> int:
+    report = json.loads(path.read_text(encoding="utf-8"))
+    try:
+        total_reads = report["summary"]["after_filtering"]["total_reads"]
+    except (KeyError, TypeError) as error:
+        raise ValueError("fastp JSON is missing summary.after_filtering.total_reads") from error
+    if not isinstance(total_reads, int) or total_reads <= 0 or total_reads % 2:
+        raise ValueError("fastp total_reads must be a positive even integer")
+    return total_reads // 2
+
+
 def subsample_pair(
     *,
     r1: Path,
@@ -57,12 +69,17 @@ def subsample_pair(
     pairs: int,
     seed: int,
     expected_length: int,
+    total_pairs: int | None = None,
 ) -> int:
     """Select exactly ``pairs`` uniformly without replacement, in input order."""
 
     if pairs <= 0:
         raise ValueError("pairs must be positive")
-    total = validate_pair(r1, r2, expected_length=expected_length)
+    total = (
+        validate_pair(r1, r2, expected_length=expected_length)
+        if total_pairs is None
+        else total_pairs
+    )
     if total < pairs:
         raise ValueError(f"requested {pairs} pairs but only {total} passed preprocessing")
 
@@ -87,11 +104,22 @@ def subsample_pair(
                     raise ValueError(
                         f"mate names differ: {record1[0]!r} versus {record2[0]!r}"
                     )
+                if (
+                    len(record1[1][1]) != expected_length
+                    or len(record2[1][1]) != expected_length
+                ):
+                    raise ValueError(
+                        f"pair {record1[0]!r} is not exactly {expected_length} bp"
+                    )
                 if rng.randrange(remaining) < needed:
                     first_out.write("\n".join(record1[1]) + "\n")
                     second_out.write("\n".join(record2[1]) + "\n")
                     needed -= 1
                 remaining -= 1
+            if read_record(first) is not None or read_record(second) is not None:
+                raise ValueError(
+                    f"FASTQ contains more than the reported {total} paired records"
+                )
         if needed:
             raise AssertionError(f"subsampling ended with {needed} pairs unselected")
         validate_pair(
@@ -117,6 +145,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--pairs", required=True, type=int)
     parser.add_argument("--seed", required=True, type=int)
     parser.add_argument("--expected-length", required=True, type=int)
+    parser.add_argument("--fastp-json", type=Path)
     return parser.parse_args()
 
 
@@ -130,5 +159,8 @@ if __name__ == "__main__":
         pairs=arguments.pairs,
         seed=arguments.seed,
         expected_length=arguments.expected_length,
+        total_pairs=(
+            fastp_pair_count(arguments.fastp_json) if arguments.fastp_json else None
+        ),
     )
     print(f"deterministically selected {observed} synchronized pairs")

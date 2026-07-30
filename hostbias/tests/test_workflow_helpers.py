@@ -3,6 +3,7 @@ from __future__ import annotations
 import gzip
 import hashlib
 import importlib.util
+import json
 import subprocess
 import sys
 from pathlib import Path
@@ -420,6 +421,11 @@ def test_pair_subsampling_is_exact_synchronized_and_byte_deterministic(
     r2 = tmp_path / "R2.fastq.gz"
     r1.write_bytes(many_fastq_bytes(1))
     r2.write_bytes(many_fastq_bytes(2))
+    fastp_json = tmp_path / "fastp.json"
+    fastp_json.write_text(
+        json.dumps({"summary": {"after_filtering": {"total_reads": 40}}}),
+        encoding="utf-8",
+    )
     output_sets = []
     for run_name in ("first", "second"):
         output1 = tmp_path / f"{run_name}.R1.fastq.gz"
@@ -440,6 +446,8 @@ def test_pair_subsampling_is_exact_synchronized_and_byte_deterministic(
             "20260729",
             "--expected-length",
             "4",
+            "--fastp-json",
+            str(fastp_json),
         )
         assert result.returncode == 0, result.stderr
         output_sets.append((output1.read_bytes(), output2.read_bytes()))
@@ -457,6 +465,45 @@ def test_pair_subsampling_is_exact_synchronized_and_byte_deterministic(
         "4",
     )
     assert validation.returncode == 0, validation.stderr
+
+
+def test_pair_subsampling_rejects_fastp_count_mismatch(tmp_path: Path) -> None:
+    r1 = tmp_path / "R1.fastq.gz"
+    r2 = tmp_path / "R2.fastq.gz"
+    r1.write_bytes(many_fastq_bytes(1))
+    r2.write_bytes(many_fastq_bytes(2))
+    fastp_json = tmp_path / "fastp.json"
+    fastp_json.write_text(
+        json.dumps({"summary": {"after_filtering": {"total_reads": 38}}}),
+        encoding="utf-8",
+    )
+    output1 = tmp_path / "out.R1.fastq.gz"
+    output2 = tmp_path / "out.R2.fastq.gz"
+
+    result = run_process(
+        str(SUBSAMPLE),
+        "--r1",
+        str(r1),
+        "--r2",
+        str(r2),
+        "--output1",
+        str(output1),
+        "--output2",
+        str(output2),
+        "--pairs",
+        "7",
+        "--seed",
+        "20260729",
+        "--expected-length",
+        "4",
+        "--fastp-json",
+        str(fastp_json),
+    )
+
+    assert result.returncode != 0
+    assert "more than the reported 19 paired records" in result.stderr
+    assert not output1.exists()
+    assert not output2.exists()
 
 
 def test_pair_subsampling_uses_fast_deterministic_gzip_contract() -> None:
@@ -487,6 +534,7 @@ def test_workflow_has_explicit_privacy_and_resource_boundaries() -> None:
     assert "--max_len1" in snakefile and "--max_len2" in snakefile
     assert "--length_limit" not in snakefile
     assert "subsample_fastq_pair.py" in snakefile
+    assert "--fastp-json {params.temp:q}/fastp.json" in snakefile
     trim_rule = snakefile.split("rule trim_and_normalize:", 1)[1].split(
         "rule build_grch38_index:", 1
     )[0]

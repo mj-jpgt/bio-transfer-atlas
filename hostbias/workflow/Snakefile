@@ -214,7 +214,8 @@ rule trim_and_normalize:
           --output1 {output.r1:q}.partial.fastq.gz \
           --output2 {output.r2:q}.partial.fastq.gz \
           --pairs {params.pairs} --seed {params.seed} \
-          --expected-length {params.length}
+          --expected-length {params.length} \
+          --fastp-json {params.temp:q}/fastp.json
         mv {output.r1:q}.partial.fastq.gz {output.r1:q}
         mv {output.r2:q}.partial.fastq.gz {output.r2:q}
         mv {params.temp:q}/fastp.json {output.report:q}
