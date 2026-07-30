@@ -1,0 +1,5 @@
+analysis_id	metric	tanzania_mean	netherlands_mean
+strict_pair	p_count	0.50	0.00
+identity_0.90	p_count	0.50	0.00
+identity_0.95	p_count	0.50	0.00
+identity_0.98	p_count	0.50	0.00

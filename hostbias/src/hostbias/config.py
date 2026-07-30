@@ -1,30 +1,110 @@
-"""Configuration and manifest validation."""
+"""Strict threshold configuration loading."""
 
 from __future__ import annotations
 
 import csv
 import json
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass, fields
 from pathlib import Path
-from typing import Any
+from typing import Any, TypeVar
 
 import jsonschema
 import yaml
 
+from hostbias.endpoints import EndpointThresholds
+from hostbias.labeling import LabelThresholds
+from hostbias.schemas import SchemaError
+from hostbias.verdict import GateThresholds
+
+
+T = TypeVar("T")
+
 
 class ValidationError(ValueError):
-    """Raised when a Hostbias input contract is invalid."""
+    """Raised when a Hostbias workflow input contract is invalid."""
 
 
 @dataclass(frozen=True)
 class ValidatedInputs:
-    """Validated configuration plus resolved sample rows."""
+    """Validated workflow configuration plus resolved sample rows."""
 
     config_path: Path
     root: Path
     config: dict[str, Any]
     manifest_path: Path
     samples: tuple[dict[str, str], ...]
+
+
+def _construct(section: str, cls: type[T], values: object) -> T:
+    if values is None:
+        return cls()
+    if not isinstance(values, dict):
+        raise SchemaError(f"threshold section {section!r} must be a mapping")
+    allowed = {field.name for field in fields(cls)}
+    unknown = set(values) - allowed
+    if unknown:
+        raise SchemaError(f"unknown {section} thresholds: {sorted(unknown)}")
+    try:
+        if cls is GateThresholds and "required_sensitivity_analyses" in values:
+            values = dict(values)
+            values["required_sensitivity_analyses"] = tuple(
+                values["required_sensitivity_analyses"]
+            )
+        return cls(**values)
+    except (TypeError, ValueError) as exc:
+        raise SchemaError(f"invalid {section} thresholds: {exc}") from exc
+
+
+def load_thresholds(
+    path: str | Path | None,
+) -> tuple[LabelThresholds, EndpointThresholds, GateThresholds, dict[str, Any]]:
+    """Load only declared threshold keys; defaults are explicit in returned data."""
+
+    raw: dict[str, Any] = {}
+    if path is not None:
+        loaded = yaml.safe_load(Path(path).read_text(encoding="utf-8"))
+        if loaded is not None and not isinstance(loaded, dict):
+            raise SchemaError("threshold configuration must be a mapping")
+        raw = loaded or {}
+    allowed_sections = {"labeling", "endpoints", "gate", "controls", "statistics"}
+    unknown_sections = set(raw) - allowed_sections
+    if unknown_sections:
+        raise SchemaError(f"unknown threshold sections: {sorted(unknown_sections)}")
+    labels = _construct("labeling", LabelThresholds, raw.get("labeling"))
+    endpoints = _construct("endpoints", EndpointThresholds, raw.get("endpoints"))
+    gate = _construct("gate", GateThresholds, raw.get("gate"))
+
+    controls = raw.get("controls") or {}
+    statistics = raw.get("statistics") or {}
+    if not isinstance(controls, dict) or not isinstance(statistics, dict):
+        raise SchemaError("controls and statistics sections must be mappings")
+    control_defaults = {
+        "min_sensitivity": 0.95,
+        "max_false_positive_bp_rate": 0.001,
+    }
+    statistics_defaults = {
+        "bootstrap_iterations": 50_000,
+        "permutation_iterations": 100_000,
+        "seed": 20_260_729,
+    }
+    unknown_controls = set(controls) - set(control_defaults)
+    unknown_statistics = set(statistics) - set(statistics_defaults)
+    if unknown_controls:
+        raise SchemaError(f"unknown controls thresholds: {sorted(unknown_controls)}")
+    if unknown_statistics:
+        raise SchemaError(
+            f"unknown statistics thresholds: {sorted(unknown_statistics)}"
+        )
+    control_defaults.update(controls)
+    statistics_defaults.update(statistics)
+    effective = {
+        "labeling": asdict(labels),
+        "endpoints": asdict(endpoints),
+        "gate": asdict(gate),
+        "controls": control_defaults,
+        "statistics": statistics_defaults,
+    }
+    return labels, endpoints, gate, effective
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -37,14 +117,13 @@ def _validate(instance: Any, schema: dict[str, Any], label: str) -> None:
     errors = sorted(validator.iter_errors(instance), key=lambda error: list(error.path))
     if errors:
         details = "; ".join(
-            f"{'.'.join(map(str, error.path)) or '<root>'}: {error.message}" for error in errors
+            f"{'.'.join(map(str, error.path)) or '<root>'}: {error.message}"
+            for error in errors
         )
         raise ValidationError(f"{label} failed schema validation: {details}")
 
 
 def _resolve_root(config_path: Path) -> Path:
-    """Resolve the project root from a config path under ``config/``."""
-
     config_path = config_path.resolve()
     if config_path.parent.name == "config":
         return config_path.parent.parent
@@ -52,6 +131,8 @@ def _resolve_root(config_path: Path) -> Path:
 
 
 def load_and_validate(config_path: str | Path) -> ValidatedInputs:
+    """Validate workflow configuration and its public sample manifest."""
+
     config_path = Path(config_path).resolve()
     if not config_path.is_file():
         raise ValidationError(f"configuration does not exist: {config_path}")
@@ -80,7 +161,9 @@ def load_and_validate(config_path: str | Path) -> ValidatedInputs:
     if fieldnames != expected:
         missing = sorted(expected - fieldnames)
         extra = sorted(fieldnames - expected)
-        raise ValidationError(f"sample manifest columns differ; missing={missing}, extra={extra}")
+        raise ValidationError(
+            f"sample manifest columns differ; missing={missing}, extra={extra}"
+        )
     if not rows:
         raise ValidationError("sample manifest contains no samples")
     for index, row in enumerate(rows, start=2):
@@ -96,10 +179,12 @@ def load_and_validate(config_path: str | Path) -> ValidatedInputs:
         if row["fastq1_url"] == row["fastq2_url"]:
             raise ValidationError(f"{row['sample_id']}: mate URLs must differ")
         if row["fastq1_md5"].lower() == row["fastq2_md5"].lower():
-            # Zero placeholders are allowed only in the distributed example.
             placeholder = "0" * 32
-            if row["fastq1_md5"] != placeholder or manifest_path.name.endswith(".example.tsv") is False:
-                raise ValidationError(f"{row['sample_id']}: mate checksums must differ")
+            is_example = manifest_path.name.endswith(".example.tsv")
+            if row["fastq1_md5"] != placeholder or not is_example:
+                raise ValidationError(
+                    f"{row['sample_id']}: mate checksums must differ"
+                )
 
     return ValidatedInputs(
         config_path=config_path,

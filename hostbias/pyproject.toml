@@ -22,7 +22,7 @@ test = [
 ]
 
 [project.scripts]
-hostbias = "hostbias.cli:main"
+hostbias = "hostbias.cli:app"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/hostbias"]

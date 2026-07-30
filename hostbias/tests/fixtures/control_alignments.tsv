@@ -1,0 +1,5 @@
+sample_id	contig_id	contig_length	target_domain	aligned_bp	identity	query_coverage	mapq	alignment_score
+C	h1	1000	human	990	0.99	0.99	60	1000
+C	h2	1000	human	990	0.99	0.99	60	1000
+C	m1	1000	gtdb	990	0.99	0.99	60	1000
+C	m2	1000	gtdb	990	0.99	0.99	60	1000

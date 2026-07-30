@@ -91,8 +91,16 @@ def _finite_ratio(numerator: float, denominator: float) -> tuple[float | None, b
 
 
 def _serializable_quantile(values: np.ndarray, q: float) -> float | None:
-    value = float(np.quantile(values, q))
-    return value if math.isfinite(value) else None
+    ordered = np.sort(values)
+    position = (len(ordered) - 1) * q
+    lower_index = math.floor(position)
+    upper_index = math.ceil(position)
+    lower = float(ordered[lower_index])
+    upper = float(ordered[upper_index])
+    if not math.isfinite(lower) or not math.isfinite(upper):
+        return None
+    weight = position - lower_index
+    return lower + weight * (upper - lower)
 
 
 def _metric_statistics(
