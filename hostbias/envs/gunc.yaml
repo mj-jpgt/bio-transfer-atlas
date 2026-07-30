@@ -1,11 +1,8 @@
-name: hostbias-qc
+name: hostbias-gunc
 channels:
   - conda-forge
   - bioconda
   - nodefaults
 dependencies:
   - python=3.11
-  - pip=24.2
-  - pyyaml=6.0.2
-  - pip:
-      - -e .
+  - gunc=1.1.1

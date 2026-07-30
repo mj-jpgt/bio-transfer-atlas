@@ -16,8 +16,10 @@ The three original bin maps and bin directories remain available under
 `work/binning/` for method-sensitivity analysis; DAS Tool 1.1.7 is the
 preregistered primary endpoint.
 
-Consensus bins are assessed without pre-filtering by CheckM2 1.0.2 and GUNC
-1.0.6, then classified with GTDB-Tk 2.4.0 and the frozen R220 database.
+Consensus bins are assessed without pre-filtering by CheckM2 1.1.0 and GUNC
+1.1.1, then classified with GTDB-Tk 2.4.0 and the frozen R220 database.
+The three tools use separate pinned environments because current CheckM2 and
+GUNC require incompatible DIAMOND versions.
 Filtering occurs only in the endpoint definition. A GUNC result of `nan` is
 translated to `gunc_pass=false`. Missing tool rows are fatal. A valid consensus
 with zero bins produces header-only private contracts and a zero-propagation
@@ -36,8 +38,9 @@ export GTDBTK_DATA_PATH=/data/hostbias/databases/gtdbtk/release220
 
 `CHECKM2DB` and `GUNC_DB` must point to DIAMOND database files, not their parent
 directories. `GTDBTK_DATA_PATH` must point to the unpacked GTDB-Tk R220 data
-root. GTDB-Tk 2.4.0 is pinned because it requires R220. The preflight validates
-both DIAMOND databases and runs `gtdbtk check_install`.
+root. GTDB-Tk 2.4.0 is pinned because it requires R220. The shared preflight
+validates that all three database payloads are present; each tool then performs
+its own format/install validation inside its dedicated environment.
 
 ## Live targets
 

@@ -58,13 +58,10 @@ rule mag_database_preflight:
         exec > {log:q} 2>&1
         test -s {params.checkm2:q}
         test -s {params.gunc:q}
-        diamond dbinfo --db {params.checkm2:q}
-        diamond dbinfo --db {params.gunc:q}
-        GTDBTK_DATA_PATH={params.gtdbtk:q} gtdbtk check_install
+        test -d {params.gtdbtk:q}
         {{
-          checkm2 --version
-          gunc --version
-          GTDBTK_DATA_PATH={params.gtdbtk:q} gtdbtk --version
+          printf 'CheckM2 database present\n'
+          printf 'GUNC database present\n'
           printf 'GTDB release: %s\n' {params.release:q}
         }} > {output.versions:q}.partial
         mv {output.versions:q}.partial {output.versions:q}
@@ -366,7 +363,7 @@ rule checkm2_qc:
     resources:
         mem_mb=config["resources"]["checkm2"]["mem_mb"],
     conda:
-        "../../envs/qc.yaml"
+        "../../envs/checkm2.yaml"
     shell:
         """
         mkdir -p $(dirname {log:q}) $(dirname {output.report:q})
@@ -403,7 +400,7 @@ rule gunc_qc:
     resources:
         mem_mb=config["resources"]["gunc"]["mem_mb"],
     conda:
-        "../../envs/qc.yaml"
+        "../../envs/gunc.yaml"
     shell:
         r"""
         mkdir -p $(dirname {log:q}) $(dirname {output.report:q})
@@ -445,7 +442,7 @@ rule gtdbtk_r220_taxonomy:
     resources:
         mem_mb=config["resources"]["gtdbtk"]["mem_mb"],
     conda:
-        "../../envs/qc.yaml"
+        "../../envs/gtdbtk.yaml"
     shell:
         """
         mkdir -p $(dirname {log:q}) $(dirname {output.bacterial:q})

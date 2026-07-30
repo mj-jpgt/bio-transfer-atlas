@@ -1,0 +1,8 @@
+name: hostbias-checkm2
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=3.13
+  - checkm2=1.1.0
