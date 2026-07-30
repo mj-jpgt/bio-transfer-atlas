@@ -7,7 +7,7 @@ import datetime as dt
 import json
 import sys
 from pathlib import Path
-from typing import Callable, Mapping, Sequence
+from typing import Callable, Sequence
 
 from .data_manifest import (
     ENA_FIELDS,
@@ -156,4 +156,3 @@ if __name__ == "__main__":
     except ManifestError as error:
         print(f"error: {error}", file=sys.stderr)
         raise SystemExit(2)
-

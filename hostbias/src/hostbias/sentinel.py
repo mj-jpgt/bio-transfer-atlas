@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import argparse
-import csv
 import json
 import sys
 from pathlib import Path
@@ -170,4 +169,3 @@ if __name__ == "__main__":
     except ManifestError as error:
         print(f"error: {error}", file=sys.stderr)
         raise SystemExit(2)
-
