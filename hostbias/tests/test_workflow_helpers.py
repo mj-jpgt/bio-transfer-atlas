@@ -13,6 +13,7 @@ PROJECT = Path(__file__).parents[1]
 FETCH = PROJECT / "workflow" / "scripts" / "fetch_pair.py"
 VALIDATE = PROJECT / "workflow" / "scripts" / "validate_fastq_pair.py"
 SUBSAMPLE = PROJECT / "workflow" / "scripts" / "subsample_fastq_pair.py"
+MAG_RULES = PROJECT / "workflow" / "rules" / "mag.smk"
 
 
 def fastq_bytes(mate: int, names: tuple[str, ...] = ("read-a", "read-b")) -> bytes:
@@ -262,3 +263,22 @@ def test_production_stage_targets_and_vm_caps_are_explicit() -> None:
     assert "minimap2 -c -x {params.preset:q} --secondary=yes -N 5" in snakefile
     assert "work/analysis_inputs" not in snakefile
     assert "PYTHONPATH=src python -m hostbias.cli" in snakefile
+
+
+def test_mag_consensus_uses_shared_coverage_and_three_binners() -> None:
+    rules = MAG_RULES.read_text(encoding="utf-8")
+    for command in (
+        "jgi_summarize_bam_contig_depths",
+        "metabat2 -i",
+        "run_MaxBin.pl",
+        "cut_up_fasta.py",
+        "concoct_coverage_table.py",
+        "merge_cutup_clustering.py",
+        "DAS_Tool",
+    ):
+        assert command in rules
+    assert rules.count("reads.sorted.bam") >= 3
+    assert "results/" not in rules
+    assert f'{chr(34)}rules/mag.smk{chr(34)}' in (
+        PROJECT / "workflow" / "Snakefile"
+    ).read_text(encoding="utf-8")
