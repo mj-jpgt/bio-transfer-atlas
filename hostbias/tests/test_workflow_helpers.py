@@ -401,3 +401,21 @@ def test_mag_qc_taxonomy_and_contract_are_private_and_pinned() -> None:
     assert 'os.environ.get("GUNC_DB"' in rules
     assert 'os.environ.get("GTDBTK_DATA_PATH"' in rules
     assert "results/" not in rules
+
+
+def test_checkm2_environment_avoids_unsatisfiable_bioconda_build() -> None:
+    environment = yaml.safe_load(
+        (PROJECT / "envs" / "checkm2.yaml").read_text(encoding="utf-8")
+    )
+    dependencies = environment["dependencies"]
+    assert "python=3.12" in dependencies
+    assert "tensorflow=2.17=cpu*" in dependencies
+    assert "diamond=2.1.11" in dependencies
+    assert "scikit-learn=1.6.1" in dependencies
+    assert "checkm2=1.1.0" not in dependencies
+    assert {
+        "pip": [
+            "git+https://github.com/chklovski/CheckM2.git@"
+            "777bd767d93ac65decaf42a46d43ecc1bf7c41a3"
+        ]
+    } in dependencies
