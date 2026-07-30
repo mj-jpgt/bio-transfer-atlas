@@ -145,6 +145,9 @@ def test_prepare_runtime_writes_valid_config_and_aggregate_safe_evidence(
         validated = load_and_validate(runtime_dir / "config.sentinel.yaml")
         assert len(validated.samples) == 6
         assert report["valid"] is True
+        assert report["inputs"]["frozen_manifest_sha256"] == (
+            "277a2d2633a3fb563510d2a00ee8c33dd0b9378fce30df10ab24d92753dc4c0d"
+        )
         assert sum(value["runs"] for value in report["arms"].values()) == 6
         serialized = evidence_path.read_text(encoding="utf-8")
         assert "ftp.example" not in serialized

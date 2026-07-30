@@ -13,10 +13,12 @@ from typing import Mapping, Sequence
 import yaml
 
 from hostbias.data_manifest import (
+    MANIFEST_FIELDS,
     ManifestError,
     RUNTIME_ENA_FIELDS,
     canonical_tsv,
     read_tsv,
+    sha256_bytes,
     validate_manifest,
 )
 from hostbias.provenance import write_json_atomic
@@ -243,7 +245,9 @@ def prepare_runtime(
         "ordered_accessions": [row["accession"] for row in runtime_rows],
         "arms": per_arm,
         "inputs": {
-            "frozen_manifest_sha256": _sha256(frozen_manifest),
+            "frozen_manifest_sha256": sha256_bytes(
+                canonical_tsv(frozen_rows, MANIFEST_FIELDS)
+            ),
             "ena_snapshot_sha256": {
                 arm: _sha256(path) for arm, path in sorted(snapshot_paths.items())
             },
