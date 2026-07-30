@@ -132,7 +132,8 @@ rule validate_inputs:
     shell:
         """
         mkdir -p $(dirname {log:q})
-        hostbias validate --config {input.config:q} > {log:q} 2>&1
+        PYTHONPATH=src python -m hostbias.cli validate \
+          --config {input.config:q} > {log:q} 2>&1
         """
 
 

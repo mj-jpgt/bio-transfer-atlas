@@ -11,5 +11,3 @@ dependencies:
   - pyyaml=6.0.2
   - pytest=8.3.3
   - ruff=0.6.9
-  - pip:
-      - -e .
