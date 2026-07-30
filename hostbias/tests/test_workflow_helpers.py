@@ -6,6 +6,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+import yaml
+
 
 PROJECT = Path(__file__).parents[1]
 FETCH = PROJECT / "workflow" / "scripts" / "fetch_pair.py"
@@ -235,6 +237,28 @@ def test_workflow_has_explicit_privacy_and_resource_boundaries() -> None:
     assert "subsample_fastq_pair.py" in snakefile
     assert "seqtk sample" not in snakefile
     assert "results/aggregate" not in snakefile
+
+
+def test_production_stage_targets_and_vm_caps_are_explicit() -> None:
+    snakefile = (PROJECT / "workflow" / "Snakefile").read_text(encoding="utf-8")
+    for target in (
+        "rule fetch_stage:",
+        "rule normalize_stage:",
+        "rule filter_stage:",
+        "rule assemble_stage:",
+        "rule downstream_bridge:",
+    ):
+        assert target in snakefile
+    assert "--memory {resources.mem_mb}000000" in snakefile
+    assert "--memory 0.9" not in snakefile
+
+    profile = yaml.safe_load(
+        (PROJECT / "profiles" / "vm" / "config.yaml").read_text(encoding="utf-8")
+    )
+    assert profile["cores"] == 30
+    assert profile["jobs"] == 8
+    assert "mem_mb=204800" in profile["resources"]
+    assert profile["rerun-incomplete"] is True
     assert "minimap2 -c -x {params.preset:q} --secondary=yes -N 5" in snakefile
     assert "work/analysis_inputs" not in snakefile
     assert "PYTHONPATH=src python -m hostbias.cli" in snakefile

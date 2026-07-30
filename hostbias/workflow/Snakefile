@@ -50,6 +50,51 @@ rule all:
         )
 
 
+rule fetch_stage:
+    input:
+        expand(f"{WORK}/raw/{{sample}}_R1.fastq.gz", sample=SAMPLE_IDS),
+        expand(f"{WORK}/raw/{{sample}}_R2.fastq.gz", sample=SAMPLE_IDS)
+
+
+rule normalize_stage:
+    input:
+        expand(f"{WORK}/normalized/{{sample}}_R1.fastq.gz", sample=SAMPLE_IDS),
+        expand(f"{WORK}/normalized/{{sample}}_R2.fastq.gz", sample=SAMPLE_IDS),
+        expand(f"{WORK}/normalized/{{sample}}.fastp.json", sample=SAMPLE_IDS)
+
+
+rule filter_stage:
+    input:
+        expand(
+            f"{WORK}/filtered/{{sample}}/{{mode}}_R1.fastq.gz",
+            sample=SAMPLE_IDS,
+            mode=FILTER_MODES,
+        ),
+        expand(
+            f"{WORK}/filtered/{{sample}}/{{mode}}_R2.fastq.gz",
+            sample=SAMPLE_IDS,
+            mode=FILTER_MODES,
+        ),
+        expand(
+            f"{WORK}/filtered/{{sample}}/bowtie2.metrics.txt",
+            sample=SAMPLE_IDS,
+        )
+
+
+rule assemble_stage:
+    input:
+        expand(
+            f"{WORK}/assembly/{{sample}}/{{mode}}/final.contigs.fa",
+            sample=SAMPLE_IDS,
+            mode=FILTER_MODES,
+        ),
+        expand(
+            f"{WORK}/assembly/{{sample}}/{{mode}}/megahit.log",
+            sample=SAMPLE_IDS,
+            mode=FILTER_MODES,
+        )
+
+
 rule downstream_bridge:
     input:
         expand(
@@ -286,7 +331,7 @@ rule assemble:
           -1 {input.r1:q} -2 {input.r2:q} \
           --min-contig-len {params.min_contig} \
           --num-cpu-threads {threads} \
-          --memory 0.9 \
+          --memory {resources.mem_mb}000000 \
           --out-dir {params.outdir:q}.partial
         mv {params.outdir:q}.partial/final.contigs.fa {output.contigs:q}
         mv {params.outdir:q}.partial/log {output.log:q}

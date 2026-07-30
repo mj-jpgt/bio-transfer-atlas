@@ -1,10 +1,10 @@
 executor: local
-cores: 32
-jobs: 32
+cores: 30
+jobs: 8
 use-conda: true
 rerun-incomplete: true
 keep-going: true
-latency-wait: 60
+latency-wait: 120
 printshellcmds: true
 show-failed-logs: true
 software-deployment-method:
@@ -12,3 +12,6 @@ software-deployment-method:
 default-resources:
   - mem_mb=4000
   - disk_mb=10000
+resources:
+  - mem_mb=204800
+  - disk_mb=2500000
