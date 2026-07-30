@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Iterable
 
 from hostbias.controls import ControlResult
-from hostbias.schemas import SensitivityRow
+from hostbias.schemas import SensitivityRow, assert_unique
 from hostbias.statistics import AnalysisStatistics
 
 
@@ -42,6 +42,10 @@ class GateThresholds:
             raise ValueError("max_sample_numerator_share must be in (0, 1]")
         if not self.required_sensitivity_analyses:
             raise ValueError("at least one sensitivity analysis is required")
+        if len(set(self.required_sensitivity_analyses)) != len(
+            self.required_sensitivity_analyses
+        ):
+            raise ValueError("required_sensitivity_analyses must be unique")
 
 
 @dataclass(frozen=True)
@@ -76,6 +80,7 @@ def make_verdict(
 
     thresholds = thresholds or GateThresholds()
     sensitivities = list(sensitivities)
+    assert_unique(sensitivities, ("analysis_id", "metric"))
     sensitivity_by_id = {
         (row.analysis_id, row.metric): row for row in sensitivities
     }

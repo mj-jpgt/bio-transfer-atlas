@@ -41,6 +41,16 @@ def evaluate_controls(
         missing = truth_keys - set(calls_by_key)
         extra = set(calls_by_key) - truth_keys
         raise SchemaError(f"control call/truth key mismatch; missing={missing}, extra={extra}")
+    inconsistent_lengths = [
+        (row.sample_id, row.contig_id)
+        for row in truth_rows
+        if calls_by_key[(row.sample_id, row.contig_id)].contig_length
+        != row.contig_length
+    ]
+    if inconsistent_lengths:
+        raise SchemaError(
+            f"control call/truth length mismatch: {inconsistent_lengths}"
+        )
     humans = [row for row in truth_rows if row.truth == "human"]
     microbes = [row for row in truth_rows if row.truth == "microbial"]
     if not humans or not microbes:

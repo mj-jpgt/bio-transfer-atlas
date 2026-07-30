@@ -81,3 +81,16 @@ def test_control_evaluation_uses_bp_specificity() -> None:
     assert result.microbial_false_positive_rate == 0.5
     assert result.microbial_false_positive_bp_rate == 0.0001
     assert result.passed
+
+
+def test_control_evaluation_rejects_length_mismatch() -> None:
+    calls = [
+        ContigCall("C", "h", 1000, ContigLabel.HUMAN, 10, None, None),
+        ContigCall("C", "m", 1000, ContigLabel.NON_HUMAN, None, 10, None),
+    ]
+    truth = [
+        ControlTruthRow("C", "h", "human", 999),
+        ControlTruthRow("C", "m", "microbial", 1000),
+    ]
+    with pytest.raises(SchemaError, match="length mismatch"):
+        evaluate_controls(calls, truth)

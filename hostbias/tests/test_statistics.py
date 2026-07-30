@@ -95,6 +95,16 @@ def test_missing_sensitivity_is_operational_failure() -> None:
     assert verdict.first_failed_criterion == "complete_sensitivity_matrix"
 
 
+def test_duplicate_sensitivity_result_is_rejected() -> None:
+    sensitivities = _sensitivities()
+    with pytest.raises(SchemaError, match="duplicate key"):
+        make_verdict(
+            analyze(_passing_rows(), 200, 200),
+            _passing_controls(),
+            sensitivities + [sensitivities[0]],
+        )
+
+
 def test_invalid_sample_rate_is_rejected() -> None:
     rows = _passing_rows()
     rows[0] = GroupedEndpoint("T00", "tanzania", 1.01, 0.08, 2)
