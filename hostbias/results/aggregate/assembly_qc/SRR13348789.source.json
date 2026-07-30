@@ -1,0 +1,20 @@
+{
+  "assembly_sha256": "8629bda8c2727c0bc34a75567198652ea5397a6cfa695224867fd0968aa17448",
+  "contig_count": 39034,
+  "filter_mode": "source",
+  "gc_fraction_acgt": 0.4704877135762486,
+  "maximum_contig_bp": 75817,
+  "minimum_contig_bp": 500,
+  "n50_bp": 2544,
+  "n90_bp": 662,
+  "n_fraction": 0.0,
+  "other_ambiguous_fraction": 0.0,
+  "privacy": {
+    "contains_contig_identifiers": false,
+    "contains_filesystem_paths": false,
+    "contains_sequences": false
+  },
+  "sample_id": "SRR13348789",
+  "schema_version": "1.0",
+  "total_bp": 65582550
+}
