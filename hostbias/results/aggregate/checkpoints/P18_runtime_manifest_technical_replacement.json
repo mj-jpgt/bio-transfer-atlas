@@ -1,0 +1,43 @@
+{
+  "arms": {
+    "netherlands": {
+      "expected_fastq_bytes": 75568388885,
+      "runs": 20
+    },
+    "tanzania": {
+      "expected_fastq_bytes": 76959611874,
+      "runs": 20
+    }
+  },
+  "inputs": {
+    "ena_snapshot_sha256": {
+      "netherlands": "d042a732734bb1b3251be8024baee26e21bdc5d828155cd229d3b9e71a2f4c0b",
+      "tanzania": "a7db1c79e978595637007b9ab896aaf2e8e792e346224a19d462a0652ed09cbb"
+    },
+    "frozen_manifest_sha256": "277a2d2633a3fb563510d2a00ee8c33dd0b9378fce30df10ab24d92753dc4c0d",
+    "replacement_ledger_sha256": "f923307239001187907853e384a28b9540c12a9797efafe1a9bcf675eac7bcf3"
+  },
+  "ordered_accessions": [
+    "SRR13348579", "SRR13348648", "SRR13348823", "SRR13348569", "SRR13348570",
+    "SRR13348806", "SRR13348882", "SRR13348849", "SRR13348789", "SRR13348616",
+    "SRR13348815", "SRR13348592", "SRR13348851", "SRR13348734", "SRR13348697",
+    "SRR13348726", "SRR13348699", "SRR13348676", "SRR13348571", "SRR13348732",
+    "SRR5127734", "SRR5127631", "SRR5127544", "SRR5127623", "SRR5127502",
+    "SRR5127724", "SRR5127422", "SRR5127662", "SRR5127853", "SRR5127608",
+    "SRR5127721", "SRR5127571", "SRR5127833", "SRR5127754", "SRR5127528",
+    "SRR5127751", "SRR5127649", "SRR5127599", "SRR5127796", "SRR5127530"
+  ],
+  "outputs": {
+    "runtime_config_sha256": "25f922cd8e3b9be62cf440d7692e208743be30ae3938b4b26f2766e4e53129b9",
+    "runtime_manifest_sha256": "4faa29f244318113f706d5f6d22ace8b662354743437bf670498e3da9bfc59aa"
+  },
+  "privacy": {
+    "contains_absolute_paths": false,
+    "contains_fastq_checksums": false,
+    "contains_fastq_urls": false,
+    "contains_sequence_data": false
+  },
+  "schema_version": 1,
+  "scope": "primary",
+  "valid": true
+}
