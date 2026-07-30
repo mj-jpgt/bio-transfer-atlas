@@ -355,11 +355,11 @@ def build_snakemake_command(
         raise OperationError("disk_mb exceeds the production disk cap")
     command = [
         snakemake_executable,
+        STAGE_TARGETS[stage],
         "--snakefile",
         "workflow/Snakefile",
         "--configfile",
         str(config_path.resolve()),
-        STAGE_TARGETS[stage],
         "--cores",
         str(cores),
         "--jobs",
