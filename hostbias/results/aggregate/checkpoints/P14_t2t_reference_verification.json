@@ -1,0 +1,18 @@
+{
+  "checkpoint": "P14_t2t_reference_verification",
+  "captured_at_utc": "2026-07-30T03:48:51Z",
+  "status": "PASS",
+  "reference": {
+    "name": "T2T-CHM13v2.0",
+    "accession": "GCA_009914755.4",
+    "source": "https://ftp.ncbi.nlm.nih.gov/genomes/all/GCA/009/914/755/GCA_009914755.4_T2T-CHM13v2.0/GCA_009914755.4_T2T-CHM13v2.0_genomic.fna.gz",
+    "bytes": 932696125,
+    "ncbi_md5": "9280657210e4161147cbe13b022225b9",
+    "md5_verified": true,
+    "sha256": "a2f8b712a1958a41b590ce67743c324d64462e17b6b4fdc62747ff4de4b09c75"
+  },
+  "privacy": {
+    "sequence_file_committed": false,
+    "aggregate_verification_only": true
+  }
+}
