@@ -6,7 +6,7 @@ import csv
 import math
 from dataclasses import dataclass, fields
 from pathlib import Path
-from typing import Callable, Iterable, TypeVar
+from typing import Callable, ClassVar, Iterable, TypeVar
 
 
 class SchemaError(ValueError):
@@ -67,7 +67,7 @@ class AlignmentRow:
     mapq: float
     alignment_score: float
 
-    PARSERS: dict[str, Callable[[str], object]] = None  # type: ignore[assignment]
+    PARSERS: ClassVar[dict[str, Callable[[str], object]]]
 
     def __post_init__(self) -> None:
         if self.target_domain not in {"human", "gtdb"}:
@@ -97,7 +97,7 @@ class ContigBinRow:
     contig_id: str
     bin_id: str
 
-    PARSERS: dict[str, Callable[[str], object]] = None  # type: ignore[assignment]
+    PARSERS: ClassVar[dict[str, Callable[[str], object]]]
 
 
 ContigBinRow.PARSERS = {
@@ -119,7 +119,7 @@ class BinQcRow:
     gtdb_genus: str | None
     gtdb_species: str | None
 
-    PARSERS: dict[str, Callable[[str], object]] = None  # type: ignore[assignment]
+    PARSERS: ClassVar[dict[str, Callable[[str], object]]]
 
     def __post_init__(self) -> None:
         if self.gtdb_domain not in {"Bacteria", "Archaea", "Eukaryota", "Unclassified"}:
@@ -146,7 +146,7 @@ class ControlTruthRow:
     truth: str
     contig_length: int
 
-    PARSERS: dict[str, Callable[[str], object]] = None  # type: ignore[assignment]
+    PARSERS: ClassVar[dict[str, Callable[[str], object]]]
 
     def __post_init__(self) -> None:
         if self.truth not in {"human", "microbial"}:
