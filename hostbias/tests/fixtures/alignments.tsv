@@ -1,0 +1,6 @@
+sample_id	contig_id	contig_length	target_domain	aligned_bp	identity	query_coverage	mapq	alignment_score
+T01	human_clear	1000	human	900	0.99	0.90	60	1000
+T01	human_clear	1000	gtdb	500	0.90	0.50	40	800
+T01	ambiguous	1000	human	900	0.99	0.90	60	1000
+T01	ambiguous	1000	gtdb	800	0.98	0.80	60	980
+T01	microbial	1000	gtdb	950	0.99	0.95	60	1100
