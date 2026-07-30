@@ -11,8 +11,10 @@
     "layout",
     "fastq1_url",
     "fastq1_md5",
+    "fastq1_bytes",
     "fastq2_url",
     "fastq2_md5",
+    "fastq2_bytes",
     "status",
     "rank"
   ],
@@ -23,8 +25,10 @@
     "layout": {"const": "PAIRED"},
     "fastq1_url": {"type": "string", "pattern": "^(https|ftp)://"},
     "fastq1_md5": {"type": "string", "pattern": "^[a-fA-F0-9]{32}$"},
+    "fastq1_bytes": {"type": "string", "pattern": "^[1-9][0-9]*$"},
     "fastq2_url": {"type": "string", "pattern": "^(https|ftp)://"},
     "fastq2_md5": {"type": "string", "pattern": "^[a-fA-F0-9]{32}$"},
+    "fastq2_bytes": {"type": "string", "pattern": "^[1-9][0-9]*$"},
     "status": {"enum": ["primary", "reserve"]},
     "rank": {"type": "string", "pattern": "^[1-9][0-9]*$"}
   }
