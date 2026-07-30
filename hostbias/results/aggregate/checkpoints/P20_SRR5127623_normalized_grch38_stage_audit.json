@@ -1,0 +1,44 @@
+{
+  "captured_at_utc": "2026-07-30T23:28:42.469453+00:00",
+  "checkpoint": "normalized_grch38_stage_audit",
+  "grch38_filter": {
+    "source": {
+      "pairs": 7999640,
+      "read_length": 100,
+      "removed_fraction": 4.5e-05,
+      "removed_pairs": 360,
+      "retained_fraction": 0.999955,
+      "retained_pairs": 7999640,
+      "synchronized": true
+    },
+    "strict": {
+      "pairs": 7997784,
+      "read_length": 100,
+      "removed_fraction": 0.000277,
+      "removed_pairs": 2216,
+      "retained_fraction": 0.999723,
+      "retained_pairs": 7997784,
+      "synchronized": true
+    }
+  },
+  "normalized": {
+    "matches_prefilter_baseline": true,
+    "pairs": 8000000,
+    "r1_bytes": 511947641,
+    "r1_sha256": "62b46f68fc9d78258cda8027e09cb31327b014bdc921b5f24e67e8588b15a209",
+    "r2_bytes": 515909116,
+    "r2_sha256": "06d1183bfa972499c1b6048f65f14f5a2ee156937b18d21557e8bf7312f8b531",
+    "read_length": 100,
+    "stable_during_audit": true,
+    "synchronized": true
+  },
+  "privacy": {
+    "absolute_paths_recorded": false,
+    "aggregate_evidence_only": true,
+    "read_identifiers_recorded": false,
+    "sequence_or_quality_recorded": false
+  },
+  "sample_id": "SRR5127623",
+  "schema_version": 1,
+  "status": "PASS"
+}
