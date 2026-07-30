@@ -145,9 +145,15 @@ def _validate(instance: Any, schema: dict[str, Any], label: str) -> None:
 
 def _resolve_root(config_path: Path) -> Path:
     config_path = config_path.resolve()
-    if config_path.parent.name == "config":
-        return config_path.parent.parent
-    return config_path.parent
+    for candidate in (config_path.parent, *config_path.parents):
+        if (
+            (candidate / "schemas" / "config.schema.json").is_file()
+            and (candidate / "schemas" / "sample_manifest.schema.json").is_file()
+        ):
+            return candidate
+    raise ValidationError(
+        f"cannot locate Hostbias project schemas above configuration: {config_path}"
+    )
 
 
 def load_and_validate(config_path: str | Path) -> ValidatedInputs:

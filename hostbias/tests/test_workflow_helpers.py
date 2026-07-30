@@ -44,12 +44,16 @@ def test_fetch_pair_publishes_only_checksum_verified_mates(tmp_path: Path) -> No
         hashlib.md5(source1.read_bytes(), usedforsecurity=False).hexdigest(),
         "--output1",
         str(output1),
+        "--bytes-1",
+        str(source1.stat().st_size),
         "--url2",
         source2.as_uri(),
         "--md5-2",
         hashlib.md5(source2.read_bytes(), usedforsecurity=False).hexdigest(),
         "--output2",
         str(output2),
+        "--bytes-2",
+        str(source2.stat().st_size),
     )
 
     assert result.returncode == 0, result.stderr
@@ -73,15 +77,53 @@ def test_fetch_pair_checksum_failure_publishes_neither_mate(tmp_path: Path) -> N
         hashlib.md5(source1.read_bytes(), usedforsecurity=False).hexdigest(),
         "--output1",
         str(output1),
+        "--bytes-1",
+        str(source1.stat().st_size),
         "--url2",
         source2.as_uri(),
         "--md5-2",
         "f" * 32,
         "--output2",
         str(output2),
+        "--bytes-2",
+        str(source2.stat().st_size),
     )
 
     assert result.returncode != 0
+    assert not output1.exists()
+    assert not output2.exists()
+
+
+def test_fetch_pair_size_failure_publishes_neither_mate(tmp_path: Path) -> None:
+    source1 = tmp_path / "source1.fastq.gz"
+    source2 = tmp_path / "source2.fastq.gz"
+    source1.write_bytes(fastq_bytes(1))
+    source2.write_bytes(fastq_bytes(2))
+    output1 = tmp_path / "out" / "R1.fastq.gz"
+    output2 = tmp_path / "out" / "R2.fastq.gz"
+
+    result = run(
+        str(FETCH),
+        "--url1",
+        source1.as_uri(),
+        "--md5-1",
+        hashlib.md5(source1.read_bytes(), usedforsecurity=False).hexdigest(),
+        "--bytes-1",
+        str(source1.stat().st_size + 1),
+        "--output1",
+        str(output1),
+        "--url2",
+        source2.as_uri(),
+        "--md5-2",
+        hashlib.md5(source2.read_bytes(), usedforsecurity=False).hexdigest(),
+        "--bytes-2",
+        str(source2.stat().st_size),
+        "--output2",
+        str(output2),
+    )
+
+    assert result.returncode != 0
+    assert "size mismatch" in result.stderr
     assert not output1.exists()
     assert not output2.exists()
 

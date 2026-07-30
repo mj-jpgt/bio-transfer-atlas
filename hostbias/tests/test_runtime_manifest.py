@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import csv
+import json
+import shutil
 from pathlib import Path
 
 import pytest
 
-from hostbias.data_manifest import ManifestError
-from hostbias.runtime_manifest import build_runtime_rows
+from hostbias.config import load_and_validate
+from hostbias.data_manifest import ManifestError, RUNTIME_ENA_FIELDS, canonical_tsv
+from hostbias.runtime_manifest import build_runtime_rows, prepare_runtime
 
 
 PROJECT = Path(__file__).parents[1]
@@ -113,3 +116,39 @@ def test_missing_size_or_wrong_file_count_is_rejected() -> None:
 
     with pytest.raises(ManifestError, match="exactly two values"):
         build_runtime_rows(frozen, metadata, scope="sentinel")
+
+
+def test_prepare_runtime_writes_valid_config_and_aggregate_safe_evidence(
+    tmp_path: Path,
+) -> None:
+    frozen = frozen_rows()
+    metadata = snapshots(frozen)
+    snapshot_paths = {}
+    for arm, rows in metadata.items():
+        path = tmp_path / f"{arm}.tsv"
+        path.write_bytes(canonical_tsv(rows, RUNTIME_ENA_FIELDS))
+        snapshot_paths[arm] = path
+    runtime_dir = PROJECT / "runtime" / tmp_path.name
+    evidence_path = tmp_path / "evidence.json"
+    try:
+        report = prepare_runtime(
+            frozen_manifest=PROJECT / "config" / "stage0_samples.tsv",
+            snapshot_paths=snapshot_paths,
+            config_template=PROJECT / "config" / "config.example.yaml",
+            runtime_manifest=runtime_dir / "stage0_samples.sentinel.tsv",
+            runtime_config=runtime_dir / "config.sentinel.yaml",
+            evidence_output=evidence_path,
+            project_root=PROJECT,
+            scope="sentinel",
+        )
+
+        validated = load_and_validate(runtime_dir / "config.sentinel.yaml")
+        assert len(validated.samples) == 6
+        assert report["valid"] is True
+        assert sum(value["runs"] for value in report["arms"].values()) == 6
+        serialized = evidence_path.read_text(encoding="utf-8")
+        assert "ftp.example" not in serialized
+        assert str(tmp_path) not in serialized
+        assert json.loads(serialized)["privacy"]["contains_sequence_data"] is False
+    finally:
+        shutil.rmtree(runtime_dir, ignore_errors=True)

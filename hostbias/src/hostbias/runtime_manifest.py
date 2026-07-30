@@ -14,6 +14,7 @@ import yaml
 
 from hostbias.data_manifest import (
     ManifestError,
+    RUNTIME_ENA_FIELDS,
     canonical_tsv,
     read_tsv,
     validate_manifest,
@@ -21,19 +22,6 @@ from hostbias.data_manifest import (
 from hostbias.provenance import write_json_atomic
 
 
-RUNTIME_ENA_FIELDS = (
-    "run_accession",
-    "study_accession",
-    "sample_accession",
-    "library_layout",
-    "instrument_platform",
-    "library_strategy",
-    "base_count",
-    "read_count",
-    "fastq_ftp",
-    "fastq_md5",
-    "fastq_bytes",
-)
 RUNTIME_MANIFEST_FIELDS = (
     "sample_id",
     "cohort",

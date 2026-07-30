@@ -27,6 +27,7 @@ from hostbias.schemas import (
 )
 from hostbias.statistics import analyze, attach_groups
 from hostbias.provenance import build_provenance, write_json_atomic
+from hostbias.runtime_manifest import prepare_runtime
 from hostbias.sentinel_runner import LocalExecutor, run_sentinel_panel
 from hostbias.verdict import make_verdict, write_verdict
 
@@ -81,7 +82,7 @@ def sentinel_run_command(
     scratch_root: Annotated[Path, typer.Option()],
     output_dir: Annotated[Path, typer.Option()],
     threads: Annotated[int, typer.Option(min=1)] = 16,
-    fasterq_dump: Annotated[str, typer.Option()] = "fasterq-dump",
+    fastq_dump: Annotated[str, typer.Option()] = "fastq-dump",
     bowtie2: Annotated[str, typer.Option()] = "bowtie2",
 ) -> None:
     """Run or resume the six aggregate-only Stage 0 sentinel checks."""
@@ -93,7 +94,7 @@ def sentinel_run_command(
         scratch_root=scratch_root,
         output_dir=output_dir,
         threads=threads,
-        executor=LocalExecutor(fasterq_dump=fasterq_dump, bowtie2=bowtie2),
+        executor=LocalExecutor(fastq_dump=fastq_dump, bowtie2=bowtie2),
     )
     typer.echo(
         json.dumps(
@@ -106,6 +107,71 @@ def sentinel_run_command(
     )
     if report["status"] != "complete":
         raise typer.Exit(2)
+
+
+def _snapshot_specs(values: list[str]) -> dict[str, Path]:
+    result: dict[str, Path] = {}
+    for value in values:
+        arm, separator, path = value.partition("=")
+        if not separator or not arm or not path:
+            raise typer.BadParameter(
+                "snapshot must be ARM=PATH", param_hint="--snapshot"
+            )
+        if arm in result:
+            raise typer.BadParameter(
+                f"duplicate snapshot arm {arm!r}", param_hint="--snapshot"
+            )
+        snapshot_path = Path(path)
+        if not snapshot_path.is_file():
+            raise typer.BadParameter(
+                f"snapshot does not exist: {snapshot_path}", param_hint="--snapshot"
+            )
+        result[arm] = snapshot_path
+    return result
+
+
+@app.command("prepare-runtime")
+def prepare_runtime_command(
+    snapshot: Annotated[
+        list[str],
+        typer.Option(help="Canonical runtime ENA snapshot as ARM=PATH; repeat per arm."),
+    ],
+    scope: Annotated[str, typer.Option(help="Either sentinel or primary.")] = "sentinel",
+    frozen_manifest: Annotated[
+        Path, typer.Option(exists=True, readable=True)
+    ] = Path("config/stage0_samples.tsv"),
+    config_template: Annotated[
+        Path, typer.Option(exists=True, readable=True)
+    ] = Path("config/config.example.yaml"),
+    runtime_dir: Annotated[Path, typer.Option()] = Path("runtime"),
+    evidence: Annotated[Path | None, typer.Option()] = None,
+) -> None:
+    """Create checksum/size-pinned runtime inputs and aggregate-safe evidence."""
+
+    project_root = Path.cwd().resolve()
+    evidence_output = evidence or (
+        Path("results")
+        / "aggregate"
+        / "checkpoints"
+        / f"runtime_manifest_{scope}.json"
+    )
+    try:
+        report = prepare_runtime(
+            frozen_manifest=frozen_manifest,
+            snapshot_paths=_snapshot_specs(snapshot),
+            config_template=config_template,
+            runtime_manifest=runtime_dir / f"stage0_samples.{scope}.tsv",
+            runtime_config=runtime_dir / f"config.{scope}.yaml",
+            evidence_output=evidence_output,
+            project_root=project_root,
+            scope=scope,
+        )
+    except (ValidationError, ValueError) as error:
+        raise typer.BadParameter(str(error)) from error
+    typer.echo(
+        f"valid: {len(report['ordered_accessions'])} {scope} runs; "
+        f"config={runtime_dir / f'config.{scope}.yaml'}"
+    )
 
 
 def _write_json(path: Path, value: object) -> None:

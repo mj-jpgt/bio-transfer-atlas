@@ -27,6 +27,7 @@ ENA_FIELDS = (
     "fastq_ftp",
     "fastq_md5",
 )
+RUNTIME_ENA_FIELDS = ENA_FIELDS + ("fastq_bytes",)
 MANIFEST_FIELDS = (
     "run_accession",
     "arm",
@@ -92,12 +93,16 @@ def write_snapshot(
     return digest
 
 
-def fetch_ena(project: str, timeout_seconds: int = 120) -> list[dict[str, str]]:
+def fetch_ena(
+    project: str,
+    timeout_seconds: int = 120,
+    fields: Sequence[str] = ENA_FIELDS,
+) -> list[dict[str, str]]:
     params = urllib.parse.urlencode(
         {
             "accession": project,
             "result": "read_run",
-            "fields": ",".join(ENA_FIELDS),
+            "fields": ",".join(fields),
             "format": "tsv",
             "download": "false",
         }
@@ -109,7 +114,7 @@ def fetch_ena(project: str, timeout_seconds: int = 120) -> list[dict[str, str]]:
     with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
         text = response.read().decode("utf-8")
     rows = _read_tsv_text(text)
-    missing = set(ENA_FIELDS).difference(rows[0])
+    missing = set(fields).difference(rows[0])
     if missing:
         raise ManifestError(f"ENA response missing fields: {sorted(missing)}")
     return sorted(rows, key=lambda row: row["run_accession"])
@@ -253,6 +258,13 @@ def build_parser() -> argparse.ArgumentParser:
     fetch.add_argument("--project", required=True)
     fetch.add_argument("--output", required=True, type=Path)
 
+    fetch_runtime = commands.add_parser(
+        "fetch-runtime-ena",
+        help="freeze a canonical ENA snapshot with FASTQ sizes",
+    )
+    fetch_runtime.add_argument("--project", required=True)
+    fetch_runtime.add_argument("--output", required=True, type=Path)
+
     select = commands.add_parser("select", help="select primary and reserve runs")
     select.add_argument(
         "--arm",
@@ -275,9 +287,10 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: Sequence[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    if args.command == "fetch-ena":
-        rows = fetch_ena(args.project)
-        digest = write_snapshot(args.output, rows)
+    if args.command in {"fetch-ena", "fetch-runtime-ena"}:
+        fields = RUNTIME_ENA_FIELDS if args.command == "fetch-runtime-ena" else ENA_FIELDS
+        rows = fetch_ena(args.project, fields=fields)
+        digest = write_snapshot(args.output, rows, fields)
         print(json.dumps({"project": args.project, "rows": len(rows), "sha256": digest}))
         return 0
     if args.command == "select":

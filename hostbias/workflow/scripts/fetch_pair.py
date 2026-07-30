@@ -32,9 +32,11 @@ def fetch(url: str, destination: Path) -> None:
 def fetch_pair(
     url1: str,
     md5_1: str,
+    bytes_1: int,
     output1: Path,
     url2: str,
     md5_2: str,
+    bytes_2: int,
     output2: Path,
 ) -> None:
     if output1.parent != output2.parent:
@@ -42,15 +44,21 @@ def fetch_pair(
     output1.parent.mkdir(parents=True, exist_ok=True)
     temporary_paths: list[Path] = []
     try:
-        for url, expected, output in (
-            (url1, md5_1.lower(), output1),
-            (url2, md5_2.lower(), output2),
+        for url, expected, expected_size, output in (
+            (url1, md5_1.lower(), bytes_1, output1),
+            (url2, md5_2.lower(), bytes_2, output2),
         ):
             descriptor, name = tempfile.mkstemp(dir=output.parent, prefix=f".{output.name}.")
             os.close(descriptor)
             temporary = Path(name)
             temporary_paths.append(temporary)
             fetch(url, temporary)
+            observed_size = temporary.stat().st_size
+            if observed_size != expected_size:
+                raise ValueError(
+                    f"size mismatch for {output.name}: expected {expected_size}, "
+                    f"observed {observed_size}"
+                )
             observed = md5_file(temporary)
             if observed != expected:
                 raise ValueError(
@@ -67,9 +75,11 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--url1", required=True)
     parser.add_argument("--md5-1", required=True)
+    parser.add_argument("--bytes-1", required=True, type=int)
     parser.add_argument("--output1", required=True, type=Path)
     parser.add_argument("--url2", required=True)
     parser.add_argument("--md5-2", required=True)
+    parser.add_argument("--bytes-2", required=True, type=int)
     parser.add_argument("--output2", required=True, type=Path)
     return parser.parse_args()
 
@@ -79,8 +89,10 @@ if __name__ == "__main__":
     fetch_pair(
         arguments.url1,
         arguments.md5_1,
+        arguments.bytes_1,
         arguments.output1,
         arguments.url2,
         arguments.md5_2,
+        arguments.bytes_2,
         arguments.output2,
     )

@@ -121,6 +121,8 @@ hostbias/resources/
 hostbias/work/
 hostbias/logs/
 hostbias/benchmarks/
+hostbias/runtime/
+hostbias/provenance/
 hostbias/results/**
 !hostbias/results/
 !hostbias/results/aggregate/

@@ -78,6 +78,8 @@ rule fetch_fastq_pair:
         url2=lambda wildcards: SAMPLES[wildcards.sample]["fastq2_url"],
         md5_1=lambda wildcards: SAMPLES[wildcards.sample]["fastq1_md5"],
         md5_2=lambda wildcards: SAMPLES[wildcards.sample]["fastq2_md5"],
+        bytes_1=lambda wildcards: SAMPLES[wildcards.sample]["fastq1_bytes"],
+        bytes_2=lambda wildcards: SAMPLES[wildcards.sample]["fastq2_bytes"],
     threads:
         config["resources"]["fetch"]["threads"]
     resources:
@@ -90,6 +92,7 @@ rule fetch_fastq_pair:
         python workflow/scripts/fetch_pair.py \
           --url1 {params.url1:q} --md5-1 {params.md5_1:q} --output1 {output.r1:q} \
           --url2 {params.url2:q} --md5-2 {params.md5_2:q} --output2 {output.r2:q} \
+          --bytes-1 {params.bytes_1:q} --bytes-2 {params.bytes_2:q} \
           > {log:q} 2>&1
         """
 
