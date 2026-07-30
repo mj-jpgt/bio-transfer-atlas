@@ -371,6 +371,8 @@ def build_snakemake_command(
         "--latency-wait",
         str(latency_wait_seconds),
         "--use-conda",
+        "--conda-frontend",
+        "conda",
         "--printshellcmds",
         "--rerun-triggers",
         "mtime",
