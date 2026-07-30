@@ -132,15 +132,22 @@ rule trim_and_normalize:
           --length_required {params.length} \
           --thread {threads} --json {params.temp:q}/fastp.json \
           --html {params.temp:q}/fastp.html
-        seqtk sample -s {params.seed} {params.temp:q}/trimmed_R1.fastq.gz {params.pairs} \
-          | pigz -p {threads} > {output.r1:q}.partial
-        seqtk sample -s {params.seed} {params.temp:q}/trimmed_R2.fastq.gz {params.pairs} \
-          | pigz -p {threads} > {output.r2:q}.partial
+        # fastp --max_len truncates tails; --length_required removes pairs that
+        # became shorter. Validate that its paired outputs are exactly 100 bp
+        # before one shared RNG samples pair records in lockstep.
         python workflow/scripts/validate_fastq_pair.py \
-          --r1 {output.r1:q}.partial --r2 {output.r2:q}.partial \
-          --expected-pairs {params.pairs} --expected-length {params.length}
-        mv {output.r1:q}.partial {output.r1:q}
-        mv {output.r2:q}.partial {output.r2:q}
+          --r1 {params.temp:q}/trimmed_R1.fastq.gz \
+          --r2 {params.temp:q}/trimmed_R2.fastq.gz \
+          --expected-length {params.length}
+        python workflow/scripts/subsample_fastq_pair.py \
+          --r1 {params.temp:q}/trimmed_R1.fastq.gz \
+          --r2 {params.temp:q}/trimmed_R2.fastq.gz \
+          --output1 {output.r1:q}.partial.fastq.gz \
+          --output2 {output.r2:q}.partial.fastq.gz \
+          --pairs {params.pairs} --seed {params.seed} \
+          --expected-length {params.length}
+        mv {output.r1:q}.partial.fastq.gz {output.r1:q}
+        mv {output.r2:q}.partial.fastq.gz {output.r2:q}
         mv {params.temp:q}/fastp.json {output.report:q}
         rm -rf {params.temp:q}
         """
