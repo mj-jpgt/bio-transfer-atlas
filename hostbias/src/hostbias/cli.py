@@ -46,6 +46,7 @@ from hostbias.reference_acquisition import Minimap2IndexBuilder, build_reference
 from hostbias.runtime_manifest import prepare_runtime
 from hostbias.sentinel_runner import LocalExecutor, run_sentinel_panel
 from hostbias.stage_audit import audit_stage
+from hostbias.stage1_prep import Stage1PreparationError, prepare_stage1
 from hostbias.verdict import make_verdict, write_verdict
 
 
@@ -89,6 +90,29 @@ def provenance_command(
         raise typer.BadParameter(str(error), param_hint="--config") from error
     write_json_atomic(build_provenance(inputs), output)
     typer.echo(output)
+
+
+@app.command("stage1-prepare")
+def stage1_prepare_command(
+    design: Annotated[Path, typer.Option(exists=True, readable=True)] = Path("config/stage1_design.yaml"),
+    donors: Annotated[Path, typer.Option(exists=True, readable=True)] = Path("config/stage1_donors.tsv"),
+    excluded_donors: Annotated[Path, typer.Option(exists=True, readable=True)] = Path(
+        "config/hprc_balanced_donors.tsv"
+    ),
+    output: Annotated[Path, typer.Option()] = Path("results/aggregate/checkpoints/stage1_prepared.json"),
+) -> None:
+    """Validate the 25-donor Stage 1 design without generating outcomes."""
+
+    try:
+        report = prepare_stage1(
+            design_path=design,
+            donors_path=donors,
+            excluded_donors_path=excluded_donors,
+            output=output,
+        )
+    except Stage1PreparationError as error:
+        raise typer.BadParameter(str(error)) from error
+    typer.echo(json.dumps({"status": report["status"], "output": str(output)}))
 
 
 @app.command("reference-build")

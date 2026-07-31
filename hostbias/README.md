@@ -49,6 +49,21 @@ The competitive human reference is acquired from checksum-pinned CHM13 and
 HPRC sources with a reproducible HPRC/IGSR donor join. See
 `docs/REFERENCE_PANEL_RUNBOOK.md`.
 
+Stage 1 is prepared, but cannot generate an outcome until the Gate A verdict
+passes. Its frozen design requires five independent donors in each 1000
+Genomes superpopulation, two microbial backgrounds, four spike fractions, and
+both leave-one-out analyses. `config/stage1_design.yaml` explicitly permits
+HGSVC3 supplementation because the HPRC R2 1000 Genomes-matched AMR pool is
+too small after excluding the Gate A panel. A checksum-pinned 25-donor public
+assembly manifest is required before running:
+
+```bash
+hostbias stage1-prepare --design config/stage1_design.yaml \
+  --donors config/stage1_donors.tsv \
+  --excluded-donors config/hprc_balanced_donors.tsv \
+  --output results/aggregate/checkpoints/stage1_prepared.json
+```
+
 ## Workflow stages
 
 1. Fetch checksum-pinned public paired FASTQs.

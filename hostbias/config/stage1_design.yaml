@@ -1,0 +1,11 @@
+# Preparation-only design.  The Stage 1 runner remains blocked until Gate A passes.
+gate_a_status: PASS_REQUIRED
+donors_per_superpopulation: 5
+superpopulations: [AFR, AMR, EAS, EUR, SAS]
+backgrounds: [defined, complex]
+spike_fractions: [0.001, 0.01, 0.05, 0.1]
+analyses: [leave_one_donor_out, leave_one_superpopulation_out]
+# HPRC R2 has only three AMR 1000 Genomes-matched donors, two already used by
+# Gate A.  HGSVC3 augmentation is therefore mandatory to retain five independent
+# donors per superpopulation without weakening the design.
+allowed_assembly_sources: [HPRC_R2, HGSVC3]
