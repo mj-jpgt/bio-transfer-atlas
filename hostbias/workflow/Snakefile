@@ -139,7 +139,10 @@ rule validate_inputs:
 
 rule fetch_fastq_pair:
     input:
-        validation=f"{WORK}/validated.ok",
+        # A runtime-manifest repair can legitimately retouch this aggregate
+        # validation sentinel.  Raw FASTQs are checksum-verified and protected;
+        # their acquisition must never be invalidated solely by that mtime.
+        validation=ancient(f"{WORK}/validated.ok"),
     output:
         r1=protected(f"{WORK}/raw/{{sample}}_R1.fastq.gz"),
         r2=protected(f"{WORK}/raw/{{sample}}_R2.fastq.gz"),
