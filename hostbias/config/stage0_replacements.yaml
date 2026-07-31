@@ -9,3 +9,9 @@ replacements:
     reason: insufficient_clean_pairs
     observed_clean_pairs: 7718819
     required_clean_pairs: 8000000
+  - arm: netherlands
+    replaced_accession: SRR5127833
+    replacement_accession: SRR5127543
+    reason: insufficient_clean_pairs
+    observed_clean_pairs: 5551493
+    required_clean_pairs: 8000000
