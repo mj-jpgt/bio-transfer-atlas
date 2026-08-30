@@ -1,0 +1,29 @@
+{
+  "captured_at_utc": "2026-07-30T23:19:22.099645+00:00",
+  "checkpoint": "primary_fastq_acquisition_closeout",
+  "expected": {
+    "bytes": 152528000759,
+    "mate_files": 80,
+    "pairs": 40
+  },
+  "manifest_sha256": "4faa29f244318113f706d5f6d22ace8b662354743437bf670498e3da9bfc59aa",
+  "observed": {
+    "bytes": 152528000759,
+    "complete_pairs": 40,
+    "ena_md5_matches": 80,
+    "final_mate_files": 80,
+    "partial_files_excluded": 0,
+    "size_matches": 80,
+    "stable_during_audit": 80,
+    "unexpected_final_files": 0
+  },
+  "privacy": {
+    "absolute_paths_recorded": false,
+    "aggregate_evidence_only": true,
+    "filenames_recorded": false,
+    "sample_accessions_recorded": false,
+    "sequence_or_quality_recorded": false
+  },
+  "schema_version": 1,
+  "status": "PASS"
+}

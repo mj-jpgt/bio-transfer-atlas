@@ -1,0 +1,40 @@
+{
+  "arms": {
+    "netherlands": {
+      "expected_fastq_bytes": 12856075719,
+      "runs": 3
+    },
+    "tanzania": {
+      "expected_fastq_bytes": 13687643481,
+      "runs": 3
+    }
+  },
+  "inputs": {
+    "ena_snapshot_sha256": {
+      "netherlands": "d042a732734bb1b3251be8024baee26e21bdc5d828155cd229d3b9e71a2f4c0b",
+      "tanzania": "a7db1c79e978595637007b9ab896aaf2e8e792e346224a19d462a0652ed09cbb"
+    },
+    "frozen_manifest_sha256": "277a2d2633a3fb563510d2a00ee8c33dd0b9378fce30df10ab24d92753dc4c0d"
+  },
+  "ordered_accessions": [
+    "SRR13348579",
+    "SRR13348648",
+    "SRR13348823",
+    "SRR5127734",
+    "SRR5127631",
+    "SRR5127544"
+  ],
+  "outputs": {
+    "runtime_config_sha256": "b5a54c84fb649c5e72b4698db9e8ea978678ddb5f92b7a0410eb05f88239478b",
+    "runtime_manifest_sha256": "14b9ed4f5ab189c2529becab3b50c4faae04572817325c3f36c52aff5aff21e8"
+  },
+  "privacy": {
+    "contains_absolute_paths": false,
+    "contains_fastq_checksums": false,
+    "contains_fastq_urls": false,
+    "contains_sequence_data": false
+  },
+  "schema_version": 1,
+  "scope": "sentinel",
+  "valid": true
+}

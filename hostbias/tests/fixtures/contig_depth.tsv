@@ -1,0 +1,4 @@
+contigName	contigLen	totalAvgDepth	sample.bam	sample.bam-var
+c1	1200	10.25	10.25	0.5
+c2	800	0	0	0
+c3	500	3.5	3.5	0.2

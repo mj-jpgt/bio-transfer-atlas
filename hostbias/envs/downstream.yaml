@@ -1,0 +1,14 @@
+name: hostbias-downstream
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=3.11
+  - pip=24.2
+  - minimap2=2.28
+  - numpy=1.26
+  - pyyaml=6
+  - jsonschema=4.22
+  - typer=0.12
+  - click=8.1

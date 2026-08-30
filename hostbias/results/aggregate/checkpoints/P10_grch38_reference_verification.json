@@ -1,0 +1,20 @@
+{
+  "checkpoint": "P10_grch38_reference_verification",
+  "captured_at_utc": "2026-07-30T04:05:00Z",
+  "status": "PASS",
+  "reference": {
+    "name": "Homo_sapiens_assembly38",
+    "source": "s3://broad-references/hg38/v0/Homo_sapiens_assembly38.fasta",
+    "bytes": 3249912778,
+    "sha256": "93157a161863464c9435062fd67c173fdaf99cb8b32f1455018361387ffa5564"
+  },
+  "index": {
+    "tool": "bowtie2-build",
+    "version": "2.5.4",
+    "threads": 30,
+    "state": "complete",
+    "shards": 6,
+    "combined_sha256": "c5f55efb14243a1d9f3d4da102df3d830230809aefede2cf686e3f1a6df6a2a3",
+    "verified_by_live_sentinel": true
+  }
+}

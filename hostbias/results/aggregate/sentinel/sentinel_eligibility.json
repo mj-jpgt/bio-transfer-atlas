@@ -1,0 +1,329 @@
+{
+  "completed_runs": 6,
+  "decision": {
+    "arms": {
+      "netherlands": {
+        "all_metadata_and_checksums_ok": true,
+        "eligible": true,
+        "passing_host_runs": 3,
+        "required_passing_host_runs": 2,
+        "runs": [
+          {
+            "checksum_ok": true,
+            "host_signal_pass": true,
+            "mapped_pairs_per_million": 1625.0,
+            "metadata_ok": true,
+            "run_accession": "SRR5127734"
+          },
+          {
+            "checksum_ok": true,
+            "host_signal_pass": true,
+            "mapped_pairs_per_million": 2569.0,
+            "metadata_ok": true,
+            "run_accession": "SRR5127631"
+          },
+          {
+            "checksum_ok": true,
+            "host_signal_pass": true,
+            "mapped_pairs_per_million": 2746.0,
+            "metadata_ok": true,
+            "run_accession": "SRR5127544"
+          }
+        ]
+      },
+      "tanzania": {
+        "all_metadata_and_checksums_ok": true,
+        "eligible": true,
+        "passing_host_runs": 3,
+        "required_passing_host_runs": 2,
+        "runs": [
+          {
+            "checksum_ok": true,
+            "host_signal_pass": true,
+            "mapped_pairs_per_million": 1288.0,
+            "metadata_ok": true,
+            "run_accession": "SRR13348579"
+          },
+          {
+            "checksum_ok": true,
+            "host_signal_pass": true,
+            "mapped_pairs_per_million": 2166.0,
+            "metadata_ok": true,
+            "run_accession": "SRR13348648"
+          },
+          {
+            "checksum_ok": true,
+            "host_signal_pass": true,
+            "mapped_pairs_per_million": 1448.0,
+            "metadata_ok": true,
+            "run_accession": "SRR13348823"
+          }
+        ]
+      }
+    },
+    "eligible": true,
+    "rule": {
+      "minimum_mapped_pairs_per_million": 100.0,
+      "minimum_passing_runs": 2,
+      "require_all_metadata_and_checksums_ok": true,
+      "sentinels_per_arm": 3
+    }
+  },
+  "eligible": true,
+  "failures": [],
+  "generated_at_utc": "2026-07-30T04:11:44.790542+00:00",
+  "grch38_index": {
+    "files": [
+      {
+        "name": "grch38_noalt.1.bt2",
+        "sha256": "801a63a4d2e1ec62ada3f9d7dc33ff74d4c1d7b2d6453e137c506de32cf77491"
+      },
+      {
+        "name": "grch38_noalt.2.bt2",
+        "sha256": "0e6a04551d758d13ec96de8508acb3ed17a3f16eb78f754a1fcc9b47ed06f098"
+      },
+      {
+        "name": "grch38_noalt.3.bt2",
+        "sha256": "e043a9c99e6263cfddbd896fb603424f0b2174a56743ba631dc4ffcf531e6d52"
+      },
+      {
+        "name": "grch38_noalt.4.bt2",
+        "sha256": "85cc1e2d52839c80c68c3727df47a9278e84bad307a090cc5b5881667714c8d3"
+      },
+      {
+        "name": "grch38_noalt.rev.1.bt2",
+        "sha256": "a7207c5e429c68eab9a0add9cffde4c02089e5171cab2a47d5b8e02bb73de77a"
+      },
+      {
+        "name": "grch38_noalt.rev.2.bt2",
+        "sha256": "d1b09cac90cc89397cc58260c7224c7aebc89ac4dea2802a034843ad3bba451d"
+      }
+    ],
+    "sha256": "c5f55efb14243a1d9f3d4da102df3d830230809aefede2cf686e3f1a6df6a2a3"
+  },
+  "manifest_sha256": "277a2d2633a3fb563510d2a00ee8c33dd0b9378fce30df10ab24d92753dc4c0d",
+  "privacy": {
+    "sam_or_bam_materialized": false,
+    "scratch_cleaned_after_each_run": true,
+    "sequence_data_recorded": false
+  },
+  "required_runs": 6,
+  "runs": [
+    {
+      "arm": "tanzania",
+      "checksum_ok": true,
+      "checksums_stable": true,
+      "fastq_shape": {
+        "maximum_read_length": 151,
+        "minimum_read_length": 151,
+        "total_bases": 302000000
+      },
+      "grch38_index_sha256": "c5f55efb14243a1d9f3d4da102df3d830230809aefede2cf686e3f1a6df6a2a3",
+      "grch38_mapped_pairs": 1288,
+      "input_sha256": {
+        "r1": "9f4b2bf8d045ec9cc67fc520cf20eb1a032700b555b184f6d072ff838d755ce5",
+        "r2": "805649f6873b969815c57e9731b417d34bfbd54c16922f88ba7a0cbdd36d5f6a"
+      },
+      "manifest_sha256": "277a2d2633a3fb563510d2a00ee8c33dd0b9378fce30df10ab24d92753dc4c0d",
+      "mapped_pairs_per_million": 1288.0,
+      "metadata_ok": true,
+      "observed_pairs": 1000000,
+      "rank": 1,
+      "requested_spots": 1000000,
+      "run_accession": "SRR13348579",
+      "schema_version": 1,
+      "status": "complete",
+      "timing_seconds": {
+        "alignment": 16.089529,
+        "fetch": 18.110724,
+        "pair_validation_and_checksum": 6.972231,
+        "total": 42.374586
+      },
+      "tool_versions": {
+        "bowtie2": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/bowtie2-align-s version 2.5.4",
+        "fastq_dump": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/fastq-dump : 3.1.1"
+      }
+    },
+    {
+      "arm": "tanzania",
+      "checksum_ok": true,
+      "checksums_stable": true,
+      "fastq_shape": {
+        "maximum_read_length": 151,
+        "minimum_read_length": 151,
+        "total_bases": 302000000
+      },
+      "grch38_index_sha256": "c5f55efb14243a1d9f3d4da102df3d830230809aefede2cf686e3f1a6df6a2a3",
+      "grch38_mapped_pairs": 2166,
+      "input_sha256": {
+        "r1": "036d3b4c7af42c22e55ef46c51976d336bf2c811a71e8ebc417e40d877bc1530",
+        "r2": "c84ea0bdf38c918124bcd8ba3e3d7de3b90776f20f4f3736da892b2ed7e48448"
+      },
+      "manifest_sha256": "277a2d2633a3fb563510d2a00ee8c33dd0b9378fce30df10ab24d92753dc4c0d",
+      "mapped_pairs_per_million": 2166.0,
+      "metadata_ok": true,
+      "observed_pairs": 1000000,
+      "rank": 2,
+      "requested_spots": 1000000,
+      "run_accession": "SRR13348648",
+      "schema_version": 1,
+      "status": "complete",
+      "timing_seconds": {
+        "alignment": 17.244328,
+        "fetch": 17.124965,
+        "pair_validation_and_checksum": 6.30704,
+        "total": 41.863111
+      },
+      "tool_versions": {
+        "bowtie2": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/bowtie2-align-s version 2.5.4",
+        "fastq_dump": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/fastq-dump : 3.1.1"
+      }
+    },
+    {
+      "arm": "tanzania",
+      "checksum_ok": true,
+      "checksums_stable": true,
+      "fastq_shape": {
+        "maximum_read_length": 151,
+        "minimum_read_length": 151,
+        "total_bases": 302000000
+      },
+      "grch38_index_sha256": "c5f55efb14243a1d9f3d4da102df3d830230809aefede2cf686e3f1a6df6a2a3",
+      "grch38_mapped_pairs": 1448,
+      "input_sha256": {
+        "r1": "4dfeb9363216a269ce810d70a92c31d131488724041a9f293ebbbe006ab50a28",
+        "r2": "b52cf182ac314deace2fafdf41b35f403fdde4a48ba3c5c7fe309c9fb5a076dd"
+      },
+      "manifest_sha256": "277a2d2633a3fb563510d2a00ee8c33dd0b9378fce30df10ab24d92753dc4c0d",
+      "mapped_pairs_per_million": 1448.0,
+      "metadata_ok": true,
+      "observed_pairs": 1000000,
+      "rank": 3,
+      "requested_spots": 1000000,
+      "run_accession": "SRR13348823",
+      "schema_version": 1,
+      "status": "complete",
+      "timing_seconds": {
+        "alignment": 16.491394,
+        "fetch": 17.346962,
+        "pair_validation_and_checksum": 5.93152,
+        "total": 40.941642
+      },
+      "tool_versions": {
+        "bowtie2": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/bowtie2-align-s version 2.5.4",
+        "fastq_dump": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/fastq-dump : 3.1.1"
+      }
+    },
+    {
+      "arm": "netherlands",
+      "checksum_ok": true,
+      "checksums_stable": true,
+      "fastq_shape": {
+        "maximum_read_length": 101,
+        "minimum_read_length": 90,
+        "total_bases": 198709567
+      },
+      "grch38_index_sha256": "c5f55efb14243a1d9f3d4da102df3d830230809aefede2cf686e3f1a6df6a2a3",
+      "grch38_mapped_pairs": 1625,
+      "input_sha256": {
+        "r1": "d7257bd5ea0130ce3b2d6eb02f4cc0287f9f7cf9f7571271a67ccff95dff7359",
+        "r2": "d1228280b185d6483bb2cc32a4f431dec7e179e23ef0c5a8162ed718fe222f59"
+      },
+      "manifest_sha256": "277a2d2633a3fb563510d2a00ee8c33dd0b9378fce30df10ab24d92753dc4c0d",
+      "mapped_pairs_per_million": 1625.0,
+      "metadata_ok": true,
+      "observed_pairs": 1000000,
+      "rank": 1,
+      "requested_spots": 1000000,
+      "run_accession": "SRR5127734",
+      "schema_version": 1,
+      "status": "complete",
+      "timing_seconds": {
+        "alignment": 14.924801,
+        "fetch": 24.717554,
+        "pair_validation_and_checksum": 5.128568,
+        "total": 45.532164
+      },
+      "tool_versions": {
+        "bowtie2": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/bowtie2-align-s version 2.5.4",
+        "fastq_dump": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/fastq-dump : 3.1.1"
+      }
+    },
+    {
+      "arm": "netherlands",
+      "checksum_ok": true,
+      "checksums_stable": true,
+      "fastq_shape": {
+        "maximum_read_length": 101,
+        "minimum_read_length": 63,
+        "total_bases": 196301058
+      },
+      "grch38_index_sha256": "c5f55efb14243a1d9f3d4da102df3d830230809aefede2cf686e3f1a6df6a2a3",
+      "grch38_mapped_pairs": 2569,
+      "input_sha256": {
+        "r1": "a9b1deee803a968c6df1120797757ecc09dae184a574b32a288dd0c3db362c03",
+        "r2": "1e149e91b5614a38d60c60186a8c5552368bc996b9a816d9b09fa3ab927f5ef1"
+      },
+      "manifest_sha256": "277a2d2633a3fb563510d2a00ee8c33dd0b9378fce30df10ab24d92753dc4c0d",
+      "mapped_pairs_per_million": 2569.0,
+      "metadata_ok": true,
+      "observed_pairs": 1000000,
+      "rank": 2,
+      "requested_spots": 1000000,
+      "run_accession": "SRR5127631",
+      "schema_version": 1,
+      "status": "complete",
+      "timing_seconds": {
+        "alignment": 16.877786,
+        "fetch": 19.656212,
+        "pair_validation_and_checksum": 5.293097,
+        "total": 42.593989
+      },
+      "tool_versions": {
+        "bowtie2": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/bowtie2-align-s version 2.5.4",
+        "fastq_dump": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/fastq-dump : 3.1.1"
+      }
+    },
+    {
+      "arm": "netherlands",
+      "checksum_ok": true,
+      "checksums_stable": true,
+      "fastq_shape": {
+        "maximum_read_length": 101,
+        "minimum_read_length": 63,
+        "total_bases": 195717891
+      },
+      "grch38_index_sha256": "c5f55efb14243a1d9f3d4da102df3d830230809aefede2cf686e3f1a6df6a2a3",
+      "grch38_mapped_pairs": 2746,
+      "input_sha256": {
+        "r1": "d6cccf499a7fb3c746a22ba1b59ccf5af744b558d8f0b735e766a67e9d62de7a",
+        "r2": "002be1f1a9dec49ce482e300605b7df293669bdc7973cda044249bfe6743e04f"
+      },
+      "manifest_sha256": "277a2d2633a3fb563510d2a00ee8c33dd0b9378fce30df10ab24d92753dc4c0d",
+      "mapped_pairs_per_million": 2746.0,
+      "metadata_ok": true,
+      "observed_pairs": 1000000,
+      "rank": 3,
+      "requested_spots": 1000000,
+      "run_accession": "SRR5127544",
+      "schema_version": 1,
+      "status": "complete",
+      "timing_seconds": {
+        "alignment": 12.368838,
+        "fetch": 17.14178,
+        "pair_validation_and_checksum": 4.946654,
+        "total": 35.223266
+      },
+      "tool_versions": {
+        "bowtie2": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/bowtie2-align-s version 2.5.4",
+        "fastq_dump": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/fastq-dump : 3.1.1"
+      }
+    }
+  ],
+  "schema_version": 1,
+  "status": "complete",
+  "tool_versions": {
+    "bowtie2": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/bowtie2-align-s version 2.5.4",
+    "fastq_dump": "/lambda/nfs/geeg/hostbias-gate-a/micromamba/envs/hostbias-preflight/bin/fastq-dump : 3.1.1"
+  }
+}

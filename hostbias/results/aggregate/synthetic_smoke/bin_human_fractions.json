@@ -1,0 +1,10 @@
+[
+  {
+    "bin_id": "bin_novel",
+    "human_bp": 1000,
+    "human_fraction": 0.5,
+    "sample_id": "T01",
+    "tier": "dominant",
+    "total_bp": 2000
+  }
+]

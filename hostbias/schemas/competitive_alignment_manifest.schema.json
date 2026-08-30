@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hostbias.local/schemas/competitive_alignment_manifest.schema.json",
+  "title": "Privacy-safe competitive alignment manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "sample_id",
+    "filter_mode",
+    "assembly_sha256",
+    "assembly_contig_count",
+    "mapper",
+    "references",
+    "aggregate",
+    "privacy"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "sample_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "filter_mode": { "enum": ["source", "strict"] },
+    "assembly_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "assembly_contig_count": { "type": "integer", "minimum": 1 },
+    "mapper": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "preset"],
+      "properties": {
+        "name": { "const": "minimap2" },
+        "version": { "type": "string", "minLength": 1 },
+        "preset": { "type": "string", "minLength": 1 }
+      }
+    },
+    "references": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "domain",
+          "reference_id",
+          "reference_sha256",
+          "paf_sha256",
+          "alignment_row_count",
+          "query_with_hit_count"
+        ],
+        "properties": {
+          "domain": { "enum": ["human", "gtdb"] },
+          "reference_id": { "type": "string", "minLength": 1 },
+          "reference_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "paf_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "alignment_row_count": { "type": "integer", "minimum": 0 },
+          "query_with_hit_count": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "aggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "alignment_row_count",
+        "human_hit_contig_count",
+        "gtdb_hit_contig_count",
+        "no_hit_contig_count"
+      ],
+      "properties": {
+        "alignment_row_count": { "type": "integer", "minimum": 1 },
+        "human_hit_contig_count": { "type": "integer", "minimum": 0 },
+        "gtdb_hit_contig_count": { "type": "integer", "minimum": 0 },
+        "no_hit_contig_count": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contains_sequences",
+        "contains_contig_identifiers",
+        "contains_filesystem_paths"
+      ],
+      "properties": {
+        "contains_sequences": { "const": false },
+        "contains_contig_identifiers": { "const": false },
+        "contains_filesystem_paths": { "const": false }
+      }
+    }
+  }
+}

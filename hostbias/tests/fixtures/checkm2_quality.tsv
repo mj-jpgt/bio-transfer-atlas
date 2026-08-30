@@ -1,0 +1,3 @@
+Name	Completeness	Contamination	Completeness_Model_Used	Translation_Table_Used
+bin.1	80	2	Neural Network (Specific Model)	11
+bin.2	90	1	Gradient Boost (General Model)	11

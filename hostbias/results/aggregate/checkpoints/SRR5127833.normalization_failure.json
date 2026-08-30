@@ -1,0 +1,12 @@
+{
+  "cohort": "netherlands",
+  "failure_stage": "normalization",
+  "observed_clean_pairs": 5551493,
+  "reason": "insufficient_clean_pairs",
+  "replacement_accession": "SRR5127543",
+  "required_clean_pairs": 8000000,
+  "sample_id": "SRR5127833",
+  "schema_version": 1,
+  "selection_rank": 13,
+  "technical_replacement_only": true
+}

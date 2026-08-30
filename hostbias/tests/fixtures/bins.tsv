@@ -1,0 +1,4 @@
+sample_id	contig_id	bin_id
+T01	human_clear	bin_novel
+T01	ambiguous	bin_novel
+T01	microbial	bin_known

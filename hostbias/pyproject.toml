@@ -1,0 +1,37 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "hostbias"
+version = "0.1.0"
+description = "Reproducible Gate A workflow for host-reference bias in metagenomics"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+  "click>=8.1,<8.2",
+  "jsonschema>=4.22,<5",
+  "numpy>=1.26,<3",
+  "PyYAML>=6.0,<7",
+  "typer>=0.12,<1",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=8.2,<9",
+]
+
+[project.scripts]
+hostbias = "hostbias.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hostbias"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

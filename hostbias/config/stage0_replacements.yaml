@@ -1,0 +1,17 @@
+schema_version: 1
+# Technical substitutions only.  The original 60-run ranked selection remains
+# immutable in stage0_samples.tsv; this ledger is applied only to the primary
+# runtime manifest and preserves the frozen within-arm reserve order.
+replacements:
+  - arm: netherlands
+    replaced_accession: SRR5127666
+    replacement_accession: SRR5127623
+    reason: insufficient_clean_pairs
+    observed_clean_pairs: 7718819
+    required_clean_pairs: 8000000
+  - arm: netherlands
+    replaced_accession: SRR5127833
+    replacement_accession: SRR5127543
+    reason: insufficient_clean_pairs
+    observed_clean_pairs: 5551493
+    required_clean_pairs: 8000000

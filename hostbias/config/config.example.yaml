@@ -1,0 +1,83 @@
+schema_version: 1
+experiment:
+  id: gate-a-20260729
+  seed: 20260729
+paths:
+  sample_manifest: config/stage0_samples.example.tsv
+  work_dir: work
+  results_dir: results
+references:
+  grch38:
+    fasta: references/grch38_no_alt.fa
+    bowtie2_index: references/indexes/grch38_no_alt
+  competitive:
+    mapper_preset: asm5
+    human:
+      reference_id: hprc-balanced-chm13-v1
+      minimap2_index: references/indexes/hprc-balanced-chm13-v1.mmi
+      sha256: 0db61e7d07ee3955c6a0e4888a55258a5d337c29fa30d7f8ac17ab7b18b98c1b
+    gtdb:
+      reference_id: gtdb-r220-genomes
+      minimap2_index: references/indexes/gtdb-r220-genomes.mmi
+      sha256: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+normalization:
+  read_length: 100
+  read_pairs: 8000000
+filtering:
+  bowtie2_preset: very-sensitive-local
+  modes:
+    - source
+    - strict
+assembly:
+  min_contig_length: 500
+binning:
+  minimum_contig_length: 1500
+  concoct_chunk_length: 10000
+  maxbin_markerset: 40
+  dastool_score_threshold: 0.5
+  dastool_search_engine: diamond
+databases:
+  checkm2: databases/checkm2/uniref100.KO.1.dmnd
+  gunc: databases/gunc/gunc_db_progenomes2.1.dmnd
+  gtdbtk: databases/gtdbtk/release220
+  gtdb_release: R220
+resources:
+  fetch:
+    threads: 4
+    mem_mb: 8000
+  preprocess:
+    threads: 8
+    mem_mb: 16000
+  filter:
+    threads: 16
+    mem_mb: 32000
+  assembly:
+    threads: 24
+    mem_mb: 64000
+  mapper:
+    threads: 24
+    mem_mb: 64000
+  endpoint:
+    threads: 2
+    mem_mb: 8000
+  coverage:
+    threads: 16
+    mem_mb: 32000
+  binner:
+    threads: 16
+    mem_mb: 64000
+  dastool:
+    threads: 16
+    mem_mb: 64000
+  checkm2:
+    threads: 16
+    mem_mb: 64000
+  gunc:
+    threads: 16
+    mem_mb: 64000
+  gtdbtk:
+    threads: 24
+    mem_mb: 120000
+  mag_contract:
+    threads: 2
+    mem_mb: 8000

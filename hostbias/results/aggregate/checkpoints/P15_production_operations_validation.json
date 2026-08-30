@@ -1,0 +1,41 @@
+{
+  "checkpoint": "P15_production_operations_validation",
+  "status": "PASS",
+  "sample_count": 40,
+  "filter_modes": [
+    "source",
+    "strict"
+  ],
+  "scheduler": {
+    "cores": 30,
+    "jobs": 8,
+    "mem_mb": 204800,
+    "disk_mb": 2500000,
+    "latency_wait_seconds": 120
+  },
+  "dry_run_job_counts": {
+    "fetch_stage": 42,
+    "normalize_stage": 82,
+    "filter_stage": 123,
+    "assemble_stage": 203,
+    "downstream_bridge": 606
+  },
+  "restart_contract": {
+    "rerun_incomplete": true,
+    "keep_going": true,
+    "force_outputs": false,
+    "delete_outputs": false,
+    "snakemake_lock_enabled": true,
+    "same_command_resumes": true
+  },
+  "verification": {
+    "pytest_passed": 72,
+    "snakemake_lint": "PASS",
+    "stage_dry_runs": "PASS"
+  },
+  "privacy": {
+    "contains_absolute_paths": false,
+    "contains_sample_accessions": false,
+    "contains_sequence_data": false
+  }
+}

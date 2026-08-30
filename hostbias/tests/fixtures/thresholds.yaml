@@ -1,0 +1,11 @@
+gate:
+  samples_per_cohort: 2
+  min_tanzania_p_count: 0.01
+  min_ratio: 1.5
+  max_permutation_p: 1.0
+  min_positive_tanzania_samples: 1
+  max_sample_numerator_share: 1.0
+statistics:
+  bootstrap_iterations: 200
+  permutation_iterations: 200
+  seed: 20260729

@@ -1,0 +1,29 @@
+[
+  {
+    "contig_id": "ambiguous",
+    "contig_length": 1000,
+    "gtdb_score": 980.0,
+    "human_score": 1000.0,
+    "human_to_gtdb_ratio": 1.0204081632653061,
+    "label": "ambiguous",
+    "sample_id": "T01"
+  },
+  {
+    "contig_id": "human_clear",
+    "contig_length": 1000,
+    "gtdb_score": 800.0,
+    "human_score": 1000.0,
+    "human_to_gtdb_ratio": 1.25,
+    "label": "human",
+    "sample_id": "T01"
+  },
+  {
+    "contig_id": "microbial",
+    "contig_length": 1000,
+    "gtdb_score": 1100.0,
+    "human_score": null,
+    "human_to_gtdb_ratio": null,
+    "label": "non_human",
+    "sample_id": "T01"
+  }
+]

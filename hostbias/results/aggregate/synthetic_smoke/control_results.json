@@ -1,0 +1,9 @@
+{
+  "human_n": 2,
+  "human_sensitivity": 1.0,
+  "human_sensitivity_bp": 1.0,
+  "microbial_false_positive_bp_rate": 0.0,
+  "microbial_false_positive_rate": 0.0,
+  "microbial_n": 2,
+  "passed": true
+}

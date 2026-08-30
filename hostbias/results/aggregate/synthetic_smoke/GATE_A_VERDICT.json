@@ -1,0 +1,162 @@
+{
+  "controls": {
+    "human_n": 2,
+    "human_sensitivity": 1.0,
+    "human_sensitivity_bp": 1.0,
+    "microbial_false_positive_bp_rate": 0.0,
+    "microbial_false_positive_rate": 0.0,
+    "microbial_n": 2,
+    "passed": true
+  },
+  "criteria": [
+    {
+      "name": "controls_pass",
+      "observed": {
+        "human_n": 2,
+        "human_sensitivity": 1.0,
+        "human_sensitivity_bp": 1.0,
+        "microbial_false_positive_bp_rate": 0.0,
+        "microbial_false_positive_rate": 0.0,
+        "microbial_n": 2,
+        "passed": true
+      },
+      "passed": true,
+      "required": "sensitivity >= 0.95 and microbial false-positive bp rate <= 0.001"
+    },
+    {
+      "name": "complete_groups",
+      "observed": {
+        "netherlands": 2,
+        "tanzania": 2
+      },
+      "passed": true,
+      "required": "exactly 2 valid samples per cohort"
+    },
+    {
+      "name": "complete_sensitivity_matrix",
+      "observed": [],
+      "passed": true,
+      "required": "p_count results for ['strict_pair', 'identity_0.90', 'identity_0.95', 'identity_0.98']"
+    },
+    {
+      "name": "minimum_tanzania_propagation",
+      "observed": 0.5,
+      "passed": true,
+      "required": ">= 0.01"
+    },
+    {
+      "name": "minimum_mean_ratio",
+      "observed": "infinity",
+      "passed": true,
+      "required": ">= 1.5"
+    },
+    {
+      "name": "ratio_ci_excludes_one",
+      "observed": 1.0,
+      "passed": false,
+      "required": "> 1"
+    },
+    {
+      "name": "difference_ci_excludes_zero",
+      "observed": 0.0,
+      "passed": false,
+      "required": "> 0"
+    },
+    {
+      "name": "permutation_significant",
+      "observed": 0.5074626865671642,
+      "passed": true,
+      "required": "< 1.0"
+    },
+    {
+      "name": "minimum_positive_tanzania_samples",
+      "observed": 1,
+      "passed": true,
+      "required": ">= 1"
+    },
+    {
+      "name": "p_bp_preserves_direction",
+      "observed": 0.5,
+      "passed": true,
+      "required": "> 0"
+    },
+    {
+      "name": "sensitivity_matrix_preserves_direction",
+      "observed": {
+        "identity_0.90": {
+          "netherlands": 0.0,
+          "tanzania": 0.5
+        },
+        "identity_0.95": {
+          "netherlands": 0.0,
+          "tanzania": 0.5
+        },
+        "identity_0.98": {
+          "netherlands": 0.0,
+          "tanzania": 0.5
+        },
+        "strict_pair": {
+          "netherlands": 0.0,
+          "tanzania": 0.5
+        }
+      },
+      "passed": true,
+      "required": "Tanzania mean > Netherlands mean in every required analysis"
+    },
+    {
+      "name": "leave_one_out_preserves_direction",
+      "observed": 0.0,
+      "passed": false,
+      "required": "all leave-one-sample-out differences > 0"
+    },
+    {
+      "name": "no_dominant_sample",
+      "observed": 1.0,
+      "passed": true,
+      "required": "<= 1.0"
+    }
+  ],
+  "first_failed_criterion": "ratio_ci_excludes_one",
+  "pass_gate_a": false,
+  "schema_version": "1.0",
+  "statistics": {
+    "bootstrap_iterations": 200,
+    "group_sizes": {
+      "netherlands": 2,
+      "tanzania": 2
+    },
+    "leave_one_out_min_difference": 0.0,
+    "leave_one_out_preserves_p_count_direction": false,
+    "max_tanzania_numerator_share": 1.0,
+    "p_bp": {
+      "difference": 0.5,
+      "difference_ci_high": 1.0,
+      "difference_ci_low": 0.0,
+      "metric": "p_bp",
+      "netherlands_mean": 0.0,
+      "permutation_p_one_sided": 0.4975124378109453,
+      "ratio": null,
+      "ratio_ci_high": null,
+      "ratio_ci_low": 1.0,
+      "ratio_is_infinite": true,
+      "tanzania_mean": 0.5
+    },
+    "p_count": {
+      "difference": 0.5,
+      "difference_ci_high": 1.0,
+      "difference_ci_low": 0.0,
+      "metric": "p_count",
+      "netherlands_mean": 0.0,
+      "permutation_p_one_sided": 0.5074626865671642,
+      "ratio": null,
+      "ratio_ci_high": null,
+      "ratio_ci_low": 1.0,
+      "ratio_is_infinite": true,
+      "tanzania_mean": 0.5
+    },
+    "permutation_iterations": 200,
+    "seed": 20260729,
+    "tanzania_positive_samples": 1
+  },
+  "status": "FAIL"
+}

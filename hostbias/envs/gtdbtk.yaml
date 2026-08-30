@@ -1,0 +1,8 @@
+name: hostbias-gtdbtk
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=3.11
+  - gtdbtk=2.4.0

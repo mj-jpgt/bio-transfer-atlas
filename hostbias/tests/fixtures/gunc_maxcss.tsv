@@ -1,0 +1,3 @@
+genome	n_genes_called	n_genes_mapped	n_contigs	taxonomic_level	pass.GUNC
+bin.1	100	90	2	genus	True
+bin.2	90	80	1	genus	False

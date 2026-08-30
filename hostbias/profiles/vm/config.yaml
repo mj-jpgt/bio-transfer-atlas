@@ -1,0 +1,17 @@
+executor: local
+cores: 30
+jobs: 8
+use-conda: true
+rerun-incomplete: true
+keep-going: true
+latency-wait: 120
+printshellcmds: true
+show-failed-logs: true
+software-deployment-method:
+  - conda
+default-resources:
+  - mem_mb=4000
+  - disk_mb=10000
+resources:
+  - mem_mb=204800
+  - disk_mb=2500000

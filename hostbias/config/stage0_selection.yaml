@@ -1,0 +1,52 @@
+schema_version: 1
+metadata_source: ENA Portal API
+metadata_query_date_utc: "2026-07-30"
+primary_per_arm: 20
+reserves_per_arm: 10
+rank:
+  - field: base_count
+    order: descending
+    numeric: true
+  - field: run_accession
+    order: ascending
+eligibility:
+  library_layout: PAIRED
+  instrument_platform: ILLUMINA
+  library_strategy: WGS
+  unique_biosample: true
+  minimum_clean_pairs: 8000000
+replacement:
+  order: ascending_rank_within_arm
+  allowed_reasons:
+    - checksum_failure
+    - wrong_library_layout
+    - corrupt_or_unsynchronized_pairs
+    - insufficient_clean_pairs
+  forbidden_reasons:
+    - host_mapping_rate
+    - human_contig_rate
+    - propagation_rate
+    - bin_quality
+    - taxonomy
+    - any_scientific_outcome
+arms:
+  tanzania:
+    bioproject: PRJNA686265
+    cohort_label: Tanzania cohort
+  netherlands:
+    bioproject: PRJNA319574
+    cohort_label: Netherlands cohort
+fallback_order:
+  - trigger_arm: netherlands
+    source: PRJEB4336
+    comparison: Denmark MetaHIT
+  - trigger_arm: tanzania
+    source: PRJNA268964
+    comparison: Peru versus USA, 20 per arm
+  - trigger_arm: either
+    source: PRJNA278393
+    comparison: Hadza versus Italian, 11 per arm
+  - trigger_arm: replication_only
+    source: PRJNA678454
+    comparison: prior-hg19-filtered residue
+

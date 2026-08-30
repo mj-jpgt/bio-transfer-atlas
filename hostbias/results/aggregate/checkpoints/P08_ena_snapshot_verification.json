@@ -1,0 +1,24 @@
+{
+  "checkpoint": "P08_ena_snapshot_verification",
+  "captured_at_utc": "2026-07-30T03:32:00Z",
+  "status": "PASS",
+  "source": "ENA Portal API read_run file report",
+  "projects": {
+    "PRJNA686265": {
+      "rows": 320,
+      "snapshot_bytes": 113948,
+      "sha256": "1ef0e7e36d7b3663a37caef6e82036e10684ea42653d78411487973067ccdf66",
+      "top_20_match_frozen_manifest": true
+    },
+    "PRJNA319574": {
+      "rows": 875,
+      "snapshot_bytes": 256095,
+      "sha256": "13c75eff464538940cf7110ddc96199622530a09ddcb956d4710df3bd3e7150f",
+      "top_20_match_frozen_manifest": true
+    }
+  },
+  "ranking": [
+    "base_count_descending",
+    "run_accession_ascending"
+  ]
+}

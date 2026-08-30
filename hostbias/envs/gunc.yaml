@@ -1,0 +1,8 @@
+name: hostbias-gunc
+channels:
+  - conda-forge
+  - bioconda
+  - nodefaults
+dependencies:
+  - python=3.11
+  - gunc=1.1.1

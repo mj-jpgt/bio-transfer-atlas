@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://hostbias.local/schemas/sample_endpoint_aggregate.schema.json",
+  "title": "Privacy-safe sample endpoint aggregate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "sample_id",
+    "filter_mode",
+    "input_sha256",
+    "human_contig_count",
+    "propagated_human_contig_count",
+    "human_bp",
+    "propagated_human_bp",
+    "p_count",
+    "p_bp",
+    "denominator_state",
+    "endpoint_bin_count",
+    "endpoint_bins_with_human",
+    "endpoint_bin_human_tiers",
+    "maximum_endpoint_bin_human_fraction",
+    "privacy"
+  ],
+  "properties": {
+    "schema_version": { "const": "1.0" },
+    "sample_id": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "filter_mode": { "enum": ["source", "strict"] },
+    "input_sha256": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["alignments", "contig_bins", "bin_qc"],
+      "properties": {
+        "alignments": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "contig_bins": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "bin_qc": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "human_contig_count": { "type": "integer", "minimum": 0 },
+    "propagated_human_contig_count": { "type": "integer", "minimum": 0 },
+    "human_bp": { "type": "integer", "minimum": 0 },
+    "propagated_human_bp": { "type": "integer", "minimum": 0 },
+    "p_count": { "type": "number", "minimum": 0, "maximum": 1 },
+    "p_bp": { "type": "number", "minimum": 0, "maximum": 1 },
+    "denominator_state": { "enum": ["observed", "zero"] },
+    "endpoint_bin_count": { "type": "integer", "minimum": 0 },
+    "endpoint_bins_with_human": { "type": "integer", "minimum": 0 },
+    "endpoint_bin_human_tiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["none", "contact", "material", "dominant"],
+      "properties": {
+        "none": { "type": "integer", "minimum": 0 },
+        "contact": { "type": "integer", "minimum": 0 },
+        "material": { "type": "integer", "minimum": 0 },
+        "dominant": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "maximum_endpoint_bin_human_fraction": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contains_sequences",
+        "contains_contig_identifiers",
+        "contains_bin_identifiers",
+        "contains_filesystem_paths"
+      ],
+      "properties": {
+        "contains_sequences": { "const": false },
+        "contains_contig_identifiers": { "const": false },
+        "contains_bin_identifiers": { "const": false },
+        "contains_filesystem_paths": { "const": false }
+      }
+    }
+  }
+}

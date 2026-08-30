@@ -1,0 +1,5 @@
+sample_id	contig_id	truth	contig_length
+C	h1	human	1000
+C	h2	human	1000
+C	m1	microbial	1000
+C	m2	microbial	1000
